@@ -80,16 +80,17 @@ export const pricingTiers: PricingTier[] = [
     priceNote: "Preis auf Anfrage",
     features: ["Individuelle Terminplanung"],
   },
+  {
+    id: "sondertarife",
+    name: "Sondertarife",
+    description: "Weitere Sondertarife, z. B. für Paare, Familien oder Firmen.",
+    priceConfirmed: false,
+    priceNote: "Preis auf Anfrage",
+    features: ["Individuell auf Anfrage"],
+  },
 ];
 
 export const pricingExtras = [
   { id: "getraenkeflat", label: "Getränkeflat", note: "Preis auf Anfrage" },
   { id: "aufnahmepauschale", label: "Aufnahme- und Servicepauschale", note: "Preis auf Anfrage" },
 ] as const;
-
-export const hansefit = {
-  active: true,
-  name: "Hansefit",
-  description:
-    "Der Sportpark Pollack ist Hansefit-Partner. Details zur Nutzung und den enthaltenen Leistungen erfährst du bei uns vor Ort oder direkt bei Hansefit.",
-};

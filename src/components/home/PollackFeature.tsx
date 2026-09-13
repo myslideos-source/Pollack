@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { TexturePanel } from "@/components/shared/TexturePanel";
 import { juergenPollack } from "@/content/about";
 
@@ -18,14 +20,21 @@ export function PollackFeature() {
             {juergenPollack.name}
           </h2>
           <p className="mt-5 max-w-xl text-paper/75">{juergenPollack.intro}</p>
+          <p className="mt-3 max-w-xl text-paper/75">{juergenPollack.story[0]}</p>
           <ul className="mt-6 grid grid-cols-1 gap-x-8 gap-y-2 text-sm text-paper/70 sm:grid-cols-2">
-            {juergenPollack.qualifications.map((q) => (
+            {juergenPollack.qualifications.slice(0, 8).map((q) => (
               <li key={q} className="flex items-start gap-2">
                 <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-red" />
                 {q}
               </li>
             ))}
           </ul>
+          <Link
+            href="/ueber-uns"
+            className="mt-6 inline-flex items-center gap-1.5 font-display text-sm uppercase tracking-wide text-red hover:text-red-dark"
+          >
+            Seine ganze Geschichte lesen <ArrowRight size={16} />
+          </Link>
         </div>
       </div>
     </section>

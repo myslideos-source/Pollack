@@ -8,7 +8,7 @@ import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbJsonLd } from "@/lib/breadcrumb";
 import { categoryMeta } from "@/content/categories";
 import { programsByCategory } from "@/content/programs";
-import { hansefit } from "@/content/pricing";
+import { hansefit, moreNutritionEsn } from "@/content/partners";
 
 const meta = categoryMeta.regeneration;
 
@@ -37,19 +37,19 @@ export default function RegenerationPage() {
           <div className="mt-14 grid gap-6 sm:grid-cols-2">
             <div className="rounded-2xl border border-paper/10 bg-anthracite p-6 sm:p-8">
               <h2 className="font-display text-xl uppercase tracking-wide text-paper">
-                More Nutrition &amp; ESN
+                MORE Nutrition &amp; ESN
               </h2>
-              <p className="mt-3 text-sm text-paper/65">
-                Proteinshakes, Riegel und Supplements direkt im Sportpark – für unterwegs oder nach dem
-                Training.
-              </p>
-              <Link href="/regeneration/more-nutrition-esn" className="mt-4 inline-block text-sm text-red hover:text-red-dark">
+              <p className="mt-3 text-sm text-paper/65">{moreNutritionEsn.subline}</p>
+              <Link href="/partner-produkte" className="mt-4 inline-block text-sm text-red hover:text-red-dark">
                 Mehr erfahren →
               </Link>
             </div>
             <div className="rounded-2xl border border-paper/10 bg-anthracite p-6 sm:p-8">
               <h2 className="font-display text-xl uppercase tracking-wide text-paper">{hansefit.name}</h2>
               <p className="mt-3 text-sm text-paper/65">{hansefit.description}</p>
+              <Link href="/partner-produkte" className="mt-4 inline-block text-sm text-red hover:text-red-dark">
+                Mehr erfahren →
+              </Link>
             </div>
           </div>
 

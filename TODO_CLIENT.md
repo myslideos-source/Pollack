@@ -20,6 +20,12 @@ Bestandsseite) direkt zur Verfügung stellen. Danach kann Abschnitt 4 des urspr�
 (Medien-Audit, Download, Einbau) nachgeholt werden — die technische Architektur dafür steht
 bereits (`src/content/media.ts`, siehe MEDIA_AUDIT.md).
 
+**Update:** Ein Versuch, die Original-Bilder per ZIP-Upload im Chat bereitzustellen, ist am
+Datei-Upload-Limit gescheitert (ZIP zu groß). Bitte entweder (a) die ZIP in kleinere Pakete
+aufteilen (z. B. pro Bereich: `hero.zip`, `fitness.zip`, `kampfkunst.zip`, `pollack.zip`,
+`more-esn.zip` …) oder (b) einzelne Bilder direkt als Chat-Anhänge hochladen — Priorität: Hero,
+Jürgen Pollack, MORE-Nutrition-/ESN-Produktbilder und -Video, dann die übrigen Bereiche.
+
 ## 2. Nutzungsrechte für Fotos & Videos
 
 Sobald echtes Bild-/Videomaterial bereitgestellt wird: Bitte schriftlich bestätigen, dass die
@@ -44,6 +50,7 @@ verbindlichen Werte liefern:
 - Personaltraining
 - Getränkeflat
 - Aufnahme- und Servicepauschale
+- Sondertarife (z. B. Paare/Familien/Firmen) — welche gibt es konkret, und zu welchen Konditionen?
 
 ## 4. Öffnungszeiten
 
@@ -66,10 +73,12 @@ Bildmaterial entsprechend an (`src/components/home/Expansion2026.tsx`).
 
 ## 6. Hydrojet-Massageliege
 
-Im Auftrag als „sofern auf der aktuellen Seite weiterhin bestätigt" markiert. Da die
-Bestandsseite nicht eingesehen werden konnte, wurde dieser Programmpunkt **nicht** in die neue
-Regeneration-Seite aufgenommen. Bitte bestätigen, ob das Hydrojet weiterhin angeboten wird —
-dann ergänzen wir es in `src/content/programs.ts`.
+Als Teil der Erweiterung 2026 (Massageraum Deluxe) ist das Hydrojet bereits in
+`src/content/expansion.ts` als geplante Ergänzung aufgeführt. Unklar ist aber, ob es **schon
+heute**, unabhängig von der Erweiterung, im laufenden Betrieb zur Verfügung steht — im Auftrag
+als „sofern aktuell bestätigt" markiert. Deshalb taucht es auf der aktuellen
+`/regeneration/massage`-Seite als bestehendes Angebot noch nicht auf. Bitte bestätigen, ob es
+schon jetzt nutzbar ist — dann ergänzen wir es in `src/content/programs.ts`.
 
 ## 7. Rechtstexte (Impressum & Datenschutzerklärung)
 
@@ -104,3 +113,48 @@ dann wird `src/components/shared/ContactForm.tsx` entsprechend angebunden.
 
 Im Auftrag nicht genannt und daher nicht ergänzt (z. B. Instagram/Facebook, Google-Bewertungen).
 Bitte mitteilen, ob und welche Profile verlinkt werden sollen.
+
+## 11. Kinderkarate — Mindestalter
+
+`src/content/programs.ts` (Slug `kinderkarate`) markiert das genaue Mindestalter für den
+Einstieg als offen. Bitte das aktuelle Mindestalter mitteilen, damit es auf der Seite konkret
+genannt werden kann.
+
+## 12. Selbstverteidigung — Kursdauer, Zielgruppen, Kursgebühren
+
+Grundlagen- und Aufbaukurs sind inhaltlich beschrieben (`src/content/programs.ts`, Slug
+`selbstverteidigung`), aber die genaue Kursdauer, feinere Zielgruppen-Abgrenzung und die
+aktuellen Kursgebühren fehlen. Kursgebühren erscheinen aktuell nur indirekt über die generelle
+„Preis auf Anfrage"-Regelung auf `/preise`.
+
+## 13. Yoga & Kinderyoga — Kurszeiten, Altersgruppe, Ninas Kontaktdaten
+
+`src/content/about.ts` (`yogaTrainerin`) und `src/content/programs.ts` (Slug `yoga`) markieren
+als offen: aktuelle Kurstage und Uhrzeiten, die Altersgruppe für Kinderyoga sowie direkte
+Kontaktdaten von Nina, falls Anfragen nicht über die allgemeinen Sportpark-Kontaktdaten laufen
+sollen. Da sich Kurszeiten häufiger ändern können, empfehlen wir, uns diese Angaben zentral
+mitzuteilen, damit sie an einer Stelle (`src/content/programs.ts`) gepflegt werden.
+
+## 14. InBody — Mitglieder- und Nichtmitgliederpreis
+
+`src/content/programs.ts` (Slug `inbody`) markiert offen, ob und wie stark sich der Preis für
+Mitglieder und Nichtmitglieder unterscheidet. Aktuell zeigt `/preise` dafür einheitlich „Preis
+auf Anfrage".
+
+## 15. Hansefit — Logo-Datei und genaue Konditionen
+
+Der neue Hansefit-Partnerbereich auf der Startseite und auf `/partner-produkte`
+(`src/components/home/PartnerHansefit.tsx`, `src/app/partner-produkte/page.tsx`) verwendet
+aktuell **kein echtes Hansefit-Logo**, sondern einen Text-Schriftzug als Platzhalter — die
+offizielle Logodatei liegt uns nicht vor. Bitte das offizielle Hansefit-Logo (Vektor- oder
+hochauflösende PNG-Datei) sowie ggf. Hansefit-Markenrichtlinien zur Verfügung stellen. Zusätzlich
+bestätigen: Gelten für Hansefit-Mitglieder bei uns besondere Einschränkungen (Zeiten, Bereiche),
+die auf der Seite erwähnt werden sollten? Aktuell wird bewusst nichts über die vom Auftraggeber
+genannte Kernaussage („Hansefit-Mitglieder können bei uns trainieren") hinaus behauptet.
+
+## 16. MORE Nutrition & ESN — Produktbilder und Produktvideo
+
+`/partner-produkte` und der Startseiten-Teaser (`src/components/home/MoreNutritionEsnTeaser.tsx`)
+sind vollständig für echte Produktbilder und das vorhandene Produktvideo vorbereitet (Layout mit
+Aufmacherbild, mehreren Produktbildern und einer Videofläche), zeigen aber aktuell nur
+TexturePanel-Platzhalter, da uns die Original-Dateien noch nicht vorliegen (siehe Punkt 1).

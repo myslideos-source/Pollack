@@ -9,7 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/gesundheit",
     "/kampfkunst",
     "/regeneration",
-    "/regeneration/more-nutrition-esn",
+    "/partner-produkte",
     "/preise",
     "/ueber-uns",
     "/kontakt",

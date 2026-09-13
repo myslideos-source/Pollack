@@ -3,7 +3,8 @@
  * Keep this the single source of truth so old links and search rankings survive the relaunch.
  */
 export const legacyRedirects: { source: string; destination: string }[] = [
-  { source: "/more-und-esn", destination: "/regeneration/more-nutrition-esn" },
+  { source: "/more-und-esn", destination: "/partner-produkte" },
+  { source: "/regeneration/more-nutrition-esn", destination: "/partner-produkte" },
   { source: "/Programm/Probetraining", destination: "/training/probetraining" },
   { source: "/programm/probetraining", destination: "/training/probetraining" },
   { source: "/programm/fitness", destination: "/training/fitness" },

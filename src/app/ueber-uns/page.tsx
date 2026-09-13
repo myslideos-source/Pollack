@@ -33,6 +33,14 @@ export default function UeberUnsPage() {
               {p}
             </p>
           ))}
+          <dl className="mt-8 grid grid-cols-2 gap-4 rounded-2xl border border-paper/10 bg-anthracite p-5 sm:grid-cols-4 sm:p-6">
+            {studioStory.facts.map((f) => (
+              <div key={f.label}>
+                <dt className="text-xs uppercase tracking-wide text-paper/45">{f.label}</dt>
+                <dd className="mt-1 font-display text-lg text-paper">{f.value}</dd>
+              </div>
+            ))}
+          </dl>
         </Container>
       </section>
 
@@ -48,6 +56,11 @@ export default function UeberUnsPage() {
                 {juergenPollack.name}
               </h2>
               <p className="mt-5 max-w-xl text-paper/75">{juergenPollack.intro}</p>
+              {juergenPollack.story.map((p) => (
+                <p key={p} className="mt-3 max-w-xl text-paper/75">
+                  {p}
+                </p>
+              ))}
               <ul className="mt-6 grid grid-cols-1 gap-x-8 gap-y-2 text-sm text-paper/70 sm:grid-cols-2">
                 {juergenPollack.qualifications.map((q) => (
                   <li key={q} className="flex items-start gap-2">

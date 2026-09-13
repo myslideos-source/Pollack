@@ -17,7 +17,8 @@ Bilder/Videos konnten deshalb nicht durchgeführt werden.** Alles, was hier steh
   (Preise, Öffnungszeiten, Fotos, Videos) nicht verifizierbar waren.
 
 Siehe **TODO_CLIENT.md** für alles, was vor dem Go-Live noch vom Auftraggeber bestätigt werden
-muss, und **MEDIA_AUDIT.md** für den Stand der Medien-Recherche.
+muss, **MEDIA_AUDIT.md** für den Stand der Medien-Recherche und **CONTENT-MIGRATION.md** für die
+Seite-für-Seite-Zuordnung der Inhalte von der alten zur neuen Website.
 
 ## Schnellstart
 
@@ -52,7 +53,8 @@ src/
     training/           Übersicht + [slug]-Detailseiten
     gesundheit/          Übersicht (inkl. Ziel-Kompass-Rechner) + [slug]
     kampfkunst/           Übersicht + [slug]
-    regeneration/          Übersicht + [slug] + more-nutrition-esn
+    regeneration/          Übersicht + [slug]
+    partner-produkte/       Hansefit, MORE Nutrition, ESN
     preise/ ueber-uns/ kontakt/ trainingsfinder/ impressum/ datenschutz/
   components/
     layout/              Header, Footer, mobile CTA-Leiste

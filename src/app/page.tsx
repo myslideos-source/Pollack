@@ -2,11 +2,15 @@ import { Hero } from "@/components/home/Hero";
 import { TrustStats } from "@/components/home/TrustStats";
 import { GoalSelector } from "@/components/home/GoalSelector";
 import { TrainingWorlds } from "@/components/home/TrainingWorlds";
-import { Expansion2026 } from "@/components/home/Expansion2026";
 import { HealthTeaser } from "@/components/home/HealthTeaser";
+import { Expansion2026 } from "@/components/home/Expansion2026";
 import { PollackFeature } from "@/components/home/PollackFeature";
+import { PartnerHansefit } from "@/components/home/PartnerHansefit";
+import { MoreNutritionEsnTeaser } from "@/components/home/MoreNutritionEsnTeaser";
 import { Gallery } from "@/components/home/Gallery";
 import { PricingTeaser } from "@/components/home/PricingTeaser";
+import { HomeOpeningHours } from "@/components/home/HomeOpeningHours";
+import { HomeContact } from "@/components/home/HomeContact";
 import { FinalCta } from "@/components/home/FinalCta";
 
 export default function HomePage() {
@@ -16,11 +20,15 @@ export default function HomePage() {
       <TrustStats />
       <GoalSelector />
       <TrainingWorlds />
-      <Expansion2026 />
       <HealthTeaser />
+      <Expansion2026 />
       <PollackFeature />
+      <PartnerHansefit />
+      <MoreNutritionEsnTeaser />
       <Gallery />
       <PricingTeaser />
+      <HomeOpeningHours />
+      <HomeContact />
       <FinalCta />
     </>
   );

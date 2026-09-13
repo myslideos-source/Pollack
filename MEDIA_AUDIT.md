@@ -12,7 +12,17 @@ WebP/AVIF optimieren und auf der neuen Seite wiederverwenden.
 wurde vom Netzwerk-Egress-Proxy der Umgebung mit `EGRESS_BLOCKED` bzw. HTTP 403
 abgewiesen (Organisationsrichtlinie, nicht umgehbar und laut Vorgabe nicht zu umgehen).
 Damit war weder das Crawlen der ~18 im Auftrag gelisteten Unterseiten noch der Download der
-genannten ca. 12 Videos oder der Fotos möglich.
+genannten ca. 12 Videos oder der Fotos möglich. Ein zweiter Versuch — den Zugriff erneut zu
+prüfen sowie testweise über das Internet Archive (`web.archive.org`) auf eine historische Kopie
+zuzugreifen — bestätigte, dass es sich um eine generelle Egress-Policy dieser Umgebung handelt
+(nur eine kleine Allowlist wie npm/GitHub/Google Fonts ist erreichbar), nicht um eine gezielte
+Sperre nur dieser Domain.
+
+**Update:** Der Auftraggeber hat angeboten, eine ZIP-Datei mit allen Originalbildern
+bereitzustellen. Der Upload ist am Datei-Größenlimit des Chats gescheitert. Empfohlener nächster
+Schritt: die ZIP in kleinere, nach Bereich aufgeteilte Pakete zerlegen (z. B. `hero.zip`,
+`fitness.zip`, `kampfkunst.zip`, `pollack.zip`, `more-esn.zip`) oder einzelne Bilder direkt als
+Chat-Anhänge hochladen. Priorität siehe TODO_CLIENT.md Punkt 1.
 
 Geprüft und erreichbar waren dagegen: `fonts.googleapis.com` / `fonts.gstatic.com` (→ Schriften
 konnten reell heruntergeladen und selbst gehostet werden) sowie `registry.npmjs.org` /
@@ -38,8 +48,10 @@ Alle in Abschnitt 4 des Auftrags genannten Medienarten fehlen komplett:
 
 - Hero-Imagefilm (Startseite)
 - Bilder/Videos zu Fitness, Milon, FIVE, Karate, Selbstverteidigung, Jürgen Pollack/Über uns,
-  More Nutrition & ESN
+  MORE Nutrition & ESN (inkl. des vorhandenen Produktvideos)
 - Sämtliche Programmfotos, Studio-Aufnahmen, Team-/Trainerfotos
+- Das offizielle Hansefit-Logo (im neuen Partnerbereich auf der Startseite und auf
+  `/partner-produkte` aktuell durch einen Text-Schriftzug ersetzt, siehe TODO_CLIENT.md Punkt 15)
 
 **Anstatt neue Stock-Fotos zu verwenden (was der Auftrag explizit ausschließt) oder Platzhalter
 zu bauen, die wie echte Fotos aussehen und damit täuschen könnten, wurde eine bewusst

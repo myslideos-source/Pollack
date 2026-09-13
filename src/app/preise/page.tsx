@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageHero } from "@/components/shared/PageHero";
 import { Container } from "@/components/shared/Container";
 import { Button } from "@/components/shared/Button";
 import { JsonLd } from "@/components/shared/JsonLd";
+import { OpeningHoursTable } from "@/components/shared/OpeningHoursTable";
 import { breadcrumbJsonLd } from "@/lib/breadcrumb";
-import { pricingTiers, pricingExtras, hansefit } from "@/content/pricing";
+import { pricingTiers, pricingExtras } from "@/content/pricing";
+import { hansefit } from "@/content/partners";
 import { AlertTriangle } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -63,9 +66,15 @@ export default function PreisePage() {
             ))}
           </div>
 
-          <div className="mt-10 rounded-2xl border border-paper/10 bg-anthracite p-6">
-            <h3 className="font-display text-lg uppercase tracking-wide text-paper">{hansefit.name}</h3>
-            <p className="mt-2 text-sm text-paper/65">{hansefit.description}</p>
+          <div className="mt-10 grid gap-6 sm:grid-cols-2">
+            <div className="rounded-2xl border border-paper/10 bg-anthracite p-6">
+              <h3 className="font-display text-lg uppercase tracking-wide text-paper">{hansefit.name}</h3>
+              <p className="mt-2 text-sm text-paper/65">{hansefit.description}</p>
+              <Link href="/partner-produkte" className="mt-3 inline-block text-sm text-red hover:text-red-dark">
+                Mehr zu unseren Partnern →
+              </Link>
+            </div>
+            <OpeningHoursTable />
           </div>
 
           <div className="mt-14 text-center">

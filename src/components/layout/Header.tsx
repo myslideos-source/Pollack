@@ -57,7 +57,7 @@ export function Header() {
           />
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex" aria-label="Hauptnavigation">
+        <nav className="hidden items-center gap-1 xl:flex" aria-label="Hauptnavigation">
           {primaryNav.map((item) => {
             const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
             return (
@@ -75,7 +75,7 @@ export function Header() {
           })}
         </nav>
 
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="hidden items-center gap-3 xl:flex">
           <OpenStatusBadge />
           <Link
             href="/kontakt#probetraining"
@@ -88,7 +88,7 @@ export function Header() {
         <button
           type="button"
           onClick={() => setMenuOpen((v) => !v)}
-          className="flex h-11 w-11 items-center justify-center rounded-full border border-paper/20 text-paper lg:hidden"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-paper/20 text-paper xl:hidden"
           aria-expanded={menuOpen}
           aria-controls="mobile-menu"
           aria-label={menuOpen ? "Menü schließen" : "Menü öffnen"}
@@ -100,7 +100,7 @@ export function Header() {
       {menuOpen ? (
         <div
           id="mobile-menu"
-          className="fixed inset-0 top-[64px] z-40 flex flex-col bg-ink px-6 py-8 lg:hidden"
+          className="fixed inset-0 top-[64px] z-40 flex flex-col bg-ink px-6 py-8 xl:hidden"
         >
           <nav className="flex flex-1 flex-col gap-1" aria-label="Mobile Hauptnavigation">
             {primaryNav.map((item) => (

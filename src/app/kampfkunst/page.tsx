@@ -33,7 +33,12 @@ export default function KampfkunstPage() {
         <Container>
           <ProgramGrid programs={items} />
 
-          <div className="mt-14 rounded-2xl border border-paper/10 bg-anthracite p-6 sm:p-8">
+          <div className="mt-14 rounded-2xl border border-red/25 bg-red/5 p-6 text-sm text-paper/75 sm:p-8">
+            Mit der Erweiterung 2026 wächst unsere Kampfsport-Area – dann trainierst du bei uns auch
+            Kickboxen zusätzlich zu Karate und Selbstverteidigung.
+          </div>
+
+          <div className="mt-6 rounded-2xl border border-paper/10 bg-anthracite p-6 sm:p-8">
             <h2 className="font-display text-2xl uppercase tracking-wide text-paper">
               Qualifikation von {juergenPollack.name}
             </h2>

@@ -37,6 +37,7 @@ export const primaryNav = [
   { label: "Gesundheit", href: "/gesundheit" },
   { label: "Kampfkunst", href: "/kampfkunst" },
   { label: "Regeneration", href: "/regeneration" },
+  { label: "Partner", href: "/partner-produkte" },
   { label: "Preise", href: "/preise" },
   { label: "Über uns", href: "/ueber-uns" },
   { label: "Kontakt", href: "/kontakt" },
