@@ -1,0 +1,113 @@
+@import "tailwindcss";
+
+:root {
+  /* Performance */
+  --color-ink: #090a0a;
+  --color-anthracite: #151717;
+  --color-anthracite-2: #1d201f;
+  --color-red: #e43b32;
+  --color-red-dark: #9f211d;
+
+  /* Health */
+  --color-moss: #829765;
+  --color-moss-dark: #5f7248;
+  --color-sand: #c8b995;
+
+  /* Neutrals */
+  --color-surface: #f1efe9;
+  --color-paper: #f7f5f0;
+
+  --background: var(--color-ink);
+  --foreground: var(--color-paper);
+}
+
+@theme inline {
+  --color-ink: var(--color-ink);
+  --color-anthracite: var(--color-anthracite);
+  --color-anthracite-2: var(--color-anthracite-2);
+  --color-red: var(--color-red);
+  --color-red-dark: var(--color-red-dark);
+  --color-moss: var(--color-moss);
+  --color-moss-dark: var(--color-moss-dark);
+  --color-sand: var(--color-sand);
+  --color-surface: var(--color-surface);
+  --color-paper: var(--color-paper);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+
+  --animate-pulse-draw: pulse-draw 3.6s ease-in-out infinite;
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes pulse-draw {
+  0% {
+    stroke-dashoffset: 240;
+  }
+  50% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -240;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+* {
+  scrollbar-color: var(--color-red) var(--color-anthracite);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Visible, consistent focus ring for keyboard users */
+:focus-visible {
+  outline: 3px solid var(--color-red);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.sr-only-focusable:not(:focus) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
