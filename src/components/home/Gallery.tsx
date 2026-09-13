@@ -39,15 +39,26 @@ const categories: {
     image: "/media/kampfkunst/kinderkarate.webp",
     imageAlt: "Kind trainiert Kinderkarate am Kickschild im Sportpark Pollack",
   },
-  { title: "Community", href: "/ueber-uns", texture: "community" },
-  { title: "Regeneration", href: "/regeneration", texture: "regeneration", big: true },
+  {
+    title: "Community",
+    href: "/ueber-uns",
+    texture: "community",
+    image: "/media/community/team-gruppe.webp",
+    imageAlt: "Trainer und Mitglieder gemeinsam im Sportpark Pollack",
+  },
+  {
+    title: "Regeneration",
+    href: "/regeneration",
+    texture: "regeneration",
+    big: true,
+    image: "/media/regeneration/solarium.webp",
+    imageAlt: "Das Ergoline-Solarium im Sportpark Pollack",
+  },
 ];
 
 /**
  * Category explorer standing in for the full video/photo gallery described in the brief.
- * Studio/Fitness/Gesundheit/Kampfkunst now show real Sportpark photos (see MEDIA_AUDIT.md);
- * Community and Regeneration still fall back to the abstract TexturePanel until matching
- * photos are supplied.
+ * All six tiles now show real Sportpark photos (see MEDIA_AUDIT.md).
  */
 export function Gallery() {
   return (

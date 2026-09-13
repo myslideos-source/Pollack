@@ -18,8 +18,8 @@ const worlds: {
     copy: "Freihanteln, Plate-Loaded und Technogym auf 1.200 m² – für alle, die an ihre Grenzen und darüber hinaus wollen.",
     texture: "performance",
     zone: "performance",
-    image: "/media/training/fitness-frau.webp",
-    imageAlt: "Frau trainiert am Kabelzug im Sportpark Pollack",
+    image: "/media/training/hardcore-area.webp",
+    imageAlt: "Die Hardcore Area mit Plate-Loaded-Maschinen und freien Gewichten im Sportpark Pollack",
   },
   {
     title: "Rücken & Beweglichkeit",

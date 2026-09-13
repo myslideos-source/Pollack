@@ -11,19 +11,19 @@ wortwörtlich auf der alten Seite stand. Es wurde nichts über diese Angaben hin
 
 Original-Bildmaterial **von der alten Website** konnte weiterhin nicht eingebaut werden (Zugriff
 blockiert, die hochgeladene ZIP war zu groß für den Chat-Upload). Der Auftraggeber hat
-stattdessen fünf echte Fotos direkt im Chat bereitgestellt (Hero-/Beratungsszene, Fitness,
-FIVE-Bereich, Kinderkarate) — diese sind bereits eingebaut, siehe Tabelle unten und
-MEDIA_AUDIT.md. Für alle übrigen Bildflächen (Milon, InBody, Karate, Selbstverteidigung,
-Massage, Yoga, Solarium, Jürgen Pollack im Porträt, MORE Nutrition/ESN, Gallery-Kacheln
-„Community"/„Regeneration") zeigt die Seite weiterhin die abstrakte `TexturePanel`-
-Platzhalterkomponente. Sobald weiteres Material vorliegt, richtet sich der Einbau nach der
-Checkliste in MEDIA_AUDIT.md.
+stattdessen in zwei Lieferungen neun echte Fotos direkt im Chat bereitgestellt (Hero-/
+Beratungsszene, Fitness ×2, FIVE-Bereich, Kinderkarate, Solarium, Hardcore Area, Gruppenfoto) —
+diese sind bereits eingebaut, siehe Tabelle unten und MEDIA_AUDIT.md (inkl. der Anmerkung zum
+Hero-Bild-Wechsel). Für alle übrigen Bildflächen (Milon, InBody, Karate, Selbstverteidigung,
+Massage, Yoga, Jürgen Pollack im Porträt, MORE Nutrition/ESN) zeigt die Seite weiterhin die
+abstrakte `TexturePanel`-Platzhalterkomponente. Sobald weiteres Material vorliegt, richtet sich
+der Einbau nach der Checkliste in MEDIA_AUDIT.md.
 
 ## Migrationstabelle
 
 | Alte Unterseite | Vorhandene Inhalte (laut Auftrag) | Neue Zielseite | Übernommene Informationen | Verwendete Bilder | Verwendete Videos | Überarbeiteter Status | Offene Angaben |
 |---|---|---|---|---|---|---|---|
-| `/` | Startseite mit Claim, Kernangeboten, Kennzahlen | `/` | Claim „Stark. Beweglich. Bereit.", alle Kennzahlen (1.200 m², 6 Zonen, 40+ Parkplätze, seit 1987), Zielauswahl, alle Programmbereiche, Partner (Hansefit, MORE/ESN), Öffnungszeiten- und Kontaktvorschau | Hero-/Beratungsfoto (art-direktionierter Mobile-/Desktop-Crop), Fitness-, FIVE- und Kinderkarate-Foto in Trainingswelten & Gallery; Community/Regeneration-Kacheln noch TexturePanel-Platzhalter | Keine (Hero-Video-Slot vorbereitet, kein echtes Video verfügbar) | Vollständig neu strukturiert, 16 Abschnitte gemäß Vorgabe | Hero-Video, weitere Fotos für Community/Regeneration |
+| `/` | Startseite mit Claim, Kernangeboten, Kennzahlen | `/` | Claim „Stark. Beweglich. Bereit.", alle Kennzahlen (1.200 m², 6 Zonen, 40+ Parkplätze, seit 1987), Zielauswahl, alle Programmbereiche, Partner (Hansefit, MORE/ESN), Öffnungszeiten- und Kontaktvorschau | Hero: Frau am Kabelzug (art-direktionierter Mobile-/Desktop-Crop); Trainingswelten und Gallery zeigen zusätzlich Hardcore-Area-, FIVE-, Kinderkarate-, Fitness-, Solarium- und Gruppenfoto | Keine (Hero-Video-Slot vorbereitet, kein echtes Video verfügbar) | Vollständig neu strukturiert, 16 Abschnitte gemäß Vorgabe | Hero-Video |
 | `/preise` | Tarife: Monatsbeitrag, Schülerpreis, Getränkeflat, Aufnahme-/Servicepauschale, Winterpaket, Schnuppermonat, Zehnerkarte, InBody, Selbstverteidigung, Personaltraining, Sondertarife, Öffnungszeiten | `/preise` | Alle genannten Tarifkategorien als Karten übernommen (als „Preis auf Anfrage", da keine Zahlen bestätigt); Öffnungszeiten-Tabelle eingebettet; Hansefit-Hinweis | Keine | Keine | Neu strukturiert, um falsche/unklare Zuordnung der Altseite zu vermeiden | Alle konkreten Preise, Feiertagsregelung im Detail (siehe TODO_CLIENT.md) |
 | `/more-und-esn` | MORE Nutrition- und ESN-Produkte, Produktbilder, Produktvideo | `/partner-produkte` (Redirect von `/more-und-esn` und `/regeneration/more-nutrition-esn`) | Editorial-Bereich mit MORE-Nutrition- und ESN-Sektion, „bei uns im Sportpark erhältlich"-Hinweis, kein Online-Verkauf | Keine (Produktbilder pending) | Keine (Produktvideo pending) | Sprachlich komplett neu geschrieben, gekürzt, in Du-Ansprache, kein 1:1-Kopieren der Altseite | Echte Produktbilder und Produktvideo (Upload durch Auftraggeber erforderlich) |
 | `/Programm/Probetraining` | Infos zum Probetraining | `/training/probetraining` | Ablauf, unverbindlicher Charakter, Terminvereinbarung per Telefon/WhatsApp | Keine | Keine | Neu geschrieben | — |
@@ -36,7 +36,7 @@ Checkliste in MEDIA_AUDIT.md.
 | `/programm/selbstverteidigung` | Grundlagenkurs, Aufbaukurs, Kursdauer, Zielgruppen, Gefahrenerkennung, Stimme/Körpersprache, Flucht, Stressdrills, Personaltraining, Kursgebühren | `/kampfkunst/selbstverteidigung` | Grundlagen-/Aufbaukurs-Struktur, alle genannten Trainingsinhalte, Personaltraining-Hinweis übernommen; keine Kriminalstatistiken/reißerische Aussagen verwendet | Keine | Keine | Deutlich erweitert | Kursdauer, Zielgruppen-Details, Kursgebühren |
 | `/programm/massage` | brainLight-Regenerationssystem, Massagesessel, individuelle Programme (Licht/Ton), Hydrojet, eigener Massageraum | `/regeneration/massage` | brainLight, individuell wählbare Programme, eigener Massageraum übernommen; keine medizinischen Wirkversprechen | Keine | Keine | Erweitert, vorsichtiger formuliert | Ob Hydrojet aktuell (unabhängig von der Erweiterung 2026) bereits im Angebot ist |
 | `/programm/yoga` | NINYASA Yoga, Trainerin Nina, Atemübungen, Meditation, Yogastile, Kinderyoga, Kurstage/Uhrzeiten, Kontaktdaten | `/regeneration/yoga` | NINYASA-Marke, Nina als Trainerin, Atemübungen/Meditation/Yogastile, Kinderyoga-Angebot übernommen | Keine | Keine | Deutlich erweitert | Kurstage, Uhrzeiten, Altersgruppe Kinderyoga, direkte Kontaktdaten von Nina |
-| `/solarium` | Ergoline-Solarium, UV-/Rotlicht, Hauttypenanalyse, ab 18, UV-Schutzbrille, Sicherheitshinweise | `/regeneration/solarium` | Alle Sicherheitshinweise vollständig übernommen, als FAQ-Akkordeon aufbereitet statt Fließtext | Keine | Keine | Neu strukturiert (Akkordeon) | — |
+| `/solarium` | Ergoline-Solarium, UV-/Rotlicht, Hauttypenanalyse, ab 18, UV-Schutzbrille, Sicherheitshinweise | `/regeneration/solarium` | Alle Sicherheitshinweise vollständig übernommen, als FAQ-Akkordeon aufbereitet statt Fließtext | Foto: Ergoline-Solarium mit blauer Beleuchtung (`solarium.webp`) — exakte Übereinstimmung mit der Beschreibung | Keine | Neu strukturiert (Akkordeon) | — |
 | `/ueberuns` | Studio-Geschichte, familiengeführt, Jürgen Pollack: Inhaber/Geschäftsführer, seit 1987, Fitness/Bodybuilding/Reha-Erfahrung, C-/B-Trainer, Vital Coach, Ernährungsberater, FIVE Basic Coach, Selbstverteidigungslehrer, Gewaltschutztrainer, Karate 2. DAN, UVSV-Fachkraft | `/ueber-uns` | Vollständige Studio-Story plus alle genannten Qualifikationen; großer Storytelling-Bereich statt kleiner Mitarbeiterkarte | Keine | Keine (Bild-/Video-Slot vorbereitet) | Deutlich erweitert (3 Story-Absätze statt 1) | Porträtfoto/Video von Jürgen Pollack |
 | `/kontakt` | Adresse, Telefon, E-Mail, WhatsApp, Anfahrt, Kontaktformular | `/kontakt` | Alle Kontaktdaten, Anfahrtskarte (consent-gated), Kontaktformular, Öffnungszeiten | Keine | Keine | Erweitert (zusätzlich jetzt auch auf der Startseite verkürzt vorhanden) | — |
 | `/impressum` | Pflichtangaben | `/impressum` | Struktur nach § 5 TMG aufgebaut, vorhandene Kontaktdaten übernommen | Keine | Keine | Strukturiert neu aufgebaut, nicht juristisch geprüft | USt-ID, Rechtsform, Verbraucherschlichtung (siehe TODO_CLIENT.md) |
@@ -47,7 +47,7 @@ Checkliste in MEDIA_AUDIT.md.
 | Neue Seite | Grund |
 |---|---|
 | `/training`, `/gesundheit`, `/kampfkunst`, `/regeneration` | Neue Kategorie-Übersichtsseiten zur Bündelung der bisherigen Einzel-Programmseiten |
-| `/training/technogym`, `/training/plate-loaded` | Aus dem Fitness-Inhalt der Altseite herausgelöst, da eigenständig relevant für SEO und Nutzerführung |
+| `/training/technogym`, `/training/plate-loaded` | Aus dem Fitness-Inhalt der Altseite herausgelöst, da eigenständig relevant für SEO und Nutzerführung. `/training/plate-loaded` zeigt das „Hardcore Area"-Foto (`hardcore-area.webp`), exakte Übereinstimmung mit der Beschreibung |
 | `/gesundheit` (mit Ziel-Kompass-Rechner) | Neuer interaktiver Gesundheitsrechner, den es auf der Altseite laut Auftrag nicht gab |
 | `/trainingsfinder` | Neues 4-Fragen-Tool, das es auf der Altseite laut Auftrag nicht gab |
 | `/partner-produkte` | Neue eigenständige Partnerseite (Hansefit, MORE Nutrition, ESN) gemäß Vorgabe |

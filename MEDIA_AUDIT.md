@@ -50,12 +50,38 @@ Kompression ~82–84 %, keine Größenänderung außer beim Hero-Crop) und einge
 
 | Datei | Motiv | Verwendung | Status |
 |---|---|---|---|
-| `public/media/hero/hero-desktop.webp` | Trainer bespricht mit einer Kundin den Trainingsplan (Weitwinkel) | Hero-Hintergrund (≥ 640px), Gallery „Studio“-Kachel | ✅ optimiert, unverändert zugeschnitten |
-| `public/media/hero/hero-mobile.webp` | Dieselbe Aufnahme, Hochformat-Ausschnitt auf beide Gesichter | Hero-Hintergrund (< 640px, per `<picture>`-`source`) | ✅ eigens für Mobile zugeschnitten (auf Wunsch des Auftraggebers) |
-| `public/media/training/fitness-frau.webp` | Frau am Kabelzug | `/training/fitness`, Trainingswelten „Kraft & Performance“ | ✅ optimiert, unverändert |
+| `public/media/hero/hero-desktop.webp` | Trainer bespricht mit einer Kundin den Trainingsplan (Weitwinkel) | Gallery „Studio“-Kachel (nicht mehr Hero, siehe dritte Lieferung unten) | ✅ optimiert, unverändert zugeschnitten |
+| `public/media/hero/hero-mobile.webp` | Dieselbe Aufnahme, Hochformat-Ausschnitt auf beide Gesichter | Ungenutzt seit dem Hero-Wechsel (Datei bleibt erhalten, falls später wieder gebraucht) | ✅ eigens für Mobile zugeschnitten |
+| `public/media/training/fitness-frau.webp` | Frau am Kabelzug (Rückenansicht) | Hero-Hintergrund (≥ 640px), `/training/fitness`, ProgramGrid-Karte „Fitness“ | ✅ optimiert, unverändert — jetzt Hero-Bild, siehe dritte Lieferung |
 | `public/media/training/fitness-mann.webp` | Mann an geführtem Kraftgerät (Klimmzug-/Latzug-Maschine) | `/training/technogym`, Gallery „Fitness“-Kachel | ✅ optimiert, unverändert |
 | `public/media/gesundheit/five-bambus-moos.webp` | FIVE-Bereich mit Bambuswand, Mooswand und Kaminfeuer-Optik | `/gesundheit/five`, Trainingswelten „Rücken & Beweglichkeit“, Erweiterung-2026-Sektion, Gallery „Gesundheit“-Kachel | ✅ optimiert, unverändert — exakte Übereinstimmung mit der im Auftrag beschriebenen Erweiterungs-Atmosphäre |
 | `public/media/kampfkunst/kinderkarate.webp` | Kind trainiert Kick gegen ein „Lil' Dragon“-Kickschild | `/kampfkunst/kinderkarate`, Trainingswelten „Kampfkunst & Selbstvertrauen“, Gallery „Kampfkunst“-Kachel | ✅ optimiert, unverändert |
+
+### Dritte Lieferung: vier weitere Fotos — Hero ausgetauscht
+
+Der Auftraggeber hat vier weitere Fotos hochgeladen und dabei ausdrücklich gebeten, das letzte
+davon (Frau am Kabelzug, Rückenansicht) als neues Hero-Bild zu verwenden. Ein Bildvergleich
+(Pixel-Diff) hat bestätigt: Dieses Foto ist **identisch** mit dem bereits aus der zweiten
+Lieferung eingebauten `fitness-frau.webp` — also keine neue Datei, sondern ein erneuter Upload
+desselben Motivs. Entsprechend wurde `fitness-frau.webp` zum Hero-Bild gemacht (mit einem neuen,
+eigens für dieses Motiv erzeugten Mobile-Crop) und das bisherige Hero-Foto (Trainer + Kundin)
+auf die Gallery-Kachel „Studio“ verschoben, wo es weiterhin sichtbar bleibt.
+
+| Datei | Motiv | Verwendung | Status |
+|---|---|---|---|
+| `public/media/hero/hero2-desktop.webp` | = `fitness-frau.webp`, volle Breite | Hero-Hintergrund (≥ 640px) | ✅ optimiert, unverändert zugeschnitten |
+| `public/media/hero/hero2-mobile.webp` | Dieselbe Aufnahme, Hochformat-Ausschnitt auf die Person | Hero-Hintergrund (< 640px, per `<picture>`-`source`) | ✅ eigens für Mobile zugeschnitten |
+| `public/media/regeneration/solarium.webp` | Ergoline-Solarium mit blauer Beleuchtung, Strand-Wandmotiv | `/regeneration/solarium`, Gallery „Regeneration“-Kachel | ✅ optimiert, unverändert — exakte Übereinstimmung mit der Solarium-Beschreibung (UV-/Rotlicht-Gerät) |
+| `public/media/training/hardcore-area.webp` | Kraftraum mit Plate-Loaded-Geräten, roter LED-Akzentbeleuchtung | `/training/plate-loaded`, Trainingswelten „Kraft & Performance“, Gallery „Studio“-Kachel (Hintergrund-Kontext) | ✅ optimiert, unverändert — exakte Übereinstimmung mit der „Hardcore Area“-Beschreibung |
+| `public/media/community/team-gruppe.webp` | Drei Personen (Trainer und zwei Mitglieder/Trainer) im Kraftraum | Gallery „Community“-Kachel | ✅ optimiert, unverändert — **Personen werden namentlich nicht identifiziert**, siehe TODO_CLIENT.md #2 |
+
+**Hinweis zur mittleren Person auf dem Gruppenfoto:** Der Mann in der Bildmitte hat dieselbe
+Statur/Frisur wie die Person auf dem ursprünglichen Hero-Foto (Trainer-Kunden-Beratung). Es liegt
+nahe, dass es sich um Jürgen Pollack handelt, das wurde vom Auftraggeber aber nicht ausdrücklich
+bestätigt. Um niemanden falsch zu benennen, wird auf der Website **keine Identität behauptet** —
+weder hier noch im „Über uns“-Bereich. Falls dies tatsächlich Jürgen Pollack ist, bitte bestätigen
+(siehe TODO_CLIENT.md), dann verschieben wir das Foto in den persönlichen Jürgen-Pollack-Bereich
+auf der Startseite und `/ueber-uns` statt in die allgemeine Gallery.
 
 **Wichtig — Nutzungsrechte weiterhin ungeklärt:** Diese Fotos wurden vom Auftraggeber selbst
 bereitgestellt, aber eine ausdrückliche schriftliche Bestätigung der Nutzungsrechte (inkl. Rechte

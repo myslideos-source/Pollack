@@ -25,28 +25,45 @@ Datei-Upload-Limit gescheitert (ZIP zu groß).
 
 **Update 2:** Der Auftraggeber hat daraufhin fünf einzelne Fotos direkt im Chat hochgeladen
 (Trainer-Beratungsszene, Frau am Kabelzug, Mann an Kraftgerät, FIVE-Bereich mit Bambus/Moos,
-Kind beim Kinderkarate). Diese fünf sind bereits eingebaut (siehe MEDIA_AUDIT.md). Für alles
-Weitere gilt weiterhin: entweder (a) die ZIP in kleinere Pakete aufteilen (z. B. pro Bereich:
-`milon.zip`, `inbody.zip`, `karate.zip`, `selbstverteidigung.zip`, `massage.zip`, `yoga.zip`,
-`solarium.zip`, `pollack-portrait.zip`, `more-esn.zip`, `hansefit-logo.zip`) oder (b) weitere
-einzelne Bilder direkt als Chat-Anhänge hochladen.
+Kind beim Kinderkarate). Diese fünf sind eingebaut (siehe MEDIA_AUDIT.md).
+
+**Update 3:** Vier weitere Fotos wurden hochgeladen (Solarium, Gruppenfoto mit drei Personen,
+Kraftraum/„Hardcore Area", nochmals die Frau am Kabelzug — laut Bildvergleich identisch mit
+einem bereits vorhandenen Foto). Auf ausdrücklichen Wunsch ist die Frau am Kabelzug jetzt das
+Hero-Bild; die anderen drei sind bei Solarium, Plate-Loaded/Hardcore Area und der Gallery-Kachel
+„Community" eingebaut. Für alles Weitere gilt weiterhin: entweder (a) die ZIP in kleinere Pakete
+aufteilen (z. B. pro Bereich: `milon.zip`, `inbody.zip`, `karate.zip`, `selbstverteidigung.zip`,
+`massage.zip`, `yoga.zip`, `pollack-portrait.zip`, `more-esn.zip`, `hansefit-logo.zip`) oder
+(b) weitere einzelne Bilder direkt als Chat-Anhänge hochladen.
 
 ## 2. Nutzungsrechte für Fotos & Videos
 
-**Betrifft jetzt auch die fünf bereits eingebauten Fotos**, nicht nur zukünftiges Material:
-Bitte schriftlich bestätigen, dass die Nutzungsrechte für die Verwendung auf der neuen Website
+**Betrifft jetzt alle neun bereits eingebauten Fotos**, nicht nur zukünftiges Material: Bitte
+schriftlich bestätigen, dass die Nutzungsrechte für die Verwendung auf der neuen Website
 vorliegen — insbesondere:
 
 - die Rechte an den abgebildeten Personen (Modellfreigabe), **besonders für das Kind auf dem
   Kinderkarate-Foto** (`public/media/kampfkunst/kinderkarate.webp`), das aktuell bereits live auf
   `/kampfkunst`, `/kampfkunst/kinderkarate` und der Startseite zu sehen ist,
-- die Rechte an den beiden erwachsenen Personen auf dem Hero-/Beratungsfoto sowie an der Frau
-  und dem Mann auf den Trainingsfotos,
+- die Rechte an den erwachsenen Personen auf dem bisherigen Hero-/Beratungsfoto (jetzt Gallery
+  „Studio"), auf den beiden Kabelzug-/Kraftgerät-Fotos und auf dem Gruppenfoto mit drei Personen
+  (Gallery „Community"),
 - bei künftigem Material zusätzlich: Musik in Videos, Marken Dritter wie Technogym/Milon/FIVE/
   InBody-Logos.
 
 Ohne diese Bestätigung sollten die bereits eingebauten personenbezogenen Aufnahmen **vor einem
 echten Go-Live** noch einmal geprüft werden.
+
+## 2a. Identität der mittleren Person auf dem Gruppenfoto (Gallery „Community")
+
+Der Mann in der Bildmitte des Gruppenfotos (`public/media/community/team-gruppe.webp`) hat
+dieselbe Statur/Frisur wie die Person auf dem ursprünglichen Hero-/Beratungsfoto — es liegt nahe,
+dass es sich um **Jürgen Pollack** handelt. Das wurde bisher nicht ausdrücklich bestätigt, daher
+wird auf der Website aktuell **keine Identität behauptet** (weder Name noch Rolle zu den
+abgebildeten Personen). Bitte bestätigen: Ist das Jürgen Pollack, und wer sind die beiden
+anderen Personen (Mitglieder, Trainer:innen, Familie)? Falls gewünscht, verschieben wir dieses
+Foto danach gezielt in den persönlichen Jürgen-Pollack-Bereich auf der Startseite und
+`/ueber-uns` statt der aktuell neutralen Gallery-Kachel „Community".
 
 ## 3. Preise
 
