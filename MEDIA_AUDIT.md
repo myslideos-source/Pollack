@@ -37,59 +37,96 @@ konnten reell heruntergeladen und selbst gehostet werden) sowie `registry.npmjs.
 | `public/logo/sportpark-pollack-logo.png` | Wie oben | Fallback/Referenz | ✅ |
 | `public/favicon-32.png`, `public/apple-touch-icon.png`, `public/icon-512.png` | Aus dem „SP“-Icon-Ausschnitt des Logos generiert | Browser-Tab-Icon, Homescreen-Icon | ✅ |
 
-Das zweite hochgeladene Bild (Hero-Mockup/Referenzscreenshot mit „STARK. BEWEGLICH. BEREIT.“)
-wurde **nicht** als Asset in die Website übernommen — es diente als kreative Referenz für Ton,
-Layout und Farbgebung, ist aber ein Mockup/Screenshot und kein für die Veröffentlichung
+Das ursprünglich zweite hochgeladene Bild (Hero-Mockup/Referenzscreenshot mit „STARK. BEWEGLICH.
+BEREIT.“) wurde **nicht** als Asset in die Website übernommen — es diente als kreative Referenz
+für Ton, Layout und Farbgebung, ist aber ein Mockup/Screenshot und kein für die Veröffentlichung
 freigegebenes Produktfoto.
 
-## Wo eigentlich echte Fotos/Videos stehen müssten
+### Zweite Lieferung: fünf echte Fotos (per Chat hochgeladen)
 
-Alle in Abschnitt 4 des Auftrags genannten Medienarten fehlen komplett:
+Der Auftraggeber hat fünf reale Aufnahmen aus dem Sportpark direkt im Chat bereitgestellt (nach
+dem gescheiterten ZIP-Upload, siehe oben). Alle wurden verarbeitet (WebP, verlustbehaftete
+Kompression ~82–84 %, keine Größenänderung außer beim Hero-Crop) und eingebaut:
 
-- Hero-Imagefilm (Startseite)
-- Bilder/Videos zu Fitness, Milon, FIVE, Karate, Selbstverteidigung, Jürgen Pollack/Über uns,
-  MORE Nutrition & ESN (inkl. des vorhandenen Produktvideos)
-- Sämtliche Programmfotos, Studio-Aufnahmen, Team-/Trainerfotos
-- Das offizielle Hansefit-Logo (im neuen Partnerbereich auf der Startseite und auf
+| Datei | Motiv | Verwendung | Status |
+|---|---|---|---|
+| `public/media/hero/hero-desktop.webp` | Trainer bespricht mit einer Kundin den Trainingsplan (Weitwinkel) | Hero-Hintergrund (≥ 640px), Gallery „Studio“-Kachel | ✅ optimiert, unverändert zugeschnitten |
+| `public/media/hero/hero-mobile.webp` | Dieselbe Aufnahme, Hochformat-Ausschnitt auf beide Gesichter | Hero-Hintergrund (< 640px, per `<picture>`-`source`) | ✅ eigens für Mobile zugeschnitten (auf Wunsch des Auftraggebers) |
+| `public/media/training/fitness-frau.webp` | Frau am Kabelzug | `/training/fitness`, Trainingswelten „Kraft & Performance“ | ✅ optimiert, unverändert |
+| `public/media/training/fitness-mann.webp` | Mann an geführtem Kraftgerät (Klimmzug-/Latzug-Maschine) | `/training/technogym`, Gallery „Fitness“-Kachel | ✅ optimiert, unverändert |
+| `public/media/gesundheit/five-bambus-moos.webp` | FIVE-Bereich mit Bambuswand, Mooswand und Kaminfeuer-Optik | `/gesundheit/five`, Trainingswelten „Rücken & Beweglichkeit“, Erweiterung-2026-Sektion, Gallery „Gesundheit“-Kachel | ✅ optimiert, unverändert — exakte Übereinstimmung mit der im Auftrag beschriebenen Erweiterungs-Atmosphäre |
+| `public/media/kampfkunst/kinderkarate.webp` | Kind trainiert Kick gegen ein „Lil' Dragon“-Kickschild | `/kampfkunst/kinderkarate`, Trainingswelten „Kampfkunst & Selbstvertrauen“, Gallery „Kampfkunst“-Kachel | ✅ optimiert, unverändert |
+
+**Wichtig — Nutzungsrechte weiterhin ungeklärt:** Diese Fotos wurden vom Auftraggeber selbst
+bereitgestellt, aber eine ausdrückliche schriftliche Bestätigung der Nutzungsrechte (inkl. Rechte
+an den abgebildeten Personen — Modellfreigabe für das Kind auf dem Kinderkarate-Foto ist hier
+besonders relevant) steht noch aus. Siehe TODO_CLIENT.md Punkt 2. Die Fotos sind bereits
+technisch eingebaut, damit der Fortschritt sichtbar ist — vor einem echten Go-Live muss Punkt 2
+aber zwingend bestätigt werden.
+
+**Hero-Crop für Mobile:** Das Originalfoto ist mit 1916×821 px sehr breit (~2,3:1). Für
+Telefone wurde ein eigener Hochformat-Ausschnitt (820×1000 px, ~4:5) erzeugt, der auf beide
+Gesichter zentriert ist, statt das breite Bild nur per CSS zu beschneiden. `Hero.tsx` liefert
+beide Versionen über ein natives `<picture>`-Element mit `media`-Query aus — der Browser lädt
+pro Endgerät nur die passende Datei (verifiziert: Mobile lädt ausschließlich `hero-mobile.webp`,
+Desktop ausschließlich `hero-desktop.webp`, nie beide).
+
+## Wo weiterhin echte Fotos/Videos fehlen
+
+Trotz der fünf neuen Fotos fehlen weiterhin:
+
+- Ein Hero-**Video** (aktuell zeigt der Hero ein Standbild, technisch aber vollständig für ein
+  Video vorbereitet, siehe unten)
+- Bilder/Videos zu Milon, InBody, Karate (Erwachsene), Selbstverteidigung, Massage/brainLight,
+  Yoga (Nina), Solarium, Jürgen Pollack im Porträt, MORE Nutrition & ESN (inkl. Produktvideo)
+- Fotos für die Gallery-Kacheln „Community“ und „Regeneration“
+- Das offizielle Hansefit-Logo (im Partnerbereich auf der Startseite und auf
   `/partner-produkte` aktuell durch einen Text-Schriftzug ersetzt, siehe TODO_CLIENT.md Punkt 15)
 
-**Anstatt neue Stock-Fotos zu verwenden (was der Auftrag explizit ausschließt) oder Platzhalter
-zu bauen, die wie echte Fotos aussehen und damit täuschen könnten, wurde eine bewusst
-abstrakte Platzhalterfläche gebaut:** die `TexturePanel`-Komponente
-(`src/components/shared/TexturePanel.tsx`). Sie erzeugt pro Themenbereich (Performance,
-Health, Kampfkunst, Regeneration, Community) einen markenkonsistenten Gradient/Grid-Hintergrund
-per CSS/SVG — kein Foto, keine Datei, kein Download nötig, aber auch keine Irreführung.
+**Für alle noch fehlenden Motive gilt weiterhin:** Anstatt neue Stock-Fotos zu verwenden (was der
+Auftrag explizit ausschließt) oder Platzhalter zu bauen, die wie echte Fotos aussehen und damit
+täuschen könnten, rendert dort weiterhin die bewusst abstrakte `TexturePanel`-Komponente
+(`src/components/shared/TexturePanel.tsx`) — ein markenkonsistenter Gradient/Grid-Hintergrund
+per CSS/SVG, kein Foto, keine Irreführung.
 
-Jede Stelle, an der im Konzept ein echtes Foto oder Video vorgesehen ist (Hero, Trainingswelten,
-Jürgen-Pollack-Feature, Gallery, Programmkarten), rendert aktuell ein `TexturePanel`.
+Die neue `MediaPanel`-Komponente (`src/components/shared/MediaPanel.tsx`) kapselt dieses
+Verhalten: Sie zeigt automatisch das echte Foto, sobald eines im jeweiligen Content-Eintrag
+hinterlegt ist, und fällt sonst auf `TexturePanel` zurück — genau dieser Mechanismus hat jetzt
+die fünf neuen Fotos ohne Layout-Änderungen eingebaut.
 
 ## Video
 
-`src/content/media.ts` definiert die zentrale Medien-Registry für Hero-Video und Galerie:
+`src/content/media.ts` definiert weiterhin die zentrale Medien-Registry für Hero und Galerie —
+jetzt mit den fünf echten Fotos befüllt, das Video-Feld bleibt `null`:
 
 ```ts
 export const heroMedia = {
   videoSrc: null,
   videoSrcWebm: null,
   posterSrc: null,
+  imageDesktopSrc: "/media/hero/hero-desktop.webp",
+  imageMobileSrc: "/media/hero/hero-mobile.webp",
+  imageAlt: "…",
 };
-export const galleryItems: GalleryItem[] = [];
+export const galleryItems: GalleryItem[] = [ /* 4 Einträge mit echten Fotos */ ];
 ```
 
-Die `Hero`-Komponente (`src/components/home/Hero.tsx`) ist bereits vollständig für ein echtes
-Video vorbereitet: `autoPlay muted loop playsInline preload="metadata"`, Poster-Fallback, ein
-sichtbarer Ton-an/aus-Schalter, `motion-reduce:hidden` für `prefers-reduced-motion`
-(zeigt dann automatisch nur das Poster/TexturePanel). Sobald echte Dateien vorliegen, genügt es,
-sie unter `public/media/...` abzulegen und die Pfade in `media.ts` einzutragen — keine
-Komponentenänderung nötig.
+Die `Hero`-Komponente (`src/components/home/Hero.tsx`) ist weiterhin vollständig für ein echtes
+Video vorbereitet und nutzt es automatisch, sobald `videoSrc` gesetzt ist: `autoPlay muted loop
+playsInline preload="metadata"`, Poster-Fallback, ein sichtbarer Ton-an/aus-Schalter,
+`motion-reduce:hidden` für `prefers-reduced-motion`. Bis dahin zeigt sie das art-direktionierte
+Foto (Desktop-/Mobile-Crop) über ein natives `<picture>`-Element.
 
-## Sobald echtes Material vorliegt — Checkliste für den nächsten Schritt
+## Sobald weiteres Material vorliegt — Checkliste für den nächsten Schritt
 
-1. Nutzungsrechte für jedes Foto/Video schriftlich bestätigen (siehe TODO_CLIENT.md).
+1. Nutzungsrechte für jedes Foto/Video schriftlich bestätigen (siehe TODO_CLIENT.md) — auch
+   rückwirkend für die fünf bereits eingebauten Fotos.
 2. Dateien in Originalauflösung ablegen, Duplikate per Hash entfernen.
 3. Für Web als WebP/AVIF (Bilder) bzw. H.264 MP4 + Poster-JPG (Videos) exportieren.
-4. Pfade in `src/content/media.ts` (`heroMedia`, `galleryItems`) eintragen.
-5. `TexturePanel`-Aufrufe an den entsprechenden Stellen durch echte `<Image>`/`<video>`
-   ersetzen (die Komponenten sind so geschnitten, dass das lokal, Datei für Datei, möglich ist).
-6. Alt-Texte pro Bild ergänzen (aktuell nur für Logo/Icons vergeben, da keine weiteren Bilder
-   existieren).
+4. Pfade in `src/content/media.ts` (`heroMedia.videoSrc`/`galleryItems`) bzw. direkt im
+   jeweiligen Content-Eintrag (`Program.image` in `src/content/programs.ts`) eintragen.
+5. Damit übernimmt `MediaPanel` (`src/components/shared/MediaPanel.tsx`) automatisch die
+   Anzeige des echten Fotos anstelle von `TexturePanel` — keine Komponentenänderung nötig, das
+   ist bereits an jeder relevanten Stelle so verdrahtet (ProgramGrid, ProgramDetail/PageHero,
+   TrainingWorlds, Expansion2026, Gallery).
+6. Alt-Texte pro Bild ergänzen (bereits für alle fünf neuen Fotos vergeben, siehe Tabelle oben).

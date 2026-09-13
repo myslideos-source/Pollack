@@ -1,5 +1,5 @@
 import { Check } from "lucide-react";
-import { TexturePanel } from "@/components/shared/TexturePanel";
+import { MediaPanel } from "@/components/shared/MediaPanel";
 import { expansion2026 } from "@/content/expansion";
 
 export function Expansion2026() {
@@ -18,7 +18,14 @@ export function Expansion2026() {
             <p className="mt-4 max-w-lg text-paper/60">{expansion2026.atmosphereNote}</p>
             <p className="mt-6 text-xs text-paper/40">{expansion2026.statusNote}</p>
           </div>
-          <TexturePanel variant="performance" className="aspect-[4/5] w-full rounded-2xl lg:aspect-[4/3]" label="Erweiterung 2026" />
+          <MediaPanel
+            src="/media/gesundheit/five-bambus-moos.webp"
+            alt="Bambus- und Mooswände mit Kaminfeuer-Atmosphäre im neuen FIVE-Bereich des Sportpark Pollack"
+            variant="performance"
+            className="relative aspect-[4/5] w-full rounded-2xl lg:aspect-[4/3]"
+            label="Erweiterung 2026"
+            sizes="(min-width: 1024px) 50vw, 100vw"
+          />
         </div>
 
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

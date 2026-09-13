@@ -1,23 +1,32 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { TexturePanel, type TextureVariant } from "@/components/shared/TexturePanel";
+import { MediaPanel } from "@/components/shared/MediaPanel";
 
 export function PageHero({
   eyebrow,
   title,
   intro,
   texture = "performance",
+  image,
+  imageAlt,
   breadcrumbs,
 }: {
   eyebrow?: string;
   title: string;
   intro?: string;
   texture?: TextureVariant;
+  image?: string;
+  imageAlt?: string;
   breadcrumbs: { label: string; href?: string }[];
 }) {
   return (
     <section className="relative overflow-hidden bg-ink pb-14 pt-28 sm:pb-20 sm:pt-36">
-      <TexturePanel variant={texture} className="absolute inset-0" />
+      {image ? (
+        <MediaPanel src={image} alt={imageAlt} className="absolute inset-0" priority sizes="100vw" />
+      ) : (
+        <TexturePanel variant={texture} className="absolute inset-0" />
+      )}
       <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink/30" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <nav aria-label="Breadcrumb" className="mb-6 flex flex-wrap items-center gap-1 text-xs text-paper/50">

@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "motion/react";
-import { TexturePanel, type TextureVariant } from "@/components/shared/TexturePanel";
+import { MediaPanel } from "@/components/shared/MediaPanel";
+import type { TextureVariant } from "@/components/shared/TexturePanel";
 import { PulseLine, type PulseZone } from "@/components/shared/PulseLine";
 
 const worlds: {
@@ -9,18 +10,24 @@ const worlds: {
   copy: string;
   texture: TextureVariant;
   zone: PulseZone;
+  image?: string;
+  imageAlt?: string;
 }[] = [
   {
     title: "Kraft & Performance",
     copy: "Freihanteln, Plate-Loaded und Technogym auf 1.200 m² – für alle, die an ihre Grenzen und darüber hinaus wollen.",
     texture: "performance",
     zone: "performance",
+    image: "/media/training/fitness-frau.webp",
+    imageAlt: "Frau trainiert am Kabelzug im Sportpark Pollack",
   },
   {
     title: "Rücken & Beweglichkeit",
     copy: "FIVE trainiert gezielt, was dein Rücken im Alltag braucht – kurz, klar strukturiert, wirksam.",
     texture: "health",
     zone: "health",
+    image: "/media/gesundheit/five-bambus-moos.webp",
+    imageAlt: "Der neue FIVE Rücken- und Gelenkbereich mit Bambus- und Mooswänden im Sportpark Pollack",
   },
   {
     title: "Körperanalyse & Fortschritt",
@@ -33,6 +40,8 @@ const worlds: {
     copy: "Karate, Kinderkarate und Selbstverteidigung – angeleitet von einem erfahrenen Gewaltschutztrainer.",
     texture: "kampfkunst",
     zone: "kampfkunst",
+    image: "/media/kampfkunst/kinderkarate.webp",
+    imageAlt: "Kind trainiert Kinderkarate am Kickschild im Sportpark Pollack",
   },
   {
     title: "Regeneration & Balance",
@@ -61,10 +70,13 @@ export function TrainingWorlds() {
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-6 px-4 py-8 sm:px-6 lg:grid-cols-2 lg:gap-12 lg:px-8"
           >
-            <TexturePanel
+            <MediaPanel
+              src={world.image}
+              alt={world.imageAlt}
               variant={world.texture}
-              className={`aspect-[4/3] w-full rounded-2xl lg:aspect-[5/4] ${i % 2 === 1 ? "lg:order-2" : ""}`}
+              className={`relative aspect-[4/3] w-full rounded-2xl lg:aspect-[5/4] ${i % 2 === 1 ? "lg:order-2" : ""}`}
               label={world.title}
+              sizes="(min-width: 1024px) 50vw, 100vw"
             />
             <div className={i % 2 === 1 ? "lg:order-1" : ""}>
               <span className="font-display text-sm uppercase tracking-[0.3em] text-paper/40">

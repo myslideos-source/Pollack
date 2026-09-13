@@ -32,6 +32,20 @@ export function Hero() {
           >
             {heroMedia.videoSrc ? <source src={heroMedia.videoSrc} type="video/mp4" /> : null}
           </video>
+        ) : heroMedia.imageDesktopSrc ? (
+          // Art-directed crop per breakpoint via <picture>: the browser only fetches the
+          // source that matches, so phones never download the wide desktop composition.
+          <picture>
+            {heroMedia.imageMobileSrc ? (
+              <source media="(max-width: 639px)" srcSet={heroMedia.imageMobileSrc} />
+            ) : null}
+            <img
+              src={heroMedia.imageDesktopSrc}
+              alt={heroMedia.imageAlt}
+              className="h-full w-full object-cover"
+              fetchPriority="high"
+            />
+          </picture>
         ) : (
           <TexturePanel variant="performance" className="h-full w-full" />
         )}

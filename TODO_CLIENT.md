@@ -20,18 +20,33 @@ Bestandsseite) direkt zur Verfügung stellen. Danach kann Abschnitt 4 des urspr�
 (Medien-Audit, Download, Einbau) nachgeholt werden — die technische Architektur dafür steht
 bereits (`src/content/media.ts`, siehe MEDIA_AUDIT.md).
 
-**Update:** Ein Versuch, die Original-Bilder per ZIP-Upload im Chat bereitzustellen, ist am
-Datei-Upload-Limit gescheitert (ZIP zu groß). Bitte entweder (a) die ZIP in kleinere Pakete
-aufteilen (z. B. pro Bereich: `hero.zip`, `fitness.zip`, `kampfkunst.zip`, `pollack.zip`,
-`more-esn.zip` …) oder (b) einzelne Bilder direkt als Chat-Anhänge hochladen — Priorität: Hero,
-Jürgen Pollack, MORE-Nutrition-/ESN-Produktbilder und -Video, dann die übrigen Bereiche.
+**Update 1:** Ein Versuch, die Original-Bilder per ZIP-Upload im Chat bereitzustellen, ist am
+Datei-Upload-Limit gescheitert (ZIP zu groß).
+
+**Update 2:** Der Auftraggeber hat daraufhin fünf einzelne Fotos direkt im Chat hochgeladen
+(Trainer-Beratungsszene, Frau am Kabelzug, Mann an Kraftgerät, FIVE-Bereich mit Bambus/Moos,
+Kind beim Kinderkarate). Diese fünf sind bereits eingebaut (siehe MEDIA_AUDIT.md). Für alles
+Weitere gilt weiterhin: entweder (a) die ZIP in kleinere Pakete aufteilen (z. B. pro Bereich:
+`milon.zip`, `inbody.zip`, `karate.zip`, `selbstverteidigung.zip`, `massage.zip`, `yoga.zip`,
+`solarium.zip`, `pollack-portrait.zip`, `more-esn.zip`, `hansefit-logo.zip`) oder (b) weitere
+einzelne Bilder direkt als Chat-Anhänge hochladen.
 
 ## 2. Nutzungsrechte für Fotos & Videos
 
-Sobald echtes Bild-/Videomaterial bereitgestellt wird: Bitte schriftlich bestätigen, dass die
-Nutzungsrechte für die Verwendung auf der neuen Website vorliegen (inkl. Rechte an abgebildeten
-Personen/Mitgliedern, Musik in Videos, Marken Dritter wie Technogym/Milon/FIVE/InBody-Logos).
-Ohne diese Bestätigung sollten keine personenbezogenen Aufnahmen veröffentlicht werden.
+**Betrifft jetzt auch die fünf bereits eingebauten Fotos**, nicht nur zukünftiges Material:
+Bitte schriftlich bestätigen, dass die Nutzungsrechte für die Verwendung auf der neuen Website
+vorliegen — insbesondere:
+
+- die Rechte an den abgebildeten Personen (Modellfreigabe), **besonders für das Kind auf dem
+  Kinderkarate-Foto** (`public/media/kampfkunst/kinderkarate.webp`), das aktuell bereits live auf
+  `/kampfkunst`, `/kampfkunst/kinderkarate` und der Startseite zu sehen ist,
+- die Rechte an den beiden erwachsenen Personen auf dem Hero-/Beratungsfoto sowie an der Frau
+  und dem Mann auf den Trainingsfotos,
+- bei künftigem Material zusätzlich: Musik in Videos, Marken Dritter wie Technogym/Milon/FIVE/
+  InBody-Logos.
+
+Ohne diese Bestätigung sollten die bereits eingebauten personenbezogenen Aufnahmen **vor einem
+echten Go-Live** noch einmal geprüft werden.
 
 ## 3. Preise
 

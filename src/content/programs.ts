@@ -18,6 +18,9 @@ export type Program = {
   faq?: ProgramFaqItem[];
   /** Inline note for anything not yet confirmed by the client (rendered subtly, not hidden). */
   openQuestion?: string;
+  /** Real photo path, when one has been supplied — falls back to the TexturePanel otherwise. */
+  image?: string;
+  imageAlt?: string;
   legacyPaths: string[];
   texture: "performance" | "health" | "kampfkunst" | "regeneration";
 };
@@ -45,6 +48,8 @@ export const programs: Program[] = [
       { label: "Zonen", value: "Freihantel, Kraftgeräte, Cardio, Plate-Loaded" },
       { label: "Für", value: "Einsteiger bis erfahrene Athleten" },
     ],
+    image: "/media/training/fitness-frau.webp",
+    imageAlt: "Frau trainiert am Kabelzug im Sportpark Pollack",
     legacyPaths: ["/programm/fitness"],
     texture: "performance",
   },
@@ -57,6 +62,8 @@ export const programs: Program[] = [
       "Unsere Technogym-Geräte gehören zur Premiumklasse im Studiobau: präzise Bewegungsführung, hochwertige Verarbeitung und eine Auswahl, die dich vom Einstieg bis zum ambitionierten Training begleitet.",
     ],
     bullets: ["Geführte Bewegungsbahnen", "Für Einsteiger und Fortgeschrittene", "Teil der 1.200 m² Trainingsfläche"],
+    image: "/media/training/fitness-mann.webp",
+    imageAlt: "Mann trainiert an einem geführten Kraftgerät im Sportpark Pollack",
     legacyPaths: [],
     texture: "performance",
   },
@@ -113,6 +120,8 @@ export const programs: Program[] = [
       { label: "Bereichsgröße", value: "ca. 60 m² (ab Erweiterung 2026)" },
       { label: "Ausrichtung", value: "Rücken, Gelenke, Beweglichkeit" },
     ],
+    image: "/media/gesundheit/five-bambus-moos.webp",
+    imageAlt: "Der neue FIVE Rücken- und Gelenkbereich mit Bambus- und Mooswänden im Sportpark Pollack",
     legacyPaths: [],
     texture: "health",
   },
@@ -187,6 +196,8 @@ export const programs: Program[] = [
       "Disziplin und Respekt, spielerisch vermittelt",
     ],
     openQuestion: "Genaues Mindestalter für den Einstieg noch zu bestätigen.",
+    image: "/media/kampfkunst/kinderkarate.webp",
+    imageAlt: "Kind trainiert Kinderkarate am Kickschild im Sportpark Pollack",
     legacyPaths: ["/programm/kinderkarate"],
     texture: "kampfkunst",
   },

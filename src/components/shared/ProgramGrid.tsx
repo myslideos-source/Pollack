@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { TexturePanel } from "@/components/shared/TexturePanel";
+import { MediaPanel } from "@/components/shared/MediaPanel";
 import type { Program } from "@/content/programs";
 
 export function ProgramGrid({ programs }: { programs: Program[] }) {
@@ -12,7 +12,13 @@ export function ProgramGrid({ programs }: { programs: Program[] }) {
           href={`/${program.category}/${program.slug}`}
           className="group flex flex-col overflow-hidden rounded-2xl border border-paper/10 bg-anthracite transition-colors hover:border-paper/25"
         >
-          <TexturePanel variant={program.texture} className="aspect-[16/10] w-full" />
+          <MediaPanel
+            src={program.image}
+            alt={program.imageAlt}
+            variant={program.texture}
+            className="relative aspect-[16/10] w-full"
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+          />
           <div className="flex flex-1 flex-col p-5">
             <h3 className="font-display text-xl uppercase tracking-wide text-paper">{program.title}</h3>
             <p className="mt-2 flex-1 text-sm text-paper/65">{program.summary}</p>
