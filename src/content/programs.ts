@@ -21,6 +21,8 @@ export type Program = {
   /** Real photo path, when one has been supplied — falls back to the TexturePanel otherwise. */
   image?: string;
   imageAlt?: string;
+  /** Click-to-play video, shown below the description when supplied (see VideoPlayer). */
+  video?: { src: string; poster: string; label: string };
   legacyPaths: string[];
   texture: "performance" | "health" | "kampfkunst" | "regeneration";
 };
@@ -178,6 +180,13 @@ export const programs: Program[] = [
       "Angeleitet von Jürgen Pollack (Karate 2. DAN, über 200 Lehrgänge)",
       "Trainingserfahrung u. a. in Boxen, Kickboxen, Krav Maga, Bodenkampf und Kyusho",
     ],
+    image: "/media/kampfkunst/karate-portrait.webp",
+    imageAlt: "Karate-Trainer in Kampfstellung im Sportpark Pollack",
+    video: {
+      src: "/media/video/karate.mp4",
+      poster: "/media/video/karate-poster.webp",
+      label: "Karate-Training im Sportpark Pollack",
+    },
     legacyPaths: ["/programm/karate"],
     texture: "kampfkunst",
   },

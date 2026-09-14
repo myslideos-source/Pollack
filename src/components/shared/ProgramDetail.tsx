@@ -4,6 +4,7 @@ import { Container } from "@/components/shared/Container";
 import { Button } from "@/components/shared/Button";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { Accordion } from "@/components/shared/Accordion";
+import { VideoPlayer } from "@/components/shared/VideoPlayer";
 import { breadcrumbJsonLd } from "@/lib/breadcrumb";
 import { categoryMeta } from "@/content/categories";
 import type { Program } from "@/content/programs";
@@ -59,6 +60,15 @@ export function ProgramDetail({ program }: { program: Program }) {
               </li>
             ))}
           </ul>
+
+          {program.video ? (
+            <VideoPlayer
+              src={program.video.src}
+              poster={program.video.poster}
+              label={program.video.label}
+              className="mt-10 aspect-video w-full rounded-2xl"
+            />
+          ) : null}
 
           {program.quote ? (
             <blockquote className="mt-10 border-l-2 border-red pl-5 font-display text-2xl leading-snug text-paper sm:text-3xl">

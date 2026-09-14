@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/shared/Button";
 import { TexturePanel } from "@/components/shared/TexturePanel";
+import { MediaPanel } from "@/components/shared/MediaPanel";
 import { moreNutritionEsn } from "@/content/partners";
 
 export function MoreNutritionEsnTeaser() {
@@ -19,7 +20,14 @@ export function MoreNutritionEsnTeaser() {
         </div>
 
         <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-          <TexturePanel variant="community" className="col-span-2 aspect-[16/9] w-full rounded-2xl lg:col-span-2 lg:row-span-2 lg:aspect-auto" label="MORE Nutrition & ESN" />
+          <MediaPanel
+            src="/media/partner/more-nutrition.webp"
+            alt="MORE Nutrition Chunky Proteinriegel-Dosen im Sportpark Pollack"
+            variant="community"
+            className="relative col-span-2 aspect-[16/9] w-full rounded-2xl lg:col-span-2 lg:row-span-2 lg:aspect-auto"
+            label="MORE Nutrition & ESN"
+            sizes="(min-width: 1024px) 50vw, 100vw"
+          />
           <TexturePanel variant="performance" className="aspect-square w-full rounded-2xl" label={moreNutritionEsn.more.name} />
           <TexturePanel variant="performance" className="aspect-square w-full rounded-2xl" label={moreNutritionEsn.esn.name} />
           <TexturePanel variant="community" className="col-span-2 aspect-[16/9] w-full rounded-2xl lg:col-span-2" label="Produktvideo" />

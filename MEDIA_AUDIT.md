@@ -97,15 +97,49 @@ beide Versionen über ein natives `<picture>`-Element mit `media`-Query aus — 
 pro Endgerät nur die passende Datei (verifiziert: Mobile lädt ausschließlich `hero-mobile.webp`,
 Desktop ausschließlich `hero-desktop.webp`, nie beide).
 
+### Vierte Lieferung: zwei weitere Fotos + das erste Video
+
+Der Auftraggeber hat vier weitere Dateien hochgeladen. Ein Bildvergleich (mittlerer Pixel-Diff,
+da direkter Bytevergleich wegen erneuter WebP-Kompression nicht aussagekräftig ist) hat gezeigt:
+Die ersten beiden Bilder sind **erneute Uploads der bereits vorhandenen Solarium- und
+Hardcore-Area-Fotos** (Diff ≈ 2 von 255 — im Bereich normaler verlustbehafteter Kompression
+desselben Bildes) und wurden deshalb nicht erneut verarbeitet. Die beiden übrigen Dateien sind
+neu:
+
+| Datei | Motiv | Verwendung | Status |
+|---|---|---|---|
+| `public/media/kampfkunst/karate-portrait.webp` | Person in rotem Karate-Gi, Kampfstellung, Spiegelreflexion, Boxsäcke im Hintergrund | `/kampfkunst/karate` | ✅ optimiert, unverändert — **Identität nicht bestätigt**, siehe Hinweis unten |
+| `public/media/partner/more-nutrition.webp` | Gestapelte MORE-Nutrition-„Chunky"-Dosen im Regal, rote Akzentbeleuchtung | `/partner-produkte` (Aufmacherbild), Startseiten-Teaser „MORE Nutrition & ESN“ | ✅ optimiert, unverändert |
+
+**Erstes echtes Video:** Der Auftraggeber hat außerdem ein 12-sekündiges Handyvideo (`.mov`,
+1920×1080, mit Ton) von zwei Personen im Kampfsport-Training (Schlagtechniken gegen Kick-Pads)
+bereitgestellt. Es wurde für das Web aufbereitet:
+
+| Datei | Verarbeitung | Verwendung | Status |
+|---|---|---|---|
+| `public/media/video/karate.mp4` | Mit ffmpeg re-encodiert: auf 1280 px Breite skaliert, H.264 (CRF 23) + AAC-Audio, `faststart` für progressive Wiedergabe. Größe 7,2 MB → 3,9 MB | `/kampfkunst/karate` (neue `VideoPlayer`-Komponente) | ✅ verarbeitet |
+| `public/media/video/karate-poster.webp` | Frame bei 3 s extrahiert, als WebP exportiert | Vorschaubild/Poster für dasselbe Video | ✅ verarbeitet |
+
+Die neue `VideoPlayer`-Komponente (`src/components/shared/VideoPlayer.tsx`) lädt **kein einziges
+Video-Byte**, bevor die Besucherin/der Besucher aktiv auf Play klickt — vor dem Klick steht nur
+ein `<img>`-Poster mit Play-Button im DOM, kein `<video>`-Element. Das wurde per
+Netzwerk-Request-Log verifiziert (0 Requests an `karate.mp4` vor dem Klick, 1 danach). Das
+entspricht der Vorgabe „keine automatische Tonwiedergabe“ und „erst beim Öffnen … laden“ aus
+dem ursprünglichen Auftrag.
+
+**Hinweis zur Person auf dem Karate-Porträt:** Statur und Frisur entsprechen der Person auf dem
+ursprünglichen Hero-Foto und dem Gruppenfoto — auch hier liegt Jürgen Pollack nahe, ist aber
+nicht bestätigt. Auch dieses Foto wird deshalb ohne Namensnennung verwendet.
+
 ## Wo weiterhin echte Fotos/Videos fehlen
 
-Trotz der fünf neuen Fotos fehlen weiterhin:
+Fehlen weiterhin:
 
 - Ein Hero-**Video** (aktuell zeigt der Hero ein Standbild, technisch aber vollständig für ein
   Video vorbereitet, siehe unten)
-- Bilder/Videos zu Milon, InBody, Karate (Erwachsene), Selbstverteidigung, Massage/brainLight,
-  Yoga (Nina), Solarium, Jürgen Pollack im Porträt, MORE Nutrition & ESN (inkl. Produktvideo)
-- Fotos für die Gallery-Kacheln „Community“ und „Regeneration“
+- Bilder/Videos zu Milon, InBody, Selbstverteidigung, Massage/brainLight, Yoga (Nina), Jürgen
+  Pollack im Porträt (sofern das Karate-Foto nicht dafür bestätigt wird), ESN-Produktbild
+- Fotos für die Gallery-Kachel „Community" ist jetzt belegt; kein offener Punkt mehr dort
 - Das offizielle Hansefit-Logo (im Partnerbereich auf der Startseite und auf
   `/partner-produkte` aktuell durch einen Text-Schriftzug ersetzt, siehe TODO_CLIENT.md Punkt 15)
 

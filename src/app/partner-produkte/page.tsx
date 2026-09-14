@@ -4,6 +4,7 @@ import { PageHero } from "@/components/shared/PageHero";
 import { Container } from "@/components/shared/Container";
 import { Button } from "@/components/shared/Button";
 import { TexturePanel } from "@/components/shared/TexturePanel";
+import { MediaPanel } from "@/components/shared/MediaPanel";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbJsonLd } from "@/lib/breadcrumb";
 import { hansefit, moreNutritionEsn } from "@/content/partners";
@@ -57,7 +58,14 @@ export default function PartnerProduktePage() {
           <p className="mt-4 max-w-2xl text-paper/70">{moreNutritionEsn.intro}</p>
 
           <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-            <TexturePanel variant="community" className="col-span-2 aspect-[16/9] w-full rounded-2xl lg:col-span-2 lg:row-span-2 lg:aspect-auto" label="Aufmacherbild" />
+            <MediaPanel
+              src="/media/partner/more-nutrition.webp"
+              alt="MORE Nutrition Chunky Proteinriegel-Dosen im Sportpark Pollack"
+              variant="community"
+              className="relative col-span-2 aspect-[16/9] w-full rounded-2xl lg:col-span-2 lg:row-span-2 lg:aspect-auto"
+              label="Aufmacherbild"
+              sizes="(min-width: 1024px) 50vw, 100vw"
+            />
             <TexturePanel variant="performance" className="aspect-square w-full rounded-2xl" label="Produktbild 1" />
             <TexturePanel variant="performance" className="aspect-square w-full rounded-2xl" label="Produktbild 2" />
             <TexturePanel variant="performance" className="aspect-square w-full rounded-2xl" label="Produktbild 3" />

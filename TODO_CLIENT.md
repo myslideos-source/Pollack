@@ -31,39 +31,51 @@ Kind beim Kinderkarate). Diese fünf sind eingebaut (siehe MEDIA_AUDIT.md).
 Kraftraum/„Hardcore Area", nochmals die Frau am Kabelzug — laut Bildvergleich identisch mit
 einem bereits vorhandenen Foto). Auf ausdrücklichen Wunsch ist die Frau am Kabelzug jetzt das
 Hero-Bild; die anderen drei sind bei Solarium, Plate-Loaded/Hardcore Area und der Gallery-Kachel
-„Community" eingebaut. Für alles Weitere gilt weiterhin: entweder (a) die ZIP in kleinere Pakete
-aufteilen (z. B. pro Bereich: `milon.zip`, `inbody.zip`, `karate.zip`, `selbstverteidigung.zip`,
-`massage.zip`, `yoga.zip`, `pollack-portrait.zip`, `more-esn.zip`, `hansefit-logo.zip`) oder
-(b) weitere einzelne Bilder direkt als Chat-Anhänge hochladen.
+„Community" eingebaut.
+
+**Update 4:** Vier weitere Dateien wurden hochgeladen: zwei davon waren erneute Uploads des
+Solarium- und Hardcore-Area-Fotos (laut Bildvergleich, nicht erneut verarbeitet), zwei waren neu
+(Karate-Porträt, MORE-Nutrition-Produktregal) und eine war das **erste Video** — ein 12-Sekunden-
+Kampfsport-Trainingsclip, der für `/kampfkunst/karate` aufbereitet wurde (siehe MEDIA_AUDIT.md).
+Für alles Weitere gilt weiterhin: entweder (a) die ZIP in kleinere Pakete aufteilen (z. B. pro
+Bereich: `milon.zip`, `inbody.zip`, `selbstverteidigung.zip`, `massage.zip`, `yoga.zip`,
+`more-esn-produktvideo.zip`, `hansefit-logo.zip`) oder (b) weitere einzelne Dateien direkt als
+Chat-Anhänge hochladen. Bitte beim Hochladen weiterer Videos möglichst kurz halten oder vorab
+komprimieren, damit der Chat-Upload nicht am Größenlimit scheitert (siehe Update 1).
 
 ## 2. Nutzungsrechte für Fotos & Videos
 
-**Betrifft jetzt alle neun bereits eingebauten Fotos**, nicht nur zukünftiges Material: Bitte
-schriftlich bestätigen, dass die Nutzungsrechte für die Verwendung auf der neuen Website
-vorliegen — insbesondere:
+**Betrifft jetzt alle elf bereits eingebauten Fotos und das eine eingebaute Video**, nicht nur
+zukünftiges Material: Bitte schriftlich bestätigen, dass die Nutzungsrechte für die Verwendung
+auf der neuen Website vorliegen — insbesondere:
 
 - die Rechte an den abgebildeten Personen (Modellfreigabe), **besonders für das Kind auf dem
   Kinderkarate-Foto** (`public/media/kampfkunst/kinderkarate.webp`), das aktuell bereits live auf
   `/kampfkunst`, `/kampfkunst/kinderkarate` und der Startseite zu sehen ist,
 - die Rechte an den erwachsenen Personen auf dem bisherigen Hero-/Beratungsfoto (jetzt Gallery
-  „Studio"), auf den beiden Kabelzug-/Kraftgerät-Fotos und auf dem Gruppenfoto mit drei Personen
-  (Gallery „Community"),
+  „Studio"), auf den beiden Kabelzug-/Kraftgerät-Fotos, auf dem Gruppenfoto mit drei Personen
+  (Gallery „Community"), auf dem Karate-Porträt (`/kampfkunst/karate`) sowie an den **zwei
+  Personen im neuen Karate-Trainingsvideo** (`public/media/video/karate.mp4`),
 - bei künftigem Material zusätzlich: Musik in Videos, Marken Dritter wie Technogym/Milon/FIVE/
-  InBody-Logos.
+  InBody-Logos, sowie die auf dem Solarium-Foto sichtbare Strand-Wandtapete (Fremddesign an der
+  Wand, keine Sportpark-eigene Gestaltung — falls das eine Rolle spielt).
 
-Ohne diese Bestätigung sollten die bereits eingebauten personenbezogenen Aufnahmen **vor einem
-echten Go-Live** noch einmal geprüft werden.
+Ohne diese Bestätigung sollten die bereits eingebauten personenbezogenen Aufnahmen und das Video
+**vor einem echten Go-Live** noch einmal geprüft werden.
 
-## 2a. Identität der mittleren Person auf dem Gruppenfoto (Gallery „Community")
+## 2a. Identität der Person auf Gruppenfoto, Hero und Karate-Porträt
 
-Der Mann in der Bildmitte des Gruppenfotos (`public/media/community/team-gruppe.webp`) hat
-dieselbe Statur/Frisur wie die Person auf dem ursprünglichen Hero-/Beratungsfoto — es liegt nahe,
-dass es sich um **Jürgen Pollack** handelt. Das wurde bisher nicht ausdrücklich bestätigt, daher
+Drei verschiedene Aufnahmen (Gruppenfoto `team-gruppe.webp`, das ursprüngliche Hero-/
+Beratungsfoto, und jetzt auch das Karate-Porträt `karate-portrait.webp`) zeigen erkennbar
+dieselbe Person — Statur, Frisur und Gesichtszüge stimmen überein. Es liegt nahe, dass es sich um
+**Jürgen Pollack** handelt (das Karate-Porträt passt besonders gut zu seiner im Auftrag
+genannten Qualifikation „Karate 2. DAN"). Das wurde bisher nicht ausdrücklich bestätigt, daher
 wird auf der Website aktuell **keine Identität behauptet** (weder Name noch Rolle zu den
 abgebildeten Personen). Bitte bestätigen: Ist das Jürgen Pollack, und wer sind die beiden
-anderen Personen (Mitglieder, Trainer:innen, Familie)? Falls gewünscht, verschieben wir dieses
-Foto danach gezielt in den persönlichen Jürgen-Pollack-Bereich auf der Startseite und
-`/ueber-uns` statt der aktuell neutralen Gallery-Kachel „Community".
+anderen Personen auf dem Gruppenfoto (Mitglieder, Trainer:innen, Familie)? Falls bestätigt,
+verschieben wir das Karate-Porträt und/oder das Gruppenfoto gezielt in den persönlichen
+Jürgen-Pollack-Bereich auf der Startseite und `/ueber-uns`, statt sie nur neutral auf den
+jeweiligen Fachseiten bzw. in der Gallery zu zeigen.
 
 ## 3. Preise
 
