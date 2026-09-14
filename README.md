@@ -45,40 +45,18 @@ Das Projekt ist ein Standard-Next.js-App-Router-Projekt und Vercel-kompatibel
 (`vercel deploy` bzw. Verbindung des Git-Repos mit Vercel genügt, keine Sonderkonfiguration
 nötig). Node ≥ 20 wird empfohlen.
 
-## Medien-Upload für den Auftraggeber (`/admin/upload`)
+## Admin-Bereich (`/admin`)
 
-Damit der Auftraggeber Fotos/Videos nicht per Chat hochladen muss (dort gilt ein
-Datei-Größenlimit, siehe TODO_CLIENT.md), gibt es eine interne, passwortgeschützte
-Upload-Seite unter `/admin/upload`. Sie schreibt nicht in ein lokales Dateisystem (das würde
-bei den meisten Hosting-Setups, z. B. Vercel Serverless Functions, beim nächsten Deployment
-wieder verschwinden), sondern committet die Datei direkt per GitHub-Contents-API in dieses
-Repository unter `public/media/<bereich>/`.
+Der frühere, passwortgeschützte GitHub-Upload unter `/admin/upload` wurde durch einen
+vollständigen, Supabase-gestützten Admin-Bereich ersetzt: geschützter Login mit Rollen
+(Admin/Redakteur), Anfragenverwaltung, Termine, ein einfacher Inhaltseditor mit
+Entwurf-und-Veröffentlichen-Workflow für Startseite und Trainingsbereiche, eine
+Medienbibliothek (Supabase Storage), Preise/Öffnungszeiten/Partner & Produkte/Team,
+Benutzerverwaltung, Änderungsverlauf und Einstellungen.
 
-**Damit das funktioniert, müssen beim Hosting zwei Umgebungsvariablen gesetzt werden:**
-
-| Variable | Bedeutung |
-|---|---|
-| `ADMIN_UPLOAD_PASSWORD` | Passwort für `/admin/upload`. Aktuell testweise mit `Sportpark2026!Pollack` vorbelegt (im Chat vom Auftraggeber als Platzhalter bestätigt) — bitte vor dem Go-Live durch ein eigenes, sicheres Passwort ersetzen. |
-| `GITHUB_TOKEN` | Ein GitHub Personal Access Token (fine-grained, nur für dieses Repository, Berechtigung „Contents: Read and write") mit Schreibrecht auf `myslideos-source/Pollack`. Erstellbar unter GitHub → Settings → Developer settings → Fine-grained tokens. **Dieses Token kann nicht von Claude erzeugt werden** — es muss vom Repository-Owner selbst angelegt werden. |
-
-Optional: `GITHUB_OWNER`, `GITHUB_REPO`, `GITHUB_BRANCH` überschreiben die Standardwerte
-(`myslideos-source` / `Pollack` / der aktuelle Arbeits-Branch), falls das Repo verschoben oder
-der Ziel-Branch geändert wird.
-
-**Wichtige Einschränkungen:**
-
-- Ohne die beiden Variablen antwortet der Upload mit einer klaren Fehlermeldung, statt still zu
-  scheitern.
-- Viele Hosting-Anbieter begrenzen die Größe von Anfragen an Serverless-Funktionen (bei Vercel
-  z. B. je nach Tarif nur wenige MB). Für größere Videos kann das ein Limit sein — die Upload-Seite
-  selbst begrenzt auf 25 MB pro Datei, das jeweilige Hosting-Limit kann aber niedriger liegen.
-- Der Upload sortiert Dateien nur in `public/media/<bereich>/` ein. Wo genau eine Datei danach auf
-  der Seite erscheint (welche Programmseite, welcher Bereich), ist weiterhin eine bewusste
-  inhaltliche Entscheidung — bitte nach dem Upload kurz mitteilen, was hochgeladen wurde und wofür
-  es gedacht ist, dann wird es gezielt eingebaut.
-- Die Seite ist per `robots.txt` (`disallow: /admin`) und `noindex`-Meta von Suchmaschinen
-  ausgeschlossen, ist aber nicht öffentlich beworben — das Passwort ist der einzige Schutz, also
-  bitte ein wirklich sicheres Passwort setzen und das Token nicht teilen.
+**Siehe [SUPABASE_SETUP.md](./SUPABASE_SETUP.md) für die vollständige Einrichtung** (Supabase-Projekt,
+Umgebungsvariablen, ersten Admin-Nutzer anlegen) und **[ADMIN_MANUAL.md](./ADMIN_MANUAL.md)** für eine
+kurze Bedienungsanleitung für Jürgen und sein Team.
 
 ## Projektstruktur
 
@@ -91,21 +69,36 @@ src/
     regeneration/          Übersicht + [slug]
     partner-produkte/       Hansefit, MORE Nutrition, ESN
     preise/ ueber-uns/ kontakt/ trainingsfinder/ impressum/ datenschutz/
+    admin/                  Geschützter Admin-Bereich (siehe SUPABASE_SETUP.md)
+      (auth)/                 Login, Passwort vergessen, Passwort zurücksetzen
+      (dashboard)/            Dashboard, Anfragen, Termine, Website, Medien, Angebote,
+                               Öffnungszeiten, Partner, Team, Benutzer, Verlauf, Einstellungen
+      actions/                Server Actions für alle Admin-Mutationen
+    actions/                  Server Actions für öffentliche Formulare (Kontakt/Probetraining)
   components/
     layout/              Header, Footer, mobile CTA-Leiste
     home/                 Startseiten-Sektionen (Hero, Trainingswelten, Gallery, …)
     shared/                Wiederverwendbare Bausteine (Button, PulseLine, TexturePanel, …)
+    admin/                  Admin-UI-Bausteine (Sidebar, Topbar, MediaPicker, ListEditor, …)
     calculator/             Sportpark Ziel-Kompass (Gesundheitsrechner)
-  content/                  Zentrale Inhalte als TypeScript-Dateien (site, hours, programs,
-                              pricing, about, goals, categories, legacy-redirects, media)
-  lib/                       Reine Logik: health-calculator.ts, training-finder.ts,
-                              breadcrumb.ts, fonts.ts
+  content/                  Ursprüngliche statische Inhalte (Blaupause für die DB-Seed-Daten;
+                              einige Seiten lesen weiterhin direkt von hier, siehe unten)
+  lib/
+    supabase/                 Client-Factories (Browser/Server/Middleware/Service-Role) +
+                               generierte Datenbanktypen
+    content/                   Server-seitige Leseschicht: liest website_sections/offers/
+                                opening_hours/partners/products für die öffentlichen Seiten
+    validation/                 Zod-Schemas für Formulare
+    auth.ts, email.ts, opening-hours.ts, website-sections-schema.ts, offer-categories.ts
   fonts/                     Selbst gehostete woff2-Dateien (Poppins)
+supabase/
+  migrations/                SQL-Migrationen (Schema, Storage-Buckets, RLS-Fixes, Seed-Daten)
 ```
 
-Inhalte zentral pflegen: Preise in `src/content/pricing.ts`, Öffnungszeiten in
-`src/content/hours.ts`, Programme/Texte in `src/content/programs.ts`,
-Kontaktdaten in `src/content/site.ts`. Keine dieser Angaben ist an mehreren Stellen dupliziert.
+Redaktionell laufend gepflegte Inhalte (Preise, Öffnungszeiten, Trainingsbereiche, Partner,
+Team, Startseiten-Hero) liegen in Supabase und werden über `/admin` bearbeitet — siehe
+`src/lib/content/` für die Leseseite. Inhalte ohne eigenes Admin-Formular (z. B. Google-
+Bewertungen, Kategorie-Kacheln, Erweiterung-2026-Teaser) bleiben vorerst in `src/content/*.ts`.
 
 ## Design-System — „Der Puls des Sportparks“
 
@@ -141,15 +134,18 @@ Kontaktdaten in `src/content/site.ts`. Keine dieser Angaben ist an mehreren Stel
 
 ## Bekannte Einschränkungen dieses Builds
 
-Siehe **TODO_CLIENT.md** für die vollständige Liste. Kurzfassung:
+Siehe **TODO_CLIENT.md** für die ursprüngliche Liste (Preise, Öffnungszeiten, Fotos) und
+**SUPABASE_SETUP.md** (Abschnitt „Bekannte Einschränkungen“) für die aktuellen, den Admin-Bereich
+betreffenden Punkte. Kurzfassung:
 
-1. Keine echten Fotos/Videos des Sportparks verbaut (Netzwerkzugriff blockiert) — Architektur
-   dafür ist vorbereitet (`src/content/media.ts`, `HeroMedia`-Logik in `Hero.tsx`).
-2. Alle Preise zeigen „Preis auf Anfrage“ (keine verifizierten Zahlen verfügbar).
-3. Öffnungszeiten (`src/content/hours.ts`, `hoursConfirmed = true`) sind aus einer Websuche
-   übernommen, die mehrere unabhängige Verzeichnis-Einträge übereinstimmend bestätigt hat —
-   nicht per Screenshot aus dem eigenen Google-Business-Profil verifiziert (siehe TODO_CLIENT.md
-   Punkt 4).
-4. Kontaktformular nutzt aktuell einen `mailto:`-Fallback statt eines echten Formular-Backends.
-5. Rechtstexte (Impressum/Datenschutz) sind strukturiert aufgebaut, aber nicht juristisch
+1. Alle Preise zeigen weiterhin „Preis auf Anfrage" (keine verifizierten Zahlen verfügbar) —
+   jetzt aber über `/admin/angebote` pflegbar.
+2. Öffnungszeiten sind aus einer Websuche übernommen (mehrere unabhängige Verzeichnis-Einträge
+   stimmten überein), nicht per Screenshot aus dem eigenen Google-Business-Profil verifiziert —
+   jetzt aber über `/admin/oeffnungszeiten` korrigierbar, ohne dass Code geändert werden muss.
+3. Rechtstexte (Impressum/Datenschutz) sind strukturiert aufgebaut, aber nicht juristisch
    geprüft.
+4. Bilder/Videos, die aus den ursprünglichen statischen Inhalten in die Datenbank übernommen
+   wurden, verweisen weiterhin auf die vorhandenen Dateien unter `public/media/…` (nicht auf die
+   Medienbibliothek) — ein Admin kann sie jederzeit über den Inhaltseditor durch eine über
+   `/admin/medien` hochgeladene Datei ersetzen.
