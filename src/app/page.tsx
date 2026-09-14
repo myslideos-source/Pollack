@@ -1,6 +1,7 @@
 import { Hero } from "@/components/home/Hero";
 import { Imagefilm } from "@/components/home/Imagefilm";
 import { TrustStats } from "@/components/home/TrustStats";
+import { GoogleReviewsBadge } from "@/components/home/GoogleReviewsBadge";
 import { GoalSelector } from "@/components/home/GoalSelector";
 import { TrainingWorlds } from "@/components/home/TrainingWorlds";
 import { HealthTeaser } from "@/components/home/HealthTeaser";
@@ -21,6 +22,7 @@ export default function HomePage() {
       <Hero />
       <Imagefilm />
       <TrustStats />
+      <GoogleReviewsBadge />
       <GoalSelector />
       <TrainingWorlds />
       <HealthTeaser />

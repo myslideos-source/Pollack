@@ -211,8 +211,8 @@ dann wird `src/components/shared/ContactForm.tsx` entsprechend angebunden.
 
 ## 10. Social-Media- und Bewertungs-Links
 
-Im Auftrag nicht genannt und daher nicht ergänzt (z. B. Instagram/Facebook, Google-Bewertungen).
-Bitte mitteilen, ob und welche Profile verlinkt werden sollen.
+Instagram/Facebook im Auftrag nicht genannt und daher nicht verlinkt. Bitte mitteilen, ob und
+welche Profile verlinkt werden sollen. Google-Bewertungen sind jetzt eingebunden — siehe Punkt 18.
 
 ## 11. Kinderkarate — Mindestalter
 
@@ -280,3 +280,22 @@ Go-Live entweder
 Beide Videos sind bereits mit Namen, Handle (`@christian.wolf`) und Plattform (TikTok &
 Instagram) als Quelle gekennzeichnet (`src/content/community.ts`,
 `src/components/home/CommunityShoutout.tsx`), das ersetzt aber keine echte Freigabe.
+
+## 18. Google-Bewertungen: Sternebadge nicht direkt aus Google verifiziert
+
+Auf Wunsch des Auftraggebers eingebaut: ein Sterne-Badge unter den Trust-Stats auf der
+Startseite (`src/components/home/GoogleReviewsBadge.tsx`) sowie im Footer, beide mit Link zur
+echten Google-Maps-Seite des Sportparks (`src/content/reviews.ts`, funktioniert ohne Place-ID
+über Googles offizielles `maps/search`-URL-Format — Besucher:innen landen direkt beim echten
+Eintrag und können dort selbst eine Bewertung lesen/abgeben). Zusätzlich als `aggregateRating`
+im strukturierten Daten-Markup (`src/app/layout.tsx`) hinterlegt.
+
+**Wichtige Einschränkung:** Direkter Zugriff auf das Google-Business-Profil war aus dieser
+Umgebung nicht möglich (dieselbe Netzwerk-Restriktion wie bei den Öffnungszeiten, siehe Punkt 1
+und 4). Der angezeigte Wert — **5,0 von 5 Sternen bei 6 Bewertungen** — stammt aus einer
+Websuche, die zwei unabhängige Verzeichnis-Einträge (11880.de, golocal.de) übereinstimmend
+zeigten; solche Verzeichnisse übernehmen ihre Zahlen häufig vom selben Google-Profil, das wurde
+hier aber nicht per Screenshot aus Google selbst verifiziert. Bitte kurz gegen die eigene
+Google-Maps-Ansicht gegenchecken und bei Abweichung `rating`/`reviewCount` in
+`src/content/reviews.ts` anpassen — der Rest (Badge, Footer, strukturierte Daten) aktualisiert
+sich automatisch.

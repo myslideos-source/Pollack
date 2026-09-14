@@ -3,7 +3,9 @@ import { poppinsDisplay, poppinsBody } from "@/lib/fonts";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { MobileCtaBar } from "@/components/layout/MobileCtaBar";
+import { WhatsAppFloatingButton } from "@/components/layout/WhatsAppFloatingButton";
 import { siteConfig, contact } from "@/content/site";
+import { googleReviews } from "@/content/reviews";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -58,6 +60,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       addressCountry: contact.country,
     },
     areaServed: "Fichtenau, Crailsheim, Hohenlohekreis",
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: googleReviews.rating,
+      reviewCount: googleReviews.reviewCount,
+    },
   };
 
   return (
@@ -73,6 +80,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </main>
         <Footer />
         <MobileCtaBar />
+        <WhatsAppFloatingButton />
       </body>
     </html>
   );

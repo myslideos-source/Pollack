@@ -1,8 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Phone, Mail, MessageCircle } from "lucide-react";
+import { MapPin, Phone, Mail, MessageCircle, Star } from "lucide-react";
 import { contact, primaryNav, siteConfig } from "@/content/site";
 import { dayLabels, openingHours, hoursConfirmed } from "@/content/hours";
+import { googleReviews } from "@/content/reviews";
 
 function formatDay(ranges: { open: string; close: string }[]): string {
   if (ranges.length === 0) return "geschlossen";
@@ -22,6 +23,16 @@ export function Footer() {
             className="h-12 w-auto"
           />
           <p className="mt-4 max-w-xs text-sm text-paper/60">{siteConfig.tagline}</p>
+          <a
+            href={googleReviews.mapsUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-4 inline-flex items-center gap-1.5 text-sm text-paper/60 hover:text-paper"
+          >
+            <Star size={14} className="fill-sand text-sand" aria-hidden="true" />
+            {googleReviews.rating.toLocaleString("de-DE", { minimumFractionDigits: 1 })} &middot;{" "}
+            {googleReviews.reviewCount} Bewertungen
+          </a>
         </div>
 
         <nav aria-label="Footer Navigation">
