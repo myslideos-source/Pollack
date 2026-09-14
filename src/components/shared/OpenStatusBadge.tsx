@@ -18,18 +18,13 @@ export function OpenStatusBadge({
   special: SpecialOpeningHour[];
   className?: string;
 }) {
-  const [status, setStatus] = useState<{ open: boolean; closesAt?: string; opensAt?: string } | null>(null);
+  const [status, setStatus] = useState<{ open: boolean; closesAt?: string } | null>(null);
 
   useEffect(() => {
     const update = () => {
       const now = new Date();
-      const { open } = isOpenNow(hours, special, now);
-      if (open) {
-        const active = hours.find((h) => !h.closed && h.open_time && h.close_time);
-        setStatus({ open: true, closesAt: active?.close_time?.slice(0, 5) });
-      } else {
-        setStatus({ open: false });
-      }
+      const { open, closesAt } = isOpenNow(hours, special, now);
+      setStatus({ open, closesAt: closesAt?.slice(0, 5) });
     };
     update();
     const id = setInterval(update, 60_000);

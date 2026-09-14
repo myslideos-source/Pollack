@@ -26,26 +26,33 @@ export type SpecialOpeningHour = {
   note: string | null;
 };
 
+function localDateStr(now: Date): string {
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+}
+
 /**
  * Computes "Jetzt geöffnet" from the regular weekly hours (which may list several time ranges
  * per weekday, e.g. a morning and an evening block with a midday closure in between), overridden
- * by any special_opening_hours entry whose date range covers `now`.
+ * by any special_opening_hours entry whose date range covers `now`. Also returns the close time
+ * of whichever range is actually active right now (not just the first range in the list), so
+ * callers can show an accurate "geöffnet bis …" instead of an arbitrary weekday's closing time.
  */
 export function isOpenNow(
   regular: OpeningHour[],
   special: SpecialOpeningHour[],
   now: Date = new Date(),
-): { open: boolean; activeSpecial: SpecialOpeningHour | null } {
-  const todayStr = now.toISOString().slice(0, 10);
+): { open: boolean; activeSpecial: SpecialOpeningHour | null; closesAt: string | null } {
+  const todayStr = localDateStr(now);
   const activeSpecial = special.find((s) => s.date_from <= todayStr && (!s.date_to || s.date_to >= todayStr)) ?? null;
 
   if (activeSpecial) {
-    return { open: isWithinRange(now, activeSpecial), activeSpecial };
+    const open = isWithinRange(now, activeSpecial);
+    return { open, activeSpecial, closesAt: open ? activeSpecial.close_time : null };
   }
 
   const todayRanges = findRegularForToday(regular, now);
-  const open = todayRanges.some((r) => isWithinRange(now, r));
-  return { open, activeSpecial: null };
+  const activeRange = todayRanges.find((r) => isWithinRange(now, r)) ?? null;
+  return { open: activeRange !== null, activeSpecial: null, closesAt: activeRange?.close_time ?? null };
 }
 
 function isWithinRange(now: Date, range: { closed: boolean; open_time: string | null; close_time: string | null }): boolean {
