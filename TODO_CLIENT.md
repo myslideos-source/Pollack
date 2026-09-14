@@ -238,6 +238,28 @@ genannte Kernaussage („Hansefit-Mitglieder können bei uns trainieren") hinaus
 ## 16. MORE Nutrition & ESN — Produktbilder und Produktvideo
 
 `/partner-produkte` und der Startseiten-Teaser (`src/components/home/MoreNutritionEsnTeaser.tsx`)
-sind vollständig für echte Produktbilder und das vorhandene Produktvideo vorbereitet (Layout mit
-Aufmacherbild, mehreren Produktbildern und einer Videofläche), zeigen aber aktuell nur
-TexturePanel-Platzhalter, da uns die Original-Dateien noch nicht vorliegen (siehe Punkt 1).
+zeigen jetzt das Aufmacherfoto und das Christian-Wolf-Regalvideo (siehe Punkt 17). Für die zwei
+einzelnen Produktbild-Kacheln („MORE Nutrition", „ESN") fehlen weiterhin eigene Fotos — bis dahin
+zeigen sie TexturePanel-Platzhalter.
+
+## 17. Christian Wolf — Video-Shoutout: Repost-Bestätigung ausstehend
+
+Die zwei neuen Videos (`public/media/video/christian-wolf-shoutout.mp4` und
+`public/media/video/christian-wolf-more-nutrition.mp4`) sind Screen-Recordings von
+Instagram/TikTok-Story-Content des Fitness-Content-Creators **Christian Wolf** (`@christian.wolf`),
+der den Sportpark besucht und dort ein Shoutout gedreht hat. Sie wurden uns direkt vom
+Auftraggeber übergeben, nicht von Christian Wolf selbst.
+
+Das ist rechtlich ein anderer Fall als die eigenen Studiofotos: Hier geht es um fremden Content
+(Bild, Stimme, Marke „Christian Wolf") eines Dritten, der öffentlich auf Social Media gepostet
+wurde. Ein öffentlicher Shoutout-Post ist in der Regel als Einverständnis zur Erwähnung gedacht,
+deckt aber nicht automatisch einen **Repost auf einer fremden Website** ab. Bitte vor dem
+Go-Live entweder
+
+- eine kurze Freigabe von Christian Wolf einholen (z. B. per DM/E-Mail: „Dürfen wir deinen
+  Shoutout-Clip auf unserer Website zeigen?"), oder
+- die Videos durch ein Standbild/Zitat ersetzen, falls keine Rückmeldung kommt.
+
+Beide Videos sind bereits mit Namen, Handle (`@christian.wolf`) und Plattform (TikTok &
+Instagram) als Quelle gekennzeichnet (`src/content/community.ts`,
+`src/components/home/CommunityShoutout.tsx`), das ersetzt aber keine echte Freigabe.

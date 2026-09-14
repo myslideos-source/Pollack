@@ -190,3 +190,27 @@ Foto (Desktop-/Mobile-Crop) über ein natives `<picture>`-Element.
    ist bereits an jeder relevanten Stelle so verdrahtet (ProgramGrid, ProgramDetail/PageHero,
    TrainingWorlds, Expansion2026, Gallery).
 6. Alt-Texte pro Bild ergänzen (bereits für alle fünf neuen Fotos vergeben, siehe Tabelle oben).
+
+### Fünfte Lieferung: zwei Videos von Christian Wolf (Content-Creator, Besuch im Sportpark)
+
+Der Auftraggeber hat zwei weitere Videos hochgeladen — beides Screen-Recordings von Instagram-/
+TikTok-Story-Content des Fitness-Content-Creators **Christian Wolf** (`@christian.wolf`), der den
+Sportpark besucht und dort ein Shoutout gedreht hat (Info vom Auftraggeber: „Christian Wolf war
+im Sportpark"). Beide Quelldateien waren bereits vertikale 720×1280-Handyvideos mit Ton:
+
+| Datei | Quelle | Inhalt | Verarbeitung | Verwendung |
+|---|---|---|---|---|
+| `public/media/video/christian-wolf-more-nutrition.mp4` (37,7 s, Original 3,8 MB → 4,6 MB nach Re-Encode) | `.mp4`-Upload | Screenshot des Sportpark-Instagram-Profils mit einem Reaktionsvideo von Christian Wolf, zeigt v. a. das reale MORE-Nutrition-Produktregal im Studio | Re-encodiert (H.264 CRF 24 + AAC 128k, `faststart`) | Produktvideo-Kachel im MORE-Nutrition-&-ESN-Bereich (Startseite + `/partner-produkte`) |
+| `public/media/video/christian-wolf-shoutout.mp4` (98,4 s, Original 10,9 MB → 13,0 MB nach Re-Encode) | `.mov`-Upload | Christian Wolf spricht direkt in die Kamera im Sportpark-Trainingsbereich („Shoutout Sportpark pollack"), endet mit einem Foto von ihm mit einem Sportpark-Teammitglied | Re-encodiert (H.264 CRF 24 + AAC 128k, `faststart`) | Neue Startseiten-Sektion „Das sagt die Community" (`src/components/home/CommunityShoutout.tsx`), vertikale Video-Karte im Phone-Format |
+
+Beide Poster-Frames wurden mit ffmpeg aus einem repräsentativen Moment extrahiert und als WebP
+exportiert (`christian-wolf-more-nutrition-poster.webp`, `christian-wolf-shoutout-poster.webp`).
+Die Videos laufen über dieselbe `VideoPlayer`-Komponente wie das Karate-Video — kein Video-Byte
+lädt, bevor aktiv auf Play geklickt wird, kein automatischer Ton.
+
+**Wichtiger Unterschied zu den bisherigen Fotos/Videos:** Das ist kein selbst produziertes
+Sportpark-Material, sondern der Social-Media-Content eines Dritten (Christian Wolf), der uns vom
+Auftraggeber weitergeleitet wurde. Beide Clips sind daher im UI sichtbar mit Name, Handle
+(`@christian.wolf`) und Plattform gekennzeichnet — siehe **TODO_CLIENT.md Punkt 17** für den
+offenen Punkt: eine ausdrückliche Repost-Freigabe von Christian Wolf liegt uns nicht vor und
+sollte vor einem echten Go-Live eingeholt werden.

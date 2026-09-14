@@ -5,6 +5,7 @@ import { TrainingWorlds } from "@/components/home/TrainingWorlds";
 import { HealthTeaser } from "@/components/home/HealthTeaser";
 import { Expansion2026 } from "@/components/home/Expansion2026";
 import { PollackFeature } from "@/components/home/PollackFeature";
+import { CommunityShoutout } from "@/components/home/CommunityShoutout";
 import { PartnerHansefit } from "@/components/home/PartnerHansefit";
 import { MoreNutritionEsnTeaser } from "@/components/home/MoreNutritionEsnTeaser";
 import { Gallery } from "@/components/home/Gallery";
@@ -23,6 +24,7 @@ export default function HomePage() {
       <HealthTeaser />
       <Expansion2026 />
       <PollackFeature />
+      <CommunityShoutout />
       <PartnerHansefit />
       <MoreNutritionEsnTeaser />
       <Gallery />
