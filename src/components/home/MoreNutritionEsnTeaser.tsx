@@ -40,7 +40,16 @@ export async function MoreNutritionEsnTeaser() {
             <TexturePanel variant="performance" className="aspect-square w-full rounded-2xl" label={more.name} />
           ) : null}
           {esn ? (
-            <TexturePanel variant="performance" className="aspect-square w-full rounded-2xl" label={esn.name} />
+            <MediaPanel
+              src={esn.imageSrc}
+              alt={`${esn.name} Produkte im Sportpark Pollack`}
+              variant="performance"
+              className="relative aspect-square w-full rounded-2xl"
+              label={esn.name}
+              sizes="(min-width: 1024px) 25vw, 50vw"
+              focalX={esn.imageFocalX}
+              focalY={esn.imageFocalY}
+            />
           ) : null}
           <TexturePanel variant="community" className="col-span-2 aspect-[16/9] w-full rounded-2xl lg:col-span-2" label="Produktvideo" />
         </div>
