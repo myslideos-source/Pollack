@@ -19,7 +19,7 @@ export function Footer() {
             alt="Sportpark Pollack"
             width={200}
             height={69}
-            className="h-8 w-auto"
+            className="h-12 w-auto"
           />
           <p className="mt-4 max-w-xs text-sm text-paper/60">{siteConfig.tagline}</p>
         </div>
