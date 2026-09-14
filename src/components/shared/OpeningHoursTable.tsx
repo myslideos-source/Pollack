@@ -2,6 +2,11 @@ import { AlertTriangle } from "lucide-react";
 import { dayLabels, openingHours, hoursConfirmed } from "@/content/hours";
 import { OpenStatusBadge } from "@/components/shared/OpenStatusBadge";
 
+function formatDay(ranges: { open: string; close: string }[]): string {
+  if (ranges.length === 0) return "geschlossen";
+  return ranges.map((r) => `${r.open} – ${r.close} Uhr`).join(", ");
+}
+
 export function OpeningHoursTable() {
   return (
     <div className="rounded-2xl border border-paper/10 bg-anthracite p-6 sm:p-8">
@@ -18,17 +23,12 @@ export function OpeningHoursTable() {
       ) : (
         <table className="mt-5 w-full text-sm">
           <tbody>
-            {(Object.keys(dayLabels) as (keyof typeof dayLabels)[]).map((key) => {
-              const day = openingHours[key];
-              return (
-                <tr key={key} className="border-t border-paper/10 first:border-t-0">
-                  <td className="py-2.5 text-paper/70">{dayLabels[key]}</td>
-                  <td className="py-2.5 text-right text-paper">
-                    {day ? `${day.open} – ${day.close} Uhr` : "geschlossen"}
-                  </td>
-                </tr>
-              );
-            })}
+            {(Object.keys(dayLabels) as (keyof typeof dayLabels)[]).map((key) => (
+              <tr key={key} className="border-t border-paper/10 first:border-t-0">
+                <td className="py-2.5 text-paper/70">{dayLabels[key]}</td>
+                <td className="py-2.5 text-right text-paper">{formatDay(openingHours[key])}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       )}

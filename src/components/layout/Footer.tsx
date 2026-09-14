@@ -4,6 +4,11 @@ import { MapPin, Phone, Mail, MessageCircle } from "lucide-react";
 import { contact, primaryNav, siteConfig } from "@/content/site";
 import { dayLabels, openingHours, hoursConfirmed } from "@/content/hours";
 
+function formatDay(ranges: { open: string; close: string }[]): string {
+  if (ranges.length === 0) return "geschlossen";
+  return ranges.map((r) => `${r.open}–${r.close}`).join(", ");
+}
+
 export function Footer() {
   return (
     <footer className="border-t border-paper/10 bg-ink text-paper">
@@ -74,15 +79,12 @@ export function Footer() {
             </p>
           ) : (
             <ul className="mt-4 space-y-1.5 text-sm text-paper/75">
-              {(Object.keys(dayLabels) as (keyof typeof dayLabels)[]).map((key) => {
-                const day = openingHours[key];
-                return (
-                  <li key={key} className="flex justify-between gap-4">
-                    <span>{dayLabels[key]}</span>
-                    <span>{day ? `${day.open}–${day.close}` : "geschlossen"}</span>
-                  </li>
-                );
-              })}
+              {(Object.keys(dayLabels) as (keyof typeof dayLabels)[]).map((key) => (
+                <li key={key} className="flex justify-between gap-4">
+                  <span>{dayLabels[key]}</span>
+                  <span>{formatDay(openingHours[key])}</span>
+                </li>
+              ))}
             </ul>
           )}
           <Link href="/kontakt" className="mt-4 inline-block text-sm text-red hover:text-red-dark">

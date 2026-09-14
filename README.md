@@ -146,9 +146,10 @@ Siehe **TODO_CLIENT.md** für die vollständige Liste. Kurzfassung:
 1. Keine echten Fotos/Videos des Sportparks verbaut (Netzwerkzugriff blockiert) — Architektur
    dafür ist vorbereitet (`src/content/media.ts`, `HeroMedia`-Logik in `Hero.tsx`).
 2. Alle Preise zeigen „Preis auf Anfrage“ (keine verifizierten Zahlen verfügbar).
-3. Öffnungszeiten sind ein unbestätigter Platzhalter (`hoursConfirmed = false` in
-   `src/content/hours.ts`) — die UI zeigt deshalb bewusst „Öffnungszeiten prüfen“ statt eines
-   berechneten (ggf. falschen) Status.
+3. Öffnungszeiten (`src/content/hours.ts`, `hoursConfirmed = true`) sind aus einer Websuche
+   übernommen, die mehrere unabhängige Verzeichnis-Einträge übereinstimmend bestätigt hat —
+   nicht per Screenshot aus dem eigenen Google-Business-Profil verifiziert (siehe TODO_CLIENT.md
+   Punkt 4).
 4. Kontaktformular nutzt aktuell einen `mailto:`-Fallback statt eines echten Formular-Backends.
 5. Rechtstexte (Impressum/Datenschutz) sind strukturiert aufgebaut, aber nicht juristisch
    geprüft.

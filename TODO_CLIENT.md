@@ -137,13 +137,30 @@ verbindlichen Werte liefern:
 
 ## 4. Öffnungszeiten
 
-`src/content/hours.ts` enthält aktuell einen **unbestätigten Platzhalter**
-(`hoursConfirmed = false`), damit die Seite niemals einen falschen „Jetzt geöffnet"/„Geschlossen"-
-Status anzeigt — stattdessen erscheint überall „Öffnungszeiten prüfen". Bitte die tatsächlichen,
-aktuellen Öffnungszeiten (Mo–So, inkl. eventueller Mittagspausen) sowie ggf. reguläre
-Feiertagsregelungen mitteilen. Danach genügt es, `openingHours` in `src/content/hours.ts`
-anzupassen und `hoursConfirmed` auf `true` zu setzen — der Rest (Live-Status im Header, Footer,
-Kontaktseite) aktualisiert sich automatisch.
+**Update:** Auf Wunsch des Auftraggebers („Öffnungszeiten bitte übernehmen so wie auf Google")
+sind jetzt konkrete Zeiten in `src/content/hours.ts` hinterlegt und `hoursConfirmed = true`
+gesetzt — der Live-Status im Header, Footer und auf der Kontaktseite rechnet damit jetzt
+tatsächlich „Jetzt geöffnet"/„Geschlossen".
+
+| Tag | Zeiten |
+|---|---|
+| Montag | 08:30–12:30, 14:30–22:00 |
+| Dienstag | 08:30–12:30, 14:30–21:00 |
+| Mittwoch | 14:30–22:00 |
+| Donnerstag | 08:30–12:30, 14:30–22:00 |
+| Freitag | 08:30–12:30, 14:30–21:00 |
+| Samstag | 08:30–14:00 |
+| Sonntag | 10:00–13:00 |
+
+**Wichtige Einschränkung:** Ein direkter Zugriff auf den Google-Business-Profil-Eintrag war aus
+dieser Umgebung nicht möglich (dieselbe Netzwerk-Restriktion wie bei sportpark-pollack.de, siehe
+Punkt 1). Die obigen Werte stammen aus einer Websuche, die über mehrere unabhängige
+Verzeichnis-Einträge (Cylex, 11880, Yelp u. a. — meist selbst vom Google-Business-Profil
+gespeist) übereinstimmend bestätigt wurden, sind also mit hoher Wahrscheinlichkeit korrekt, aber
+**nicht per Screenshot aus dem eigenen Google-Profil verifiziert**. Bitte einmal kurz gegen die
+eigene Google-Maps-Ansicht gegenchecken, bevor die Seite live geht — und eventuelle reguläre
+Feiertagsregelungen mitteilen (aktuell zeigt die Seite dazu nur den generischen Hinweis „An
+Feiertagen können abweichende Öffnungszeiten gelten").
 
 ## 5. Erweiterung 2026 — Umsetzungsstand
 
