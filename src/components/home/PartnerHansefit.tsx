@@ -20,7 +20,7 @@ export async function PartnerHansefit() {
               alt="Hansefit Logo"
               width={974}
               height={620}
-              className="h-auto w-full max-w-[300px]"
+              className="h-auto w-full max-w-[220px]"
             />
           </div>
           <div>
