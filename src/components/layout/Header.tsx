@@ -57,14 +57,14 @@ export function Header() {
           />
         </Link>
 
-        <nav className="hidden items-center gap-1 xl:flex" aria-label="Hauptnavigation">
+        <nav className="hidden items-center gap-0.5 xl:flex" aria-label="Hauptnavigation">
           {primaryNav.map((item) => {
             const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`rounded-full px-3 py-2 font-display text-sm uppercase tracking-wide transition-colors ${
+                className={`whitespace-nowrap rounded-full px-2.5 py-2 font-display text-[13px] uppercase tracking-normal transition-colors 2xl:px-3 2xl:text-sm 2xl:tracking-wide ${
                   active ? "text-red" : "text-paper/80 hover:text-paper"
                 }`}
                 aria-current={active ? "page" : undefined}

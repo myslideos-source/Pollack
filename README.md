@@ -100,7 +100,7 @@ src/
                               pricing, about, goals, categories, legacy-redirects, media)
   lib/                       Reine Logik: health-calculator.ts, training-finder.ts,
                               breadcrumb.ts, fonts.ts
-  fonts/                     Selbst gehostete woff2-Dateien (Barlow Condensed, Manrope)
+  fonts/                     Selbst gehostete woff2-Dateien (Poppins)
 ```
 
 Inhalte zentral pflegen: Preise in `src/content/pricing.ts`, Öffnungszeiten in
@@ -112,8 +112,8 @@ Kontaktdaten in `src/content/site.ts`. Keine dieser Angaben ist an mehreren Stel
 - Farben als CSS-Variablen in `src/app/globals.css` (`--color-ink`, `--color-red`,
   `--color-moss`, `--color-sand`, …), per Tailwind v4 `@theme inline` als Utilities
   (`bg-ink`, `text-red`, `bg-moss`, …) verfügbar.
-- Display-Schrift: Barlow Condensed (`font-display`), Body: Manrope (`font-body`) — beide
-  selbst gehostet aus `src/fonts/`, keine Google-Fonts-Anfrage zur Laufzeit.
+- Schrift: Poppins für Headlines (`font-display`) und Fließtext (`font-body`) — selbst
+  gehostet aus `src/fonts/`, keine Google-Fonts-Anfrage zur Laufzeit.
 - `PulseLine`-Komponente (`src/components/shared/PulseLine.tsx`): die wiederkehrende
   Puls-Linie, die beim Scrollen in den Viewport von Rot (Performance) zu Moosgrün (Gesundheit)
   wechselt. Respektiert `prefers-reduced-motion`.

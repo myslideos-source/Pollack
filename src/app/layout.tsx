@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { barlowCondensed, manrope } from "@/lib/fonts";
+import { poppinsDisplay, poppinsBody } from "@/lib/fonts";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { MobileCtaBar } from "@/components/layout/MobileCtaBar";
@@ -61,7 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   };
 
   return (
-    <html lang="de" className={`${barlowCondensed.variable} ${manrope.variable}`}>
+    <html lang="de" className={`${poppinsDisplay.variable} ${poppinsBody.variable}`}>
       <body className="flex min-h-screen flex-col bg-ink font-body text-paper antialiased">
         <script
           type="application/ld+json"

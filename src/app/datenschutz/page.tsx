@@ -48,9 +48,8 @@ export default function DatenschutzPage() {
 
           <h2 className="mt-8 font-display text-xl uppercase tracking-wide text-paper">Schriftarten</h2>
           <p className="mt-3">
-            Diese Website nutzt die Schriftarten &bdquo;Barlow Condensed&ldquo; und &bdquo;Manrope&ldquo; ausschließlich
-            selbst gehostet. Es findet keine Verbindung zu Google Fonts oder anderen
-            Schriftarten-Servern statt.
+            Diese Website nutzt die Schriftart &bdquo;Poppins&ldquo; ausschließlich selbst gehostet. Es
+            findet keine Verbindung zu Google Fonts oder anderen Schriftarten-Servern statt.
           </p>
 
           <h2 className="mt-8 font-display text-xl uppercase tracking-wide text-paper">Kontaktformular</h2>
