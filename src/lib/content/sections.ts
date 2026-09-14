@@ -1,19 +1,23 @@
 import "server-only";
-import { cookies } from "next/headers";
+import { draftMode } from "next/headers";
+import { createPublicClient } from "@/lib/supabase/public";
 import { createClient } from "@/lib/supabase/server";
 
 export type SectionContent = Record<string, unknown>;
 
 /**
- * Reads one website_sections row by slug for public rendering. When the signed-in-staff-only
- * "sp_preview" cookie is set (see admin/actions/publish.ts togglePreviewModeAction), an existing
- * draft overrides the live content/visible so staff can see the pending version — but the public
- * site must never show a half-finished draft, so a hidden result (live or draft) always renders
- * as absent, never as an empty placeholder.
+ * Reads one website_sections row by slug for public rendering. The live-content lookup always
+ * uses the stateless public client (see lib/supabase/public.ts) so the common case — Draft Mode
+ * off, i.e. every real visitor — never touches cookies() and can be statically cached. Only when
+ * Next.js Draft Mode is on (see admin/actions/publish.ts togglePreviewModeAction — a signed-in-
+ * staff-only preview) do we reach for the cookie-aware client, since website_drafts' RLS only
+ * allows staff to read it. Draft Mode only forces dynamic, uncached rendering for that one
+ * previewing session; every other visitor still gets the statically cached, published-only page.
+ * A hidden result (live or draft) always renders as absent, never as an empty placeholder.
  */
 export async function getSection(slug: string): Promise<{ content: SectionContent } | null> {
-  const supabase = await createClient();
-  const { data: section, error } = await supabase
+  const publicClient = createPublicClient();
+  const { data: section, error } = await publicClient
     .from("website_sections")
     .select("id, content, visible")
     .eq("slug", slug)
@@ -21,10 +25,10 @@ export async function getSection(slug: string): Promise<{ content: SectionConten
   if (error) console.error(`[getSection:${slug}]`, error);
   if (!section) return null;
 
-  const cookieStore = await cookies();
-  const preview = cookieStore.get("sp_preview")?.value === "1";
+  const { isEnabled: preview } = await draftMode();
 
   if (preview) {
+    const supabase = await createClient();
     const { data: draft } = await supabase
       .from("website_drafts")
       .select("content, visible")

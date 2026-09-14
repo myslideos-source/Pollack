@@ -47,6 +47,7 @@ export async function savePartnerAction(formData: FormData): Promise<{ error?: s
     await logAudit(profile.id, "partner.updated", "partner", d.id, `Partner aktualisiert: ${d.name}`);
     revalidatePath("/admin/partner");
     revalidatePath("/admin/medien");
+    revalidatePath("/", "layout");
     return { id: d.id };
   }
 
@@ -60,6 +61,7 @@ export async function savePartnerAction(formData: FormData): Promise<{ error?: s
   await logAudit(profile.id, "partner.created", "partner", data.id, `Partner angelegt: ${d.name}`);
   revalidatePath("/admin/partner");
   revalidatePath("/admin/medien");
+  revalidatePath("/", "layout");
   return { id: data.id };
 }
 
@@ -75,6 +77,7 @@ export async function deletePartnerAction(formData: FormData): Promise<{ error?:
   await logAudit(profile.id, "partner.deleted", "partner", id, `Partner gelöscht: ${item?.name ?? ""}`);
   revalidatePath("/admin/partner");
   revalidatePath("/admin/medien");
+  revalidatePath("/", "layout");
   return {};
 }
 
@@ -124,6 +127,7 @@ export async function saveProductAction(formData: FormData): Promise<{ error?: s
     await logAudit(profile.id, "product.updated", "product", d.id, `Produkt aktualisiert: ${d.name}`);
     revalidatePath("/admin/partner");
     revalidatePath("/admin/medien");
+    revalidatePath("/", "layout");
     return { id: d.id };
   }
 
@@ -137,6 +141,7 @@ export async function saveProductAction(formData: FormData): Promise<{ error?: s
   await logAudit(profile.id, "product.created", "product", data.id, `Produkt angelegt: ${d.name}`);
   revalidatePath("/admin/partner");
   revalidatePath("/admin/medien");
+  revalidatePath("/", "layout");
   return { id: data.id };
 }
 
@@ -152,5 +157,6 @@ export async function deleteProductAction(formData: FormData): Promise<{ error?:
   await logAudit(profile.id, "product.deleted", "product", id, `Produkt gelöscht: ${item?.name ?? ""}`);
   revalidatePath("/admin/partner");
   revalidatePath("/admin/medien");
+  revalidatePath("/", "layout");
   return {};
 }

@@ -1,5 +1,5 @@
 import "server-only";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import { resolveMedia, resolveMediaSrc } from "@/lib/content/media";
 
 export type PublicPartner = {
@@ -23,7 +23,7 @@ export type PublicProduct = {
 };
 
 export async function loadPartners(): Promise<PublicPartner[]> {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   const { data, error } = await supabase
     .from("partners")
     .select("id, name, description, link_url, logo_media_id")
@@ -43,7 +43,7 @@ export async function loadPartners(): Promise<PublicPartner[]> {
 }
 
 export async function loadProducts(): Promise<PublicProduct[]> {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   const { data, error } = await supabase
     .from("products")
     .select("id, name, category, description, image_media_id, recommended, partner_id")

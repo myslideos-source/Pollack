@@ -1,9 +1,9 @@
 import "server-only";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import type { OpeningHour, SpecialOpeningHour } from "@/lib/opening-hours";
 
 export async function loadOpeningHours(): Promise<{ hours: OpeningHour[]; special: SpecialOpeningHour[] }> {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   const todayStr = new Date().toISOString().slice(0, 10);
   const [{ data: hours, error: hoursError }, { data: special, error: specialError }] = await Promise.all([
     supabase.from("opening_hours").select("weekday, open_time, close_time, closed, sort_order").order("sort_order"),

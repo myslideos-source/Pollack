@@ -1,6 +1,6 @@
 "use server";
 
-import { cookies } from "next/headers";
+import { draftMode } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { requireStaff } from "@/lib/auth";
@@ -34,13 +34,15 @@ export async function publishAllDraftsAction(
   return { status: "success", count: count ?? 0 };
 }
 
-/** Toggles a signed-in-only preview cookie so the public site renders pending drafts inline. */
+/**
+ * Toggles Next.js's built-in Draft Mode so the public site renders pending drafts inline for
+ * this signed-in staff session only. Unlike a plain cookie check, Draft Mode only opts *this*
+ * request into dynamic, uncached rendering — every other visitor keeps getting the cached,
+ * statically-rendered page, which is what lets the public site be cached at all.
+ */
 export async function togglePreviewModeAction(enable: boolean): Promise<void> {
   await requireStaff();
-  const cookieStore = await cookies();
-  if (enable) {
-    cookieStore.set("sp_preview", "1", { httpOnly: true, sameSite: "lax", path: "/", maxAge: 60 * 60 * 4 });
-  } else {
-    cookieStore.delete("sp_preview");
-  }
+  const draft = await draftMode();
+  if (enable) draft.enable();
+  else draft.disable();
 }

@@ -1,5 +1,5 @@
 import "server-only";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -23,7 +23,7 @@ export async function resolveMedia(value: unknown): Promise<ResolvedMedia | null
   if (typeof value !== "string" || value.length === 0) return null;
   if (!UUID_RE.test(value)) return { src: value, focalX: 50, focalY: 50 };
 
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   const { data, error } = await supabase
     .from("media")
     .select("storage_bucket, storage_path, crop")

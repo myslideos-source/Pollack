@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { draftMode } from "next/headers";
 import { requireStaff } from "@/lib/auth";
 
 /**
- * Enables preview mode and redirects to the public homepage, both in one server round trip.
+ * Enables Draft Mode and redirects to the public homepage, both in one server round trip.
  * Exists as a plain navigable GET route (rather than a Server Action called from a click
  * handler, then window.open()'d afterwards) because opening a new tab only counts as a
  * user-initiated action — and so is exempt from popup blocking — when window.open() runs
@@ -14,7 +14,6 @@ import { requireStaff } from "@/lib/auth";
  */
 export async function GET(request: Request) {
   await requireStaff();
-  const cookieStore = await cookies();
-  cookieStore.set("sp_preview", "1", { httpOnly: true, sameSite: "lax", path: "/", maxAge: 60 * 60 * 4 });
+  (await draftMode()).enable();
   return NextResponse.redirect(new URL("/", request.url));
 }

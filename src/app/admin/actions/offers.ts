@@ -72,6 +72,7 @@ export async function saveOfferAction(formData: FormData): Promise<{ error?: str
     if (error) return { error: "Angebot konnte nicht gespeichert werden." };
     await logAudit(profile.id, "offer.updated", d.id, `Angebot aktualisiert: ${d.title}`);
     revalidatePath("/admin/angebote");
+    revalidatePath("/", "layout");
     return { id: d.id };
   }
 
@@ -84,6 +85,7 @@ export async function saveOfferAction(formData: FormData): Promise<{ error?: str
   if (error) return { error: "Angebot konnte nicht angelegt werden." };
   await logAudit(profile.id, "offer.created", data.id, `Angebot angelegt: ${d.title}`);
   revalidatePath("/admin/angebote");
+  revalidatePath("/", "layout");
   return { id: data.id };
 }
 
@@ -100,6 +102,7 @@ export async function deleteOfferAction(formData: FormData): Promise<{ error?: s
   if (error) return { error: "Angebot konnte nicht gelöscht werden." };
   await logAudit(profile.id, "offer.deleted", parsed.data.id, `Angebot gelöscht: ${item?.title ?? ""}`);
   revalidatePath("/admin/angebote");
+  revalidatePath("/", "layout");
   return {};
 }
 
@@ -114,5 +117,6 @@ export async function togglePublishedOfferAction(formData: FormData): Promise<{ 
   if (error) return { error: "Status konnte nicht geändert werden." };
   await logAudit(profile.id, "offer.publish_toggled", id, `Veröffentlichung ${!published ? "aktiviert" : "deaktiviert"}.`);
   revalidatePath("/admin/angebote");
+  revalidatePath("/", "layout");
   return {};
 }

@@ -1,5 +1,5 @@
 import "server-only";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 
 export type PublicOffer = {
   id: string;
@@ -12,7 +12,7 @@ export type PublicOffer = {
 };
 
 export async function loadPublishedOffers(): Promise<PublicOffer[]> {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   const { data, error } = await supabase
     .from("offers")
     .select("id, title, category, description, price_note, features, highlighted")
