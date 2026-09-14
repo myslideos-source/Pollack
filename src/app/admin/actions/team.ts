@@ -68,6 +68,7 @@ export async function saveTeamMemberAction(formData: FormData): Promise<{ error?
     if (error) return { error: "Teammitglied konnte nicht gespeichert werden." };
     await logAudit(profile.id, "team_member.updated", d.id, `Teammitglied aktualisiert: ${d.name}`);
     revalidatePath("/admin/team");
+    revalidatePath("/admin/medien");
     return { id: d.id };
   }
 
@@ -80,6 +81,7 @@ export async function saveTeamMemberAction(formData: FormData): Promise<{ error?
   if (error) return { error: "Teammitglied konnte nicht angelegt werden." };
   await logAudit(profile.id, "team_member.created", data.id, `Teammitglied angelegt: ${d.name}`);
   revalidatePath("/admin/team");
+  revalidatePath("/admin/medien");
   return { id: data.id };
 }
 
@@ -94,5 +96,6 @@ export async function deleteTeamMemberAction(formData: FormData): Promise<{ erro
   if (error) return { error: "Teammitglied konnte nicht gelöscht werden." };
   await logAudit(profile.id, "team_member.deleted", id, `Teammitglied gelöscht: ${item?.name ?? ""}`);
   revalidatePath("/admin/team");
+  revalidatePath("/admin/medien");
   return {};
 }

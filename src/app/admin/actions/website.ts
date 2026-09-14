@@ -61,6 +61,7 @@ export async function saveSectionDraftAction(
 
   revalidatePath("/admin/website");
   revalidatePath("/admin");
+  revalidatePath("/admin/medien");
   return {};
 }
 
@@ -80,6 +81,7 @@ export async function discardSectionDraftAction(sectionId: string): Promise<{ er
 
   revalidatePath("/admin/website");
   revalidatePath("/admin");
+  revalidatePath("/admin/medien");
   return {};
 }
 
@@ -147,5 +149,6 @@ export async function restoreLastPublishedAction(sectionId: string): Promise<{ e
 
   revalidatePath("/admin/website");
   revalidatePath("/", "layout");
+  revalidatePath("/admin/medien");
   return {};
 }

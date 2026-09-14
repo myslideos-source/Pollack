@@ -29,6 +29,7 @@ export async function publishAllDraftsAction(
   // The public pages read live content server-side — bust the cache so the new version
   // appears immediately instead of waiting for the next natural revalidation.
   revalidatePath("/", "layout");
+  revalidatePath("/admin/medien");
 
   return { status: "success", count: count ?? 0 };
 }
