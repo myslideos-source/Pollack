@@ -7,7 +7,7 @@ import { breadcrumbJsonLd } from "@/lib/breadcrumb";
 import { OpeningHoursTable } from "@/components/shared/OpeningHoursTable";
 import { ConsentMap } from "@/components/shared/ConsentMap";
 import { ContactForm } from "@/components/shared/ContactForm";
-import { contact } from "@/content/site";
+import { loadContact } from "@/lib/content/contact";
 
 export const metadata: Metadata = {
   title: "Kontakt",
@@ -15,7 +15,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/kontakt" },
 };
 
-export default function KontaktPage() {
+export default async function KontaktPage() {
+  const contact = await loadContact();
   return (
     <>
       <JsonLd data={breadcrumbJsonLd([{ label: "Start", href: "/" }, { label: "Kontakt", href: "/kontakt" }])} />
@@ -37,7 +38,7 @@ export default function KontaktPage() {
               <Phone size={22} className="text-red" />
               <div>
                 <div className="font-display uppercase tracking-wide">Anrufen</div>
-                <div className="text-sm text-paper/60">{contact.phoneDisplay}</div>
+                <div className="text-sm text-paper/60">{contact.phone}</div>
               </div>
             </a>
             <a
@@ -49,7 +50,7 @@ export default function KontaktPage() {
               <MessageCircle size={22} className="text-moss" />
               <div>
                 <div className="font-display uppercase tracking-wide">WhatsApp</div>
-                <div className="text-sm text-paper/60">{contact.whatsappDisplay}</div>
+                <div className="text-sm text-paper/60">{contact.whatsapp}</div>
               </div>
             </a>
             <a

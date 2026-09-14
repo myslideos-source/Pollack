@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProgramDetail } from "@/components/shared/ProgramDetail";
 import { getProgram, programsByCategory } from "@/content/programs";
+import { mergeProgramWithSection } from "@/lib/content/program-merge";
 
 export function generateStaticParams() {
   return programsByCategory("training").map((p) => ({ slug: p.slug }));
@@ -13,8 +14,9 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const program = getProgram(slug);
-  if (!program || program.category !== "training") return {};
+  const base = getProgram(slug);
+  if (!base || base.category !== "training") return {};
+  const program = await mergeProgramWithSection(base);
   return {
     title: program.title,
     description: program.summary,
@@ -28,7 +30,8 @@ export default async function TrainingProgramPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const program = getProgram(slug);
-  if (!program || program.category !== "training") notFound();
+  const base = getProgram(slug);
+  if (!base || base.category !== "training") notFound();
+  const program = await mergeProgramWithSection(base);
   return <ProgramDetail program={program} />;
 }

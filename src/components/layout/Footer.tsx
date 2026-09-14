@@ -1,16 +1,21 @@
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Phone, Mail, MessageCircle, Star } from "lucide-react";
-import { contact, primaryNav, siteConfig } from "@/content/site";
-import { dayLabels, openingHours, hoursConfirmed } from "@/content/hours";
+import { primaryNav, siteConfig } from "@/content/site";
 import { googleReviews } from "@/content/reviews";
+import { WEEKDAYS, type OpeningHour } from "@/lib/opening-hours";
+import type { ContactContent } from "@/lib/content/contact";
 
-function formatDay(ranges: { open: string; close: string }[]): string {
-  if (ranges.length === 0) return "geschlossen";
-  return ranges.map((r) => `${r.open}–${r.close}`).join(", ");
+function formatDay(ranges: OpeningHour[]): string {
+  if (ranges.length === 0 || ranges.every((r) => r.closed)) return "geschlossen";
+  return ranges
+    .filter((r) => !r.closed && r.open_time && r.close_time)
+    .map((r) => `${r.open_time?.slice(0, 5)}–${r.close_time?.slice(0, 5)}`)
+    .join(", ");
 }
 
-export function Footer() {
+export function Footer({ contact, hours }: { contact: ContactContent; hours: OpeningHour[] }) {
+  const hasHours = hours.length > 0;
   return (
     <footer className="border-t border-paper/10 bg-ink text-paper">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-4 lg:px-8">
@@ -64,13 +69,13 @@ export function Footer() {
             <li className="flex items-center gap-2">
               <Phone size={16} className="shrink-0 text-red" aria-hidden="true" />
               <a href={contact.phoneHref} className="hover:text-paper">
-                {contact.phoneDisplay}
+                {contact.phone}
               </a>
             </li>
             <li className="flex items-center gap-2">
               <MessageCircle size={16} className="shrink-0 text-red" aria-hidden="true" />
               <a href={contact.whatsappHref} target="_blank" rel="noreferrer" className="hover:text-paper">
-                WhatsApp {contact.whatsappDisplay}
+                WhatsApp {contact.whatsapp}
               </a>
             </li>
             <li className="flex items-center gap-2">
@@ -84,16 +89,16 @@ export function Footer() {
 
         <div>
           <h2 className="font-display text-sm uppercase tracking-[0.2em] text-paper/50">Öffnungszeiten</h2>
-          {!hoursConfirmed ? (
+          {!hasHours ? (
             <p className="mt-4 text-sm text-paper/60">
               Aktuelle Öffnungszeiten bitte telefonisch oder per WhatsApp erfragen.
             </p>
           ) : (
             <ul className="mt-4 space-y-1.5 text-sm text-paper/75">
-              {(Object.keys(dayLabels) as (keyof typeof dayLabels)[]).map((key) => (
-                <li key={key} className="flex justify-between gap-4">
-                  <span>{dayLabels[key]}</span>
-                  <span>{formatDay(openingHours[key])}</span>
+              {WEEKDAYS.map((day) => (
+                <li key={day.value} className="flex justify-between gap-4">
+                  <span>{day.label}</span>
+                  <span>{formatDay(hours.filter((h) => h.weekday === day.value))}</span>
                 </li>
               ))}
             </ul>

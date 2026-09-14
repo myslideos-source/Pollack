@@ -8,7 +8,7 @@ import { TexturePanel } from "@/components/shared/TexturePanel";
 import { MediaPanel } from "@/components/shared/MediaPanel";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbJsonLd } from "@/lib/breadcrumb";
-import { hansefit, moreNutritionEsn } from "@/content/partners";
+import { loadPartners, loadProducts } from "@/lib/content/partners-data";
 
 export const metadata: Metadata = {
   title: "Partner & Produkte",
@@ -17,7 +17,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "/partner-produkte" },
 };
 
-export default function PartnerProduktePage() {
+export default async function PartnerProduktePage() {
+  const [partners, products] = await Promise.all([loadPartners(), loadProducts()]);
+  const hansefit = partners.find((p) => p.name === "Hansefit");
+  const more = products.find((p) => p.name === "MORE Nutrition");
+  const esn = products.find((p) => p.name === "ESN");
   return (
     <>
       <JsonLd data={breadcrumbJsonLd([{ label: "Start", href: "/" }, { label: "Partner & Produkte", href: "/partner-produkte" }])} />
@@ -38,10 +42,12 @@ export default function PartnerProduktePage() {
               </span>
             </div>
             <div>
-              <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">{hansefit.headline}</h2>
-              <p className="mt-4 max-w-xl text-ink/70">{hansefit.description}</p>
+              <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
+                {hansefit ? `Mit ${hansefit.name} im Sportpark Pollack trainieren.` : "Hansefit"}
+              </h2>
+              <p className="mt-4 max-w-xl text-ink/70">{hansefit?.description}</p>
               <Button href="/kontakt#anfrage" variant="primary" className="mt-6">
-                {hansefit.cta} <ArrowRight size={16} />
+                {hansefit ? `Mit ${hansefit.name} trainieren` : "Kontakt aufnehmen"} <ArrowRight size={16} />
               </Button>
             </div>
           </div>
@@ -54,13 +60,16 @@ export default function PartnerProduktePage() {
             Nach dem Training
           </span>
           <h2 className="mt-3 max-w-2xl font-display text-4xl font-bold tracking-tight text-paper sm:text-5xl">
-            {moreNutritionEsn.headline}
+            Dein Training endet nicht am letzten Satz.
           </h2>
-          <p className="mt-4 max-w-2xl text-paper/70">{moreNutritionEsn.intro}</p>
+          <p className="mt-4 max-w-2xl text-paper/70">
+            Ernährung ist Teil des Trainingserfolgs. Deshalb findest du bei uns vor Ort ausgewählte Produkte von
+            MORE Nutrition und ESN – für den Shake direkt nach dem Training oder den Snack für unterwegs.
+          </p>
 
           <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
             <MediaPanel
-              src="/media/partner/more-nutrition.webp"
+              src={more?.imageSrc ?? "/media/partner/more-nutrition.webp"}
               alt="MORE Nutrition Chunky Proteinriegel-Dosen im Sportpark Pollack"
               variant="community"
               className="relative col-span-2 aspect-[16/9] w-full rounded-2xl lg:col-span-2 lg:row-span-2 lg:aspect-auto"
@@ -74,21 +83,23 @@ export default function PartnerProduktePage() {
           </div>
 
           <div className="mt-10 grid gap-6 sm:grid-cols-2">
-            <div className="rounded-2xl border border-paper/10 bg-anthracite p-6 sm:p-8">
-              <h3 className="font-display text-xl uppercase tracking-wide text-paper">
-                {moreNutritionEsn.more.name}
-              </h3>
-              <p className="mt-3 text-sm text-paper/65">{moreNutritionEsn.more.description}</p>
-            </div>
-            <div className="rounded-2xl border border-paper/10 bg-anthracite p-6 sm:p-8">
-              <h3 className="font-display text-xl uppercase tracking-wide text-paper">
-                {moreNutritionEsn.esn.name}
-              </h3>
-              <p className="mt-3 text-sm text-paper/65">{moreNutritionEsn.esn.description}</p>
-            </div>
+            {more ? (
+              <div className="rounded-2xl border border-paper/10 bg-anthracite p-6 sm:p-8">
+                <h3 className="font-display text-xl uppercase tracking-wide text-paper">{more.name}</h3>
+                <p className="mt-3 text-sm text-paper/65">{more.description}</p>
+              </div>
+            ) : null}
+            {esn ? (
+              <div className="rounded-2xl border border-paper/10 bg-anthracite p-6 sm:p-8">
+                <h3 className="font-display text-xl uppercase tracking-wide text-paper">{esn.name}</h3>
+                <p className="mt-3 text-sm text-paper/65">{esn.description}</p>
+              </div>
+            ) : null}
           </div>
 
-          <p className="mt-8 text-sm text-paper/50">{moreNutritionEsn.availabilityNote}</p>
+          <p className="mt-8 text-sm text-paper/50">
+            Bei uns im Sportpark erhältlich – kein Online-Verkauf über diese Website.
+          </p>
           <p className="mt-2 text-xs text-paper/40">
             Video vom Regal-Besuch:{" "}
             <Link href="/#christian-wolf" className="underline underline-offset-2 hover:text-paper/70">

@@ -5,10 +5,20 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Menu, X, Phone, MessageCircle } from "lucide-react";
-import { primaryNav, contact } from "@/content/site";
+import { primaryNav } from "@/content/site";
 import { OpenStatusBadge } from "@/components/shared/OpenStatusBadge";
+import type { ContactContent } from "@/lib/content/contact";
+import type { OpeningHour, SpecialOpeningHour } from "@/lib/opening-hours";
 
-export function Header() {
+export function Header({
+  contact,
+  hours,
+  special,
+}: {
+  contact: ContactContent;
+  hours: OpeningHour[];
+  special: SpecialOpeningHour[];
+}) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -80,7 +90,7 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-3 xl:flex">
-          <OpenStatusBadge />
+          <OpenStatusBadge hours={hours} special={special} />
           <Link
             href="/kontakt#probetraining"
             className="rounded-full bg-red px-5 py-2.5 font-display text-sm uppercase tracking-wide text-paper transition-colors hover:bg-red-dark"
@@ -118,7 +128,7 @@ export function Header() {
             ))}
           </nav>
           <div className="mt-6 flex flex-col gap-3">
-            <OpenStatusBadge className="self-start" />
+            <OpenStatusBadge hours={hours} special={special} className="self-start" />
             <div className="grid grid-cols-2 gap-3">
               <a
                 href={contact.phoneHref}

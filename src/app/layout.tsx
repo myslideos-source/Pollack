@@ -4,8 +4,10 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { MobileCtaBar } from "@/components/layout/MobileCtaBar";
 import { WhatsAppFloatingButton } from "@/components/layout/WhatsAppFloatingButton";
-import { siteConfig, contact } from "@/content/site";
+import { siteConfig, contact as staticContact } from "@/content/site";
 import { googleReviews } from "@/content/reviews";
+import { loadContact } from "@/lib/content/contact";
+import { loadOpeningHours } from "@/lib/content/opening-hours-data";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -44,7 +46,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const [contact, { hours, special }] = await Promise.all([loadContact(), loadOpeningHours()]);
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "HealthClub",
@@ -57,7 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       streetAddress: contact.street,
       postalCode: contact.zip,
       addressLocality: contact.city,
-      addressCountry: contact.country,
+      addressCountry: staticContact.country,
     },
     areaServed: "Fichtenau, Crailsheim, Hohenlohekreis",
     aggregateRating: {
@@ -74,13 +78,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <Header />
+        <Header contact={contact} hours={hours} special={special} />
         <main id="main-content" className="flex-1 pb-16 lg:pb-0">
           {children}
         </main>
-        <Footer />
-        <MobileCtaBar />
-        <WhatsAppFloatingButton />
+        <Footer contact={contact} hours={hours} />
+        <MobileCtaBar contact={contact} />
+        <WhatsAppFloatingButton contact={contact} />
       </body>
     </html>
   );

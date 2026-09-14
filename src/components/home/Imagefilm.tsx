@@ -2,7 +2,15 @@
 
 import { useState } from "react";
 import { Play, Volume2 } from "lucide-react";
-import { imagefilm } from "@/content/imagefilm";
+
+export type ImagefilmContent = {
+  eyebrow: string;
+  headline: string;
+  durationLabel: string;
+  video: string | null;
+  teaserVideo: string | null;
+  poster: string | null;
+};
 
 /**
  * Cinematic full-bleed section directly below the Hero. Before interaction, a short muted
@@ -11,7 +19,7 @@ import { imagefilm } from "@/content/imagefilm";
  * a deliberate exception for this hero-adjacent placement. Clicking swaps in the full film
  * with sound; nothing beyond the small teaser loop loads before that click.
  */
-export function Imagefilm() {
+export function Imagefilm({ content: imagefilm }: { content: ImagefilmContent }) {
   const [playing, setPlaying] = useState(false);
 
   return (
@@ -25,9 +33,9 @@ export function Imagefilm() {
             autoPlay
             playsInline
             preload="metadata"
-            poster={imagefilm.poster}
+            poster={imagefilm.poster ?? undefined}
           >
-            <source src={imagefilm.src} type="video/mp4" />
+            <source src={imagefilm.video ?? undefined} type="video/mp4" />
           </video>
         ) : (
           <>
@@ -39,13 +47,13 @@ export function Imagefilm() {
               loop
               playsInline
               preload="auto"
-              poster={imagefilm.poster}
+              poster={imagefilm.poster ?? undefined}
             >
-              <source src={imagefilm.teaserSrc} type="video/mp4" />
+              <source src={imagefilm.teaserVideo ?? undefined} type="video/mp4" />
             </video>
             {/* eslint-disable-next-line @next/next/no-img-element -- reduced-motion fallback, no next/image benefit for a fixed background layer */}
             <img
-              src={imagefilm.poster}
+              src={imagefilm.poster ?? undefined}
               alt=""
               className="absolute inset-0 hidden h-full w-full object-cover motion-reduce:block"
             />

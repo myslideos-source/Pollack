@@ -6,8 +6,8 @@ import { Button } from "@/components/shared/Button";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { OpeningHoursTable } from "@/components/shared/OpeningHoursTable";
 import { breadcrumbJsonLd } from "@/lib/breadcrumb";
-import { pricingTiers, pricingExtras } from "@/content/pricing";
-import { hansefit } from "@/content/partners";
+import { loadPublishedOffers } from "@/lib/content/offers-data";
+import { loadPartners } from "@/lib/content/partners-data";
 import { AlertTriangle } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -16,7 +16,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/preise" },
 };
 
-export default function PreisePage() {
+export default async function PreisePage() {
+  const [offers, partners] = await Promise.all([loadPublishedOffers(), loadPartners()]);
+  const hansefit = partners.find((p) => p.name === "Hansefit");
   return (
     <>
       <JsonLd data={breadcrumbJsonLd([{ label: "Start", href: "/" }, { label: "Preise", href: "/preise" }])} />
@@ -40,16 +42,16 @@ export default function PreisePage() {
           </div>
 
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {pricingTiers.map((tier) => (
-              <div key={tier.id} className="flex flex-col rounded-2xl border border-paper/10 bg-anthracite p-6">
-                <h2 className="font-display text-xl uppercase tracking-wide text-paper">{tier.name}</h2>
-                <p className="mt-2 flex-1 text-sm text-paper/65">{tier.description}</p>
+            {offers.map((offer) => (
+              <div key={offer.id} className="flex flex-col rounded-2xl border border-paper/10 bg-anthracite p-6">
+                <h2 className="font-display text-xl uppercase tracking-wide text-paper">{offer.title}</h2>
+                <p className="mt-2 flex-1 text-sm text-paper/65">{offer.description}</p>
                 <ul className="mt-3 space-y-1 text-xs text-paper/50">
-                  {tier.features.map((f) => (
+                  {offer.features.map((f) => (
                     <li key={f}>· {f}</li>
                   ))}
                 </ul>
-                <p className="mt-4 font-display text-lg text-red">{tier.priceNote}</p>
+                <p className="mt-4 font-display text-lg text-red">{offer.priceNote}</p>
                 <Button href="/kontakt#anfrage" variant="secondary" className="mt-4">
                   Unverbindlich anfragen
                 </Button>
@@ -57,23 +59,16 @@ export default function PreisePage() {
             ))}
           </div>
 
-          <div className="mt-10 grid gap-4 sm:grid-cols-2">
-            {pricingExtras.map((extra) => (
-              <div key={extra.id} className="rounded-2xl border border-paper/10 bg-anthracite p-6">
-                <h3 className="font-display text-lg uppercase tracking-wide text-paper">{extra.label}</h3>
-                <p className="mt-2 text-sm text-red">{extra.note}</p>
-              </div>
-            ))}
-          </div>
-
           <div className="mt-10 grid gap-6 sm:grid-cols-2">
-            <div className="rounded-2xl border border-paper/10 bg-anthracite p-6">
-              <h3 className="font-display text-lg uppercase tracking-wide text-paper">{hansefit.name}</h3>
-              <p className="mt-2 text-sm text-paper/65">{hansefit.description}</p>
-              <Link href="/partner-produkte" className="mt-3 inline-block text-sm text-red hover:text-red-dark">
-                Mehr zu unseren Partnern →
-              </Link>
-            </div>
+            {hansefit ? (
+              <div className="rounded-2xl border border-paper/10 bg-anthracite p-6">
+                <h3 className="font-display text-lg uppercase tracking-wide text-paper">{hansefit.name}</h3>
+                <p className="mt-2 text-sm text-paper/65">{hansefit.description}</p>
+                <Link href="/partner-produkte" className="mt-3 inline-block text-sm text-red hover:text-red-dark">
+                  Mehr zu unseren Partnern →
+                </Link>
+              </div>
+            ) : null}
             <OpeningHoursTable />
           </div>
 

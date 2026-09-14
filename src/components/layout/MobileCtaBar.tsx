@@ -1,8 +1,8 @@
 import { Phone, MessageCircle, CalendarCheck } from "lucide-react";
-import { contact } from "@/content/site";
+import type { ContactContent } from "@/lib/content/contact";
 
 /** Fixed bottom action bar for small screens: always-reachable phone, WhatsApp, and trial CTA. */
-export function MobileCtaBar() {
+export function MobileCtaBar({ contact }: { contact: ContactContent }) {
   return (
     <div
       className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-3 border-t border-paper/10 bg-ink/95 backdrop-blur-md lg:hidden"

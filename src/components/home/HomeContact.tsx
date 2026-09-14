@@ -1,9 +1,10 @@
 import { Phone, Mail, MessageCircle, ArrowRight } from "lucide-react";
 import { Button } from "@/components/shared/Button";
 import { ConsentMap } from "@/components/shared/ConsentMap";
-import { contact } from "@/content/site";
+import { loadContact } from "@/lib/content/contact";
 
-export function HomeContact() {
+export async function HomeContact() {
+  const contact = await loadContact();
   return (
     <section className="bg-ink py-16 sm:py-24" aria-label="Kontakt und Anfahrt">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -25,7 +26,7 @@ export function HomeContact() {
               <Phone size={22} className="text-red" />
               <div>
                 <div className="font-display uppercase tracking-wide">Anrufen</div>
-                <div className="text-sm text-paper/60">{contact.phoneDisplay}</div>
+                <div className="text-sm text-paper/60">{contact.phone}</div>
               </div>
             </a>
             <a
@@ -37,7 +38,7 @@ export function HomeContact() {
               <MessageCircle size={22} className="text-moss" />
               <div>
                 <div className="font-display uppercase tracking-wide">WhatsApp</div>
-                <div className="text-sm text-paper/60">{contact.whatsappDisplay}</div>
+                <div className="text-sm text-paper/60">{contact.whatsapp}</div>
               </div>
             </a>
             <a

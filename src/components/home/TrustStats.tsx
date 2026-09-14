@@ -2,7 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useInView, useReducedMotion } from "motion/react";
-import { trustStats } from "@/content/site";
+
+/** Parses the admin-editable "1.200 m² · moderne Trainingsfläche" list format back into parts. */
+function parseStat(item: string): { value: string; unit: string; label: string } {
+  const [valueUnit = "", label = ""] = item.split(" · ");
+  const match = valueUnit.match(/^([\d.,]+\+?)\s*(.*)$/);
+  return { value: match?.[1] ?? valueUnit, unit: match?.[2] ?? "", label };
+}
 
 function StatValue({ value, unit, animate = true }: { value: string; unit: string; animate?: boolean }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -35,11 +41,12 @@ function StatValue({ value, unit, animate = true }: { value: string; unit: strin
   );
 }
 
-export function TrustStats() {
+export function TrustStats({ items }: { items: string[] }) {
+  const stats = items.map(parseStat);
   return (
     <section className="border-y border-paper/10 bg-anthracite" aria-label="Sportpark Pollack in Zahlen">
       <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 px-4 py-10 sm:px-6 lg:grid-cols-4 lg:gap-4 lg:px-8">
-        {trustStats.map((stat) => (
+        {stats.map((stat) => (
           <div key={stat.label} className="flex flex-col gap-1">
             <StatValue value={stat.value} unit={stat.unit} animate={!stat.label.startsWith("Erfahrung")} />
             <span className="text-sm text-paper/60">{stat.label}</span>

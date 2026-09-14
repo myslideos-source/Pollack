@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getOpenStatus, type OpenStatus } from "@/content/hours";
+import { isOpenNow, type OpeningHour, type SpecialOpeningHour } from "@/lib/opening-hours";
 
 /**
  * Renders nothing meaningful until mounted on the client: the real open/closed
@@ -9,17 +9,34 @@ import { getOpenStatus, type OpenStatus } from "@/content/hours";
  * value into the static HTML. We render a neutral placeholder first, then swap
  * in the live status after mount, and refresh it every minute.
  */
-export function OpenStatusBadge({ className = "" }: { className?: string }) {
-  const [status, setStatus] = useState<OpenStatus | null>(null);
+export function OpenStatusBadge({
+  hours,
+  special,
+  className = "",
+}: {
+  hours: OpeningHour[];
+  special: SpecialOpeningHour[];
+  className?: string;
+}) {
+  const [status, setStatus] = useState<{ open: boolean; closesAt?: string; opensAt?: string } | null>(null);
 
   useEffect(() => {
-    const update = () => setStatus(getOpenStatus());
+    const update = () => {
+      const now = new Date();
+      const { open } = isOpenNow(hours, special, now);
+      if (open) {
+        const active = hours.find((h) => !h.closed && h.open_time && h.close_time);
+        setStatus({ open: true, closesAt: active?.close_time?.slice(0, 5) });
+      } else {
+        setStatus({ open: false });
+      }
+    };
     update();
     const id = setInterval(update, 60_000);
     return () => clearInterval(id);
-  }, []);
+  }, [hours, special]);
 
-  if (!status || status.kind === "unconfirmed") {
+  if (!status) {
     return (
       <span
         className={`inline-flex items-center gap-2 rounded-full border border-paper/20 px-3 py-1 text-xs font-medium uppercase tracking-wide text-paper/70 ${className}`}
@@ -30,13 +47,13 @@ export function OpenStatusBadge({ className = "" }: { className?: string }) {
     );
   }
 
-  if (status.kind === "open") {
+  if (status.open) {
     return (
       <span
         className={`inline-flex items-center gap-2 rounded-full border border-moss/40 bg-moss/10 px-3 py-1 text-xs font-medium uppercase tracking-wide text-moss ${className}`}
       >
         <span className="h-1.5 w-1.5 rounded-full bg-moss" aria-hidden="true" />
-        Jetzt geöffnet · bis {status.closesAt}
+        Jetzt geöffnet{status.closesAt ? ` · bis ${status.closesAt}` : ""}
       </span>
     );
   }
@@ -46,11 +63,7 @@ export function OpenStatusBadge({ className = "" }: { className?: string }) {
       className={`inline-flex items-center gap-2 rounded-full border border-paper/20 px-3 py-1 text-xs font-medium uppercase tracking-wide text-paper/60 ${className}`}
     >
       <span className="h-1.5 w-1.5 rounded-full bg-paper/40" aria-hidden="true" />
-      {status.opensOn
-        ? `Geschlossen · öffnet ${status.opensOn} ${status.opensAt}`
-        : status.opensAt
-          ? `Geschlossen · öffnet ${status.opensAt}`
-          : "Aktuell geschlossen"}
+      Aktuell geschlossen
     </span>
   );
 }

@@ -5,12 +5,22 @@ import { Volume2, VolumeX, ChevronRight } from "lucide-react";
 import { Button } from "@/components/shared/Button";
 import { TexturePanel } from "@/components/shared/TexturePanel";
 import { heroMedia } from "@/content/media";
-import { siteConfig } from "@/content/site";
 
-export function Hero() {
+export type HeroContent = {
+  headline: string;
+  subline: string;
+  ctaPrimaryLabel: string;
+  ctaSecondaryLabel: string;
+  imageDesktopSrc: string | null;
+  imageMobileSrc: string | null;
+};
+
+export function Hero({ content }: { content: HeroContent }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
   const hasVideo = Boolean(heroMedia.videoSrc);
+  const imageDesktopSrc = content.imageDesktopSrc ?? heroMedia.imageDesktopSrc;
+  const imageMobileSrc = content.imageMobileSrc ?? heroMedia.imageMobileSrc;
 
   useEffect(() => {
     if (videoRef.current) videoRef.current.muted = muted;
@@ -32,15 +42,13 @@ export function Hero() {
           >
             {heroMedia.videoSrc ? <source src={heroMedia.videoSrc} type="video/mp4" /> : null}
           </video>
-        ) : heroMedia.imageDesktopSrc ? (
+        ) : imageDesktopSrc ? (
           // Art-directed crop per breakpoint via <picture>: the browser only fetches the
           // source that matches, so phones never download the wide desktop composition.
           <picture>
-            {heroMedia.imageMobileSrc ? (
-              <source media="(max-width: 639px)" srcSet={heroMedia.imageMobileSrc} />
-            ) : null}
+            {imageMobileSrc ? <source media="(max-width: 639px)" srcSet={imageMobileSrc} /> : null}
             <img
-              src={heroMedia.imageDesktopSrc}
+              src={imageDesktopSrc}
               alt={heroMedia.imageAlt}
               className="h-full w-full object-cover"
               fetchPriority="high"
@@ -70,19 +78,23 @@ export function Hero() {
             Fitness · Gesundheit · Kampfkunst
           </span>
           <h1 className="font-display text-[15vw] font-extrabold leading-[0.9] tracking-tight text-paper sm:text-7xl lg:text-8xl">
-            Stark.
-            <br />
-            Beweglich.
-            <br />
-            Bereit.
+            {content.headline
+              .split(/(?<=\.)\s+/)
+              .filter(Boolean)
+              .map((line, i, arr) => (
+                <span key={i}>
+                  {line}
+                  {i < arr.length - 1 ? <br /> : null}
+                </span>
+              ))}
           </h1>
-          <p className="mt-6 max-w-md text-base text-paper/80 sm:text-lg">{siteConfig.tagline}</p>
+          <p className="mt-6 max-w-md text-base text-paper/80 sm:text-lg">{content.subline}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button href="/kontakt#probetraining" variant="primary">
-              Probetraining starten <ChevronRight size={16} />
+              {content.ctaPrimaryLabel} <ChevronRight size={16} />
             </Button>
             <Button href="/trainingsfinder" variant="secondary">
-              Meinen Bereich finden
+              {content.ctaSecondaryLabel}
             </Button>
           </div>
         </div>
