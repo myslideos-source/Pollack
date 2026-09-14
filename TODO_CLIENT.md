@@ -281,21 +281,23 @@ Beide Videos sind bereits mit Namen, Handle (`@christian.wolf`) und Plattform (T
 Instagram) als Quelle gekennzeichnet (`src/content/community.ts`,
 `src/components/home/CommunityShoutout.tsx`), das ersetzt aber keine echte Freigabe.
 
-## 18. Google-Bewertungen: Sternebadge nicht direkt aus Google verifiziert
+## 18. Google-Bewertungen: jetzt mit echten Zahlen und echten Zitaten bestätigt
 
 Auf Wunsch des Auftraggebers eingebaut: ein Sterne-Badge unter den Trust-Stats auf der
-Startseite (`src/components/home/GoogleReviewsBadge.tsx`) sowie im Footer, beide mit Link zur
-echten Google-Maps-Seite des Sportparks (`src/content/reviews.ts`, funktioniert ohne Place-ID
-über Googles offizielles `maps/search`-URL-Format — Besucher:innen landen direkt beim echten
-Eintrag und können dort selbst eine Bewertung lesen/abgeben). Zusätzlich als `aggregateRating`
-im strukturierten Daten-Markup (`src/app/layout.tsx`) hinterlegt.
+Startseite sowie im Footer, beide mit Link zur echten Google-Maps-Seite des Sportparks
+(`src/content/reviews.ts`, funktioniert ohne Place-ID über Googles offizielles
+`maps/search`-URL-Format — Besucher:innen landen direkt beim echten Eintrag und können dort
+selbst eine Bewertung lesen/abgeben). Zusätzlich als `aggregateRating` im strukturierten
+Daten-Markup (`src/app/layout.tsx`) hinterlegt. Darunter läuft jetzt außerdem ein
+Kachel-Karussell mit drei echten Rezensionszitaten nach links (`GoogleReviewsBadge.tsx`,
+pausiert bei Hover, zeigt bei `prefers-reduced-motion` eine statische, umbrechende Reihe statt
+der Endlos-Animation).
 
-**Wichtige Einschränkung:** Direkter Zugriff auf das Google-Business-Profil war aus dieser
-Umgebung nicht möglich (dieselbe Netzwerk-Restriktion wie bei den Öffnungszeiten, siehe Punkt 1
-und 4). Der angezeigte Wert — **5,0 von 5 Sternen bei 6 Bewertungen** — stammt aus einer
-Websuche, die zwei unabhängige Verzeichnis-Einträge (11880.de, golocal.de) übereinstimmend
-zeigten; solche Verzeichnisse übernehmen ihre Zahlen häufig vom selben Google-Profil, das wurde
-hier aber nicht per Screenshot aus Google selbst verifiziert. Bitte kurz gegen die eigene
-Google-Maps-Ansicht gegenchecken und bei Abweichung `rating`/`reviewCount` in
-`src/content/reviews.ts` anpassen — der Rest (Badge, Footer, strukturierte Daten) aktualisiert
-sich automatisch.
+**Update:** Der Auftraggeber hat **4,9 von 5 Sternen bei 56 Bewertungen** per Screenshot direkt
+aus dem eigenen Google-Maps-Profil bestätigt (ersetzt den vorherigen, nur über Websuche
+cross-referenzierten Platzhalterwert von 5,0/6). Ebenso die drei Rezensionszitate (Ulrich
+Vigenschow, Benjamin Blumenstock, Thomas Hercher) — echte, vom Auftraggeber per Screenshot
+übergebene Google-Rezensionen. Laut Auftraggeber gibt es noch mehr Bewertungen als die drei
+gezeigten — bei Bedarf gerne weitere Screenshots schicken, dann werden sie in
+`src/content/reviews.ts` (Array `reviews`) ergänzt; das Karussell übernimmt neue Einträge
+automatisch, ohne Komponentenänderung.
