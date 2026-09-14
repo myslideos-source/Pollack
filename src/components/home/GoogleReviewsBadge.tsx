@@ -1,5 +1,6 @@
 import { Star, ArrowRight } from "lucide-react";
 import { googleReviews } from "@/content/reviews";
+import { loadGoogleRating } from "@/lib/content/google-reviews";
 
 function ReviewCard({ review }: { review: (typeof googleReviews.reviews)[number] }) {
   return (
@@ -24,8 +25,13 @@ function ReviewCard({ review }: { review: (typeof googleReviews.reviews)[number]
  * seamless loop (`translateX(-50%)` on a doubled, `w-max` row); the duplicate copy is
  * `aria-hidden` (screen readers shouldn't hear every quote twice) and `motion-reduce:hidden` (so
  * `prefers-reduced-motion` visitors get one static, wrapped row instead of a frozen half-loop).
+ *
+ * The star average and review count come from loadGoogleRating() — live from Google once
+ * GOOGLE_PLACES_API_KEY/GOOGLE_PLACE_ID are configured, the confirmed static snapshot otherwise.
+ * The quotes themselves stay the curated static set (see content/reviews.ts).
  */
-export function GoogleReviewsBadge() {
+export async function GoogleReviewsBadge() {
+  const { rating, reviewCount } = await loadGoogleRating();
   return (
     <section className="border-b border-paper/10 bg-ink py-8 sm:py-10" aria-label="Bewertungen">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-6 gap-y-3 px-4 text-center sm:px-6 lg:px-8">
@@ -36,9 +42,9 @@ export function GoogleReviewsBadge() {
         </div>
         <p className="text-sm text-paper/75">
           <span className="font-display font-semibold text-paper">
-            {googleReviews.rating.toLocaleString("de-DE", { minimumFractionDigits: 1 })}
+            {rating.toLocaleString("de-DE", { minimumFractionDigits: 1 })}
           </span>{" "}
-          von 5 &middot; {googleReviews.reviewCount} Bewertungen bei Google
+          von 5 &middot; {reviewCount} Bewertungen bei Google
         </p>
         <a
           href={googleReviews.mapsUrl}

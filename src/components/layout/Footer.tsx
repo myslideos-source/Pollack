@@ -5,6 +5,7 @@ import { primaryNav, siteConfig } from "@/content/site";
 import { googleReviews } from "@/content/reviews";
 import { WEEKDAYS, type OpeningHour } from "@/lib/opening-hours";
 import type { ContactContent } from "@/lib/content/contact";
+import type { GoogleRating } from "@/lib/content/google-reviews";
 
 function formatDay(ranges: OpeningHour[]): string {
   if (ranges.length === 0 || ranges.every((r) => r.closed)) return "geschlossen";
@@ -14,7 +15,15 @@ function formatDay(ranges: OpeningHour[]): string {
     .join(", ");
 }
 
-export function Footer({ contact, hours }: { contact: ContactContent; hours: OpeningHour[] }) {
+export function Footer({
+  contact,
+  hours,
+  rating,
+}: {
+  contact: ContactContent;
+  hours: OpeningHour[];
+  rating: GoogleRating;
+}) {
   const hasHours = hours.length > 0;
   return (
     <footer className="border-t border-paper/10 bg-ink text-paper">
@@ -35,8 +44,8 @@ export function Footer({ contact, hours }: { contact: ContactContent; hours: Ope
             className="mt-4 inline-flex items-center gap-1.5 text-sm text-paper/60 hover:text-paper"
           >
             <Star size={14} className="fill-sand text-sand" aria-hidden="true" />
-            {googleReviews.rating.toLocaleString("de-DE", { minimumFractionDigits: 1 })} &middot;{" "}
-            {googleReviews.reviewCount} Bewertungen
+            {rating.rating.toLocaleString("de-DE", { minimumFractionDigits: 1 })} &middot;{" "}
+            {rating.reviewCount} Bewertungen
           </a>
         </div>
 

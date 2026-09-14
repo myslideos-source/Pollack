@@ -77,6 +77,16 @@ export default function DatenschutzPage() {
           </p>
 
           <h2 className="mt-8 font-display text-xl uppercase tracking-wide text-paper">
+            Google-Bewertungen
+          </h2>
+          <p className="mt-3">
+            Die auf der Startseite angezeigte Sternebewertung und Anzahl der Bewertungen rufen wir
+            serverseitig über die Google Places API ab, ohne dass dabei Daten deines Browsers oder
+            deiner Person an Google übertragen werden. Es handelt sich um eine reine
+            Server-zu-Server-Abfrage öffentlich einsehbarer Kennzahlen unseres Google-Maps-Eintrags.
+          </p>
+
+          <h2 className="mt-8 font-display text-xl uppercase tracking-wide text-paper">
             WhatsApp-Kontakt
           </h2>
           <p className="mt-3">

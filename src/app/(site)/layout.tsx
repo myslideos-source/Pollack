@@ -6,9 +6,9 @@ import { WhatsAppFloatingButton } from "@/components/layout/WhatsAppFloatingButt
 import { PreviewBanner } from "@/components/shared/PreviewBanner";
 import { ViewTracker } from "@/components/shared/ViewTracker";
 import { siteConfig, contact as staticContact } from "@/content/site";
-import { googleReviews } from "@/content/reviews";
 import { loadContact } from "@/lib/content/contact";
 import { loadOpeningHours } from "@/lib/content/opening-hours-data";
+import { loadGoogleRating } from "@/lib/content/google-reviews";
 
 /**
  * Shell for the public marketing site only — header, footer, mobile CTA bar and the
@@ -27,10 +27,11 @@ import { loadOpeningHours } from "@/lib/content/opening-hours-data";
 export const revalidate = 3600;
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
-  const [contact, { hours, special }, { isEnabled: previewActive }] = await Promise.all([
+  const [contact, { hours, special }, { isEnabled: previewActive }, { rating, reviewCount }] = await Promise.all([
     loadContact(),
     loadOpeningHours(),
     draftMode(),
+    loadGoogleRating(),
   ]);
 
   const jsonLd = {
@@ -50,8 +51,8 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
     areaServed: "Fichtenau, Crailsheim, Hohenlohekreis",
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: googleReviews.rating,
-      reviewCount: googleReviews.reviewCount,
+      ratingValue: rating,
+      reviewCount: reviewCount,
     },
   };
 
@@ -64,7 +65,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       <main id="main-content" className="flex-1 pb-16 lg:pb-0">
         {children}
       </main>
-      <Footer contact={contact} hours={hours} />
+      <Footer contact={contact} hours={hours} rating={{ rating, reviewCount }} />
       <MobileCtaBar contact={contact} />
       <WhatsAppFloatingButton contact={contact} />
     </>
