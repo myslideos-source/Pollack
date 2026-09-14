@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { requireStaff } from "@/lib/auth";
+import { OFFER_CATEGORIES } from "@/lib/offer-categories";
 
 async function logAudit(actorId: string, action: string, entityId: string | undefined, summary: string) {
   const supabase = await createClient();
@@ -13,7 +14,7 @@ async function logAudit(actorId: string, action: string, entityId: string | unde
 const offerSchema = z.object({
   id: z.string().uuid().optional(),
   title: z.string().trim().min(1, "Titel erforderlich."),
-  category: z.string().trim().min(1, "Kategorie erforderlich."),
+  category: z.enum(OFFER_CATEGORIES),
   description: z.string().trim().optional(),
   priceCents: z.coerce.number().int().nonnegative().optional(),
   priceNote: z.string().trim().optional(),

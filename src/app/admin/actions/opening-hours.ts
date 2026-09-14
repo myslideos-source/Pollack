@@ -11,39 +11,57 @@ async function logAudit(actorId: string, action: string, entityId: string | unde
   await supabase.from("audit_logs").insert({ actor_id: actorId, action, entity_type: "opening_hours", entity_id: entityId, summary });
 }
 
+const rangeSchema = z.object({ openTime: z.string().min(1), closeTime: z.string().min(1) });
+
 const weekdaySchema = z.object({
   weekday: z.enum(WEEKDAYS.map((w) => w.value) as [string, ...string[]]),
-  closed: z.coerce.boolean().optional(),
-  openTime: z.string().optional(),
-  closeTime: z.string().optional(),
+  closed: z.boolean(),
+  ranges: z.array(rangeSchema),
 });
 
-export async function saveWeekdayHoursAction(formData: FormData): Promise<{ error?: string }> {
+/**
+ * Replaces every opening_hours row for one weekday with the given set of ranges (a gym day
+ * commonly has a morning and an evening block with a midday closure in between, so a single
+ * open/close pair per weekday isn't enough). Not wrapped in a DB transaction — acceptable for
+ * this single-admin-editor workflow — but delete-then-insert keeps stale ranges from lingering.
+ */
+export async function saveWeekdayHoursAction(input: {
+  weekday: string;
+  closed: boolean;
+  ranges: { openTime: string; closeTime: string }[];
+}): Promise<{ error?: string }> {
   const profile = await requireStaff();
-  const parsed = weekdaySchema.safeParse({
-    weekday: formData.get("weekday"),
-    closed: formData.get("closed") === "on",
-    openTime: formData.get("openTime") || undefined,
-    closeTime: formData.get("closeTime") || undefined,
-  });
+  const parsed = weekdaySchema.safeParse(input);
   if (!parsed.success) return { error: "Ungültige Eingabe." };
   const d = parsed.data;
-  const sortOrder = WEEKDAYS.findIndex((w) => w.value === d.weekday);
 
   const supabase = await createClient();
-  const { error } = await supabase.from("opening_hours").upsert(
-    {
-      weekday: d.weekday,
-      closed: d.closed ?? false,
-      open_time: d.closed ? null : d.openTime || null,
-      close_time: d.closed ? null : d.closeTime || null,
-      sort_order: sortOrder,
-    },
-    { onConflict: "weekday" },
-  );
-  if (error) return { error: "Öffnungszeiten konnten nicht gespeichert werden." };
+  const { error: deleteError } = await supabase.from("opening_hours").delete().eq("weekday", d.weekday);
+  if (deleteError) return { error: "Öffnungszeiten konnten nicht gespeichert werden." };
 
-  await logAudit(profile.id, "opening_hours.updated", undefined, `Öffnungszeiten aktualisiert: ${WEEKDAYS.find((w) => w.value === d.weekday)?.label}`);
+  if (!d.closed && d.ranges.length > 0) {
+    const rows = d.ranges.map((r, i) => ({
+      weekday: d.weekday,
+      closed: false,
+      open_time: r.openTime,
+      close_time: r.closeTime,
+      sort_order: i,
+    }));
+    const { error: insertError } = await supabase.from("opening_hours").insert(rows);
+    if (insertError) return { error: "Öffnungszeiten konnten nicht gespeichert werden." };
+  } else {
+    const { error: insertError } = await supabase
+      .from("opening_hours")
+      .insert({ weekday: d.weekday, closed: true, open_time: null, close_time: null, sort_order: 0 });
+    if (insertError) return { error: "Öffnungszeiten konnten nicht gespeichert werden." };
+  }
+
+  await logAudit(
+    profile.id,
+    "opening_hours.updated",
+    undefined,
+    `Öffnungszeiten aktualisiert: ${WEEKDAYS.find((w) => w.value === d.weekday)?.label}`,
+  );
   revalidatePath("/admin/oeffnungszeiten");
   revalidatePath("/");
   return {};

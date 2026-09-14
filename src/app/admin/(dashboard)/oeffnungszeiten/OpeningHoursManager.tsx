@@ -5,7 +5,7 @@ import { Plus, Trash2, Pencil, X } from "lucide-react";
 import { WEEKDAYS } from "@/lib/opening-hours";
 import { saveWeekdayHoursAction, saveSpecialHoursAction, deleteSpecialHoursAction } from "@/app/admin/actions/opening-hours";
 
-type Hour = { weekday: string; closed: boolean; open_time: string | null; close_time: string | null };
+type Hour = { weekday: string; closed: boolean; open_time: string | null; close_time: string | null; sort_order: number };
 type Special = {
   id: string;
   label: string;
@@ -16,68 +16,96 @@ type Special = {
   close_time: string | null;
   note: string | null;
 };
+type Range = { openTime: string; closeTime: string };
 
-function WeekdayRow({ day, hour }: { day: (typeof WEEKDAYS)[number]; hour: Hour | undefined }) {
-  const [closed, setClosed] = useState(hour?.closed ?? false);
-  const [openTime, setOpenTime] = useState(hour?.open_time?.slice(0, 5) ?? "");
-  const [closeTime, setCloseTime] = useState(hour?.close_time?.slice(0, 5) ?? "");
+function WeekdayRow({ day, hours }: { day: (typeof WEEKDAYS)[number]; hours: Hour[] }) {
+  const initialRanges: Range[] = hours
+    .filter((h) => !h.closed)
+    .sort((a, b) => a.sort_order - b.sort_order)
+    .map((h) => ({ openTime: h.open_time?.slice(0, 5) ?? "", closeTime: h.close_time?.slice(0, 5) ?? "" }));
+
+  const [closed, setClosed] = useState(hours.length > 0 && hours.every((h) => h.closed));
+  const [ranges, setRanges] = useState<Range[]>(initialRanges.length > 0 ? initialRanges : [{ openTime: "", closeTime: "" }]);
   const [isPending, startTransition] = useTransition();
   const [saved, setSaved] = useState(false);
 
+  function updateRange(i: number, field: keyof Range, value: string) {
+    setRanges((rs) => rs.map((r, idx) => (idx === i ? { ...r, [field]: value } : r)));
+    setSaved(false);
+  }
+
   function save() {
-    const fd = new FormData();
-    fd.set("weekday", day.value);
-    if (closed) fd.set("closed", "on");
-    fd.set("openTime", openTime);
-    fd.set("closeTime", closeTime);
     startTransition(async () => {
-      await saveWeekdayHoursAction(fd);
+      await saveWeekdayHoursAction({
+        weekday: day.value,
+        closed,
+        ranges: closed ? [] : ranges.filter((r) => r.openTime && r.closeTime),
+      });
       setSaved(true);
     });
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-3 border-b border-paper/5 px-4 py-3 last:border-b-0">
-      <span className="w-28 text-sm text-paper">{day.label}</span>
-      <label className="flex items-center gap-1.5 text-xs text-paper/60">
-        <input
-          type="checkbox"
-          checked={closed}
-          onChange={(e) => {
-            setClosed(e.target.checked);
-            setSaved(false);
-          }}
-        />
-        Geschlossen
-      </label>
-      {!closed ? (
-        <>
+    <div className="flex flex-wrap items-start gap-3 border-b border-paper/5 px-4 py-3 last:border-b-0">
+      <span className="w-28 pt-1.5 text-sm text-paper">{day.label}</span>
+      <div className="flex flex-1 flex-col gap-2">
+        <label className="flex items-center gap-1.5 text-xs text-paper/60">
           <input
-            type="time"
-            value={openTime}
+            type="checkbox"
+            checked={closed}
             onChange={(e) => {
-              setOpenTime(e.target.value);
+              setClosed(e.target.checked);
               setSaved(false);
             }}
-            className="rounded-lg border border-paper/15 bg-ink px-2 py-1.5 text-sm text-paper"
           />
-          <span className="text-paper/40">–</span>
-          <input
-            type="time"
-            value={closeTime}
-            onChange={(e) => {
-              setCloseTime(e.target.value);
-              setSaved(false);
-            }}
-            className="rounded-lg border border-paper/15 bg-ink px-2 py-1.5 text-sm text-paper"
-          />
-        </>
-      ) : null}
+          Geschlossen
+        </label>
+        {!closed
+          ? ranges.map((range, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <input
+                  type="time"
+                  value={range.openTime}
+                  onChange={(e) => updateRange(i, "openTime", e.target.value)}
+                  className="rounded-lg border border-paper/15 bg-ink px-2 py-1.5 text-sm text-paper"
+                />
+                <span className="text-paper/40">–</span>
+                <input
+                  type="time"
+                  value={range.closeTime}
+                  onChange={(e) => updateRange(i, "closeTime", e.target.value)}
+                  className="rounded-lg border border-paper/15 bg-ink px-2 py-1.5 text-sm text-paper"
+                />
+                {ranges.length > 1 ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRanges((rs) => rs.filter((_, idx) => idx !== i));
+                      setSaved(false);
+                    }}
+                    className="text-paper/40 hover:text-red"
+                  >
+                    <X size={14} />
+                  </button>
+                ) : null}
+              </div>
+            ))
+          : null}
+        {!closed ? (
+          <button
+            type="button"
+            onClick={() => setRanges((rs) => [...rs, { openTime: "", closeTime: "" }])}
+            className="flex w-fit items-center gap-1 text-xs text-paper/50 hover:text-paper"
+          >
+            <Plus size={12} /> Zeitspanne hinzufügen (z. B. Mittagspause)
+          </button>
+        ) : null}
+      </div>
       <button
         type="button"
         onClick={save}
         disabled={isPending}
-        className="ml-auto rounded-full border border-paper/15 px-3 py-1.5 text-xs text-paper/70 hover:text-paper disabled:opacity-60"
+        className="rounded-full border border-paper/15 px-3 py-1.5 text-xs text-paper/70 hover:text-paper disabled:opacity-60"
       >
         {isPending ? "Speichert …" : saved ? "Gespeichert" : "Speichern"}
       </button>
@@ -197,7 +225,7 @@ export function OpeningHoursManager({ hours, special }: { hours: Hour[]; special
         <h2 className="font-display text-lg text-paper">Reguläre Öffnungszeiten</h2>
         <div className="mt-3 overflow-hidden rounded-2xl border border-paper/10 bg-anthracite">
           {WEEKDAYS.map((day) => (
-            <WeekdayRow key={day.value} day={day} hour={hours.find((h) => h.weekday === day.value)} />
+            <WeekdayRow key={day.value} day={day} hours={hours.filter((h) => h.weekday === day.value)} />
           ))}
         </div>
       </div>

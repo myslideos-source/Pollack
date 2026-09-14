@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { Plus, Pencil, Trash2, Star, Eye, EyeOff, X } from "lucide-react";
 import { saveOfferAction, deleteOfferAction, togglePublishedOfferAction } from "@/app/admin/actions/offers";
+import { OFFER_CATEGORIES, OFFER_CATEGORY_LABELS } from "@/lib/offer-categories";
 
 type Offer = {
   id: string;
@@ -52,13 +53,18 @@ function OfferForm({ offer, onDone }: { offer?: Offer; onDone: () => void }) {
         </div>
         <div>
           <label className="mb-1 block text-xs text-paper/50">Kategorie</label>
-          <input
+          <select
             name="category"
-            defaultValue={offer?.category}
-            placeholder="z. B. Mitgliedschaft, Probetraining, Aktion"
+            defaultValue={offer?.category ?? OFFER_CATEGORIES[0]}
             required
             className="w-full rounded-lg border border-paper/15 bg-ink px-3 py-2 text-sm text-paper"
-          />
+          >
+            {OFFER_CATEGORIES.map((cat) => (
+              <option key={cat} value={cat}>
+                {OFFER_CATEGORY_LABELS[cat]}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -216,7 +222,9 @@ export function OffersManager({ offers }: { offers: Offer[] }) {
                 <div className="flex flex-wrap items-center gap-2">
                   <p className="font-medium text-paper">{offer.title}</p>
                   {offer.highlighted ? <Star size={14} className="text-sand" /> : null}
-                  <span className="rounded-full border border-paper/15 px-2 py-0.5 text-[11px] text-paper/50">{offer.category}</span>
+                  <span className="rounded-full border border-paper/15 px-2 py-0.5 text-[11px] text-paper/50">
+                    {OFFER_CATEGORY_LABELS[offer.category as keyof typeof OFFER_CATEGORY_LABELS] ?? offer.category}
+                  </span>
                   {!offer.published ? (
                     <span className="rounded-full border border-paper/15 px-2 py-0.5 text-[11px] text-paper/40">Entwurf</span>
                   ) : null}
