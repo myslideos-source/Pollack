@@ -36,7 +36,11 @@ export function Header() {
   return (
     <header
       className={`sticky top-0 z-50 w-full transition-colors duration-300 ${
-        scrolled ? "bg-ink/90 backdrop-blur-md shadow-[0_1px_0_0_rgba(247,245,240,0.08)]" : "bg-transparent"
+        menuOpen
+          ? "bg-ink"
+          : scrolled
+            ? "bg-ink/90 backdrop-blur-md shadow-[0_1px_0_0_rgba(247,245,240,0.08)]"
+            : "bg-transparent"
       }`}
     >
       <a
