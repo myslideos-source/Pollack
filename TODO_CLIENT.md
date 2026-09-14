@@ -289,15 +289,16 @@ Startseite sowie im Footer, beide mit Link zur echten Google-Maps-Seite des Spor
 `maps/search`-URL-Format — Besucher:innen landen direkt beim echten Eintrag und können dort
 selbst eine Bewertung lesen/abgeben). Zusätzlich als `aggregateRating` im strukturierten
 Daten-Markup (`src/app/layout.tsx`) hinterlegt. Darunter läuft jetzt außerdem ein
-Kachel-Karussell mit drei echten Rezensionszitaten nach links (`GoogleReviewsBadge.tsx`,
+Kachel-Karussell mit sieben echten Rezensionszitaten nach links (`GoogleReviewsBadge.tsx`,
 pausiert bei Hover, zeigt bei `prefers-reduced-motion` eine statische, umbrechende Reihe statt
 der Endlos-Animation).
 
 **Update:** Der Auftraggeber hat **4,9 von 5 Sternen bei 56 Bewertungen** per Screenshot direkt
 aus dem eigenen Google-Maps-Profil bestätigt (ersetzt den vorherigen, nur über Websuche
-cross-referenzierten Platzhalterwert von 5,0/6). Ebenso die drei Rezensionszitate (Ulrich
-Vigenschow, Benjamin Blumenstock, Thomas Hercher) — echte, vom Auftraggeber per Screenshot
-übergebene Google-Rezensionen. Laut Auftraggeber gibt es noch mehr Bewertungen als die drei
-gezeigten — bei Bedarf gerne weitere Screenshots schicken, dann werden sie in
-`src/content/reviews.ts` (Array `reviews`) ergänzt; das Karussell übernimmt neue Einträge
-automatisch, ohne Komponentenänderung.
+cross-referenzierten Platzhalterwert von 5,0/6). Ebenso sieben Rezensionszitate (Ulrich
+Vigenschow, Benjamin Blumenstock, Thomas Hercher, Tobias Müller, Danny Müller, Adrian sowie eine
+Rezension ohne im Screenshot sichtbaren Namen, dort als „Google-Nutzer" ausgewiesen) — echte, vom
+Auftraggeber per Screenshot übergebene Google-Rezensionen. Laut Auftraggeber gibt es noch mehr
+Bewertungen als die sieben gezeigten (56 insgesamt) — bei Bedarf gerne weitere Screenshots
+schicken, dann werden sie in `src/content/reviews.ts` (Array `reviews`) ergänzt; das Karussell
+übernimmt neue Einträge automatisch, ohne Komponentenänderung.

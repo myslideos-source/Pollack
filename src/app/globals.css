@@ -40,7 +40,7 @@
 
   --animate-pulse-draw: pulse-draw 3.6s ease-in-out infinite;
   --animate-fade-up: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
-  --animate-marquee: marquee 42s linear infinite;
+  --animate-marquee: marquee 85s linear infinite;
 }
 
 @keyframes pulse-draw {

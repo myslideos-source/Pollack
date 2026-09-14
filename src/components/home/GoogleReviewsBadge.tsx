@@ -10,7 +10,9 @@ function ReviewCard({ review }: { review: (typeof googleReviews.reviews)[number]
         ))}
       </div>
       <p className="text-sm leading-relaxed text-paper/80">&bdquo;{review.quote}&ldquo;</p>
-      <p className="mt-auto text-xs text-paper/50">{review.author} &middot; Google-Rezension</p>
+      <p className="mt-auto text-xs text-paper/50">
+        {review.author ?? "Google-Nutzer"} &middot; {review.postedLabel}
+      </p>
     </div>
   );
 }
@@ -50,12 +52,12 @@ export function GoogleReviewsBadge() {
 
       <div className="group mt-6 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]">
         <div className="flex gap-4 px-4 motion-safe:w-max motion-safe:animate-marquee motion-safe:group-hover:[animation-play-state:paused] motion-reduce:w-full motion-reduce:flex-wrap motion-reduce:justify-center sm:px-6">
-          {googleReviews.reviews.map((review) => (
-            <ReviewCard key={review.author} review={review} />
+          {googleReviews.reviews.map((review, i) => (
+            <ReviewCard key={i} review={review} />
           ))}
           <div aria-hidden="true" className="contents motion-reduce:hidden">
-            {googleReviews.reviews.map((review) => (
-              <ReviewCard key={`${review.author}-dup`} review={review} />
+            {googleReviews.reviews.map((review, i) => (
+              <ReviewCard key={`dup-${i}`} review={review} />
             ))}
           </div>
         </div>
