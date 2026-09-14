@@ -6,6 +6,7 @@ import { siteConfig, contact as staticContact } from "@/content/site";
 import { googleReviews } from "@/content/reviews";
 import { loadContact } from "@/lib/content/contact";
 import { loadOpeningHours } from "@/lib/content/opening-hours-data";
+import { recordPageView } from "@/lib/content/analytics";
 
 /**
  * Shell for the public marketing site only — header, footer, mobile CTA bar and the
@@ -14,7 +15,7 @@ import { loadOpeningHours } from "@/lib/content/opening-hours-data";
  * (AdminShell) and must not show the public nav.
  */
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
-  const [contact, { hours, special }] = await Promise.all([loadContact(), loadOpeningHours()]);
+  const [contact, { hours, special }] = await Promise.all([loadContact(), loadOpeningHours(), recordPageView()]);
 
   const jsonLd = {
     "@context": "https://schema.org",

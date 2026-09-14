@@ -34,6 +34,7 @@ export default async function AdminDashboardPage() {
     { data: recentInquiries },
     { data: upcomingAppointments },
     { data: recentSections },
+    { data: weeklyVisitors },
   ] = await Promise.all([
     supabase.from("inquiries").select("id", { count: "exact", head: true }).eq("status", "neu"),
     supabase
@@ -76,6 +77,7 @@ export default async function AdminDashboardPage() {
       .select("id, title, page, updated_at")
       .order("updated_at", { ascending: false })
       .limit(5),
+    supabase.rpc("get_weekly_visitor_count"),
   ]);
 
   const firstName = profile.full_name.split(" ")[0];
@@ -128,13 +130,13 @@ export default async function AdminDashboardPage() {
         ))}
 
         <div className="rounded-2xl border border-paper/10 bg-anthracite p-5 lg:col-span-4">
-          <div className="flex items-center gap-3 text-paper/50">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-paper/5 text-paper/40">
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-red/15 text-red">
               <BarChart3 size={20} />
             </span>
             <div>
-              <p className="text-sm">Besucher diese Woche</p>
-              <p className="text-xs">Kein Analytics-Dienst verbunden — Kennzahl noch nicht verfügbar.</p>
+              <p className="text-sm text-paper/60">Besucher diese Woche</p>
+              <p className="font-display text-2xl font-semibold text-paper">{weeklyVisitors ?? 0}</p>
             </div>
           </div>
         </div>

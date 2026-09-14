@@ -85,6 +85,17 @@ export default function DatenschutzPage() {
             von WhatsApp. Diese Funktion wird erst durch deinen aktiven Klick ausgelöst.
           </p>
 
+          <h2 className="mt-8 font-display text-xl uppercase tracking-wide text-paper">
+            Anonymer Besucherzähler
+          </h2>
+          <p className="mt-3">
+            Damit wir eine grobe wöchentliche Besucherzahl für unsere interne Verwaltung sehen können,
+            setzen wir ein rein technisches Cookie (&bdquo;sp_visitor&ldquo;) mit einer zufällig erzeugten
+            Kennung — ohne IP-Adresse, Namen, Standort oder sonstige personenbezogene Daten, ohne
+            Weitergabe an Dritte und ohne Einsatz durch einen externen Analyse-Dienst. Die Kennung wird
+            zusammen mit einem Zeitstempel gespeichert; ältere Einträge werden regelmäßig gelöscht.
+          </p>
+
           <h2 className="mt-8 font-display text-xl uppercase tracking-wide text-paper">Deine Rechte</h2>
           <p className="mt-3">
             Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung,

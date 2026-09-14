@@ -765,6 +765,24 @@ export type Database = {
           },
         ];
       };
+      page_views: {
+        Row: {
+          created_at: string;
+          id: string;
+          session_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          session_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          session_id?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       [_ in never]: never;
@@ -772,8 +790,10 @@ export type Database = {
     Functions: {
       current_profile_role: { Args: Record<PropertyKey, never>; Returns: string };
       get_notification_email: { Args: Record<PropertyKey, never>; Returns: string | null };
+      get_weekly_visitor_count: { Args: Record<PropertyKey, never>; Returns: number };
       is_admin: { Args: Record<PropertyKey, never>; Returns: boolean };
       is_staff: { Args: Record<PropertyKey, never>; Returns: boolean };
+      prune_old_page_views: { Args: Record<PropertyKey, never>; Returns: undefined };
       publish_all_drafts: { Args: { p_actor: string }; Returns: number };
       restore_last_version: {
         Args: { p_actor: string; p_section_id: string };
