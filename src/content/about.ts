@@ -2,6 +2,8 @@ export const juergenPollack = {
   name: "Jürgen Pollack",
   role: "Inhaber und Geschäftsführer",
   since: 1987,
+  portraitSrc: "/media/about/juergen-pollack-portrait.webp",
+  portraitAlt: "Jürgen Pollack, Inhaber des Sportpark Pollack, im Kraftraum",
   intro:
     "Seit 1987 auf der Matte und im Kraftraum zuhause: Jürgen Pollack hat den Sportpark Pollack aus Überzeugung aufgebaut – dass Training mehr sein soll als Wiederholungen zählen, nämlich ein Weg zu einem gesünderen, stärkeren und selbstbewussteren Leben.",
   story: [

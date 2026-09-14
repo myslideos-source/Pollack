@@ -246,3 +246,37 @@ aktualisiert wird. Ergebnis: Nach Klick auf Play blieb `video.currentSrc` fälsc
 Teaser-Datei stehen. Behoben durch `key="teaser"` / `key="full"` auf den beiden Video-Elementen
 (erzwingt einen frischen DOM-Node) — per Netzwerk-Log verifiziert, dass nach dem Fix korrekt
 `imagefilm.mp4` anstelle von `imagefilm-teaser.mp4` angefragt wird.
+
+### Korrektur: Christian-Wolf-Regalvideo aus dem MORE-Nutrition-Grid entfernt, stattdessen Slider
+
+Rückmeldung des Auftraggebers per Screenshot: Das Regal-Video
+(`christian-wolf-more-nutrition.mp4`) wirkte im MORE-Nutrition-Grid „nicht schlau gewählt" — der
+Grund war strukturell, nicht nur eine falsche Poster-Frame-Wahl. Beide Christian-Wolf-Clips sind
+Hochformat-Aufnahmen (720×1280). Im MORE-Nutrition-Grid lief das Video aber in einer breiten
+16:9- bzw. 4:3-Kachel mit `object-cover` — dadurch zeigte der sichtbare Ausschnitt *während der
+gesamten Wiedergabe* (nicht nur im Standbild) durchgehend nur den mittleren Bildstreifen mit dem
+„@ Christian Wolf"-Tag und einem abgeschnittenen Gesicht, nie das eigentliche Regal.
+
+**Lösung:** Video aus dem MORE-Nutrition-Grid entfernt (Startseite + `/partner-produkte`), dort
+wieder der ursprüngliche `TexturePanel`-Platzhalter „Produktvideo". Stattdessen zeigt die
+Community-Sektion (`src/components/home/CommunityShoutout.tsx`) jetzt **beide** Clips als
+Zwei-Tab-Slider im nativen Hochformat (kein Zuschnitt, `aspect-[9/16]`) — „Im Sportpark" (Talking-
+Head-Shoutout) und „MORE-Nutrition-Regal" (Produktregal), umschaltbar per Klick, `key`-Prop pro
+Clip setzt die Wiedergabe beim Wechsel zurück. `/partner-produkte` verlinkt jetzt stattdessen auf
+`/#christian-wolf` mit dem Hinweistext „Video vom Regal-Besuch: auf der Startseite ansehen".
+
+### Neues Foto: Jürgen-Pollack-Porträt (vom Auftraggeber als „Head Coach Bild" geliefert)
+
+Professionelles Studio-Porträt (1122×1402, Halbtotale, verschränkte Arme, Kraftraum-Hintergrund
+mit rotem Akzentlicht) ersetzt die bisherigen `TexturePanel`-Platzhalter an beiden Stellen, an
+denen Jürgen Pollack redaktionell vorgestellt wird:
+
+| Datei | Verwendung |
+|---|---|
+| `public/media/about/juergen-pollack-portrait.webp` (als WebP optimiert) | `PollackFeature.tsx` (Startseite) und `/ueber-uns` — beide über `MediaPanel` statt `TexturePanel`, gesteuert durch die neuen Felder `portraitSrc`/`portraitAlt` in `src/content/about.ts` |
+
+Rollentext („Inhaber und Geschäftsführer") unverändert gelassen — die Bildunterschrift „Head
+Coach" aus der Chat-Nachricht wurde nicht automatisch als neuer Rollentitel übernommen, da das
+eine inhaltliche Entscheidung ist, keine reine Bildzuordnung. Falls „Head Coach" als offizieller
+Titel neben oder anstelle von „Inhaber und Geschäftsführer" erscheinen soll, bitte kurz
+bestätigen.

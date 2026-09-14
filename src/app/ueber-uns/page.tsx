@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/shared/PageHero";
 import { Container } from "@/components/shared/Container";
 import { Button } from "@/components/shared/Button";
-import { TexturePanel } from "@/components/shared/TexturePanel";
+import { MediaPanel } from "@/components/shared/MediaPanel";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbJsonLd } from "@/lib/breadcrumb";
 import { juergenPollack, studioStory } from "@/content/about";
@@ -47,7 +47,14 @@ export default function UeberUnsPage() {
       <section className="bg-anthracite py-14 sm:py-20">
         <Container>
           <div className="grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
-            <TexturePanel variant="kampfkunst" className="aspect-[4/5] w-full rounded-2xl" label={juergenPollack.name} />
+            <MediaPanel
+              src={juergenPollack.portraitSrc}
+              alt={juergenPollack.portraitAlt}
+              variant="kampfkunst"
+              className="relative aspect-[4/5] w-full rounded-2xl"
+              label={juergenPollack.name}
+              sizes="(min-width: 1024px) 45vw, 100vw"
+            />
             <div>
               <span className="font-display text-sm uppercase tracking-[0.3em] text-red">
                 {juergenPollack.role}

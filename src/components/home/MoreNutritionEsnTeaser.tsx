@@ -3,9 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/shared/Button";
 import { TexturePanel } from "@/components/shared/TexturePanel";
 import { MediaPanel } from "@/components/shared/MediaPanel";
-import { VideoPlayer } from "@/components/shared/VideoPlayer";
 import { moreNutritionEsn } from "@/content/partners";
-import { christianWolfShoutout as cw } from "@/content/community";
 
 export function MoreNutritionEsnTeaser() {
   return (
@@ -32,18 +30,10 @@ export function MoreNutritionEsnTeaser() {
           />
           <TexturePanel variant="performance" className="aspect-square w-full rounded-2xl" label={moreNutritionEsn.more.name} />
           <TexturePanel variant="performance" className="aspect-square w-full rounded-2xl" label={moreNutritionEsn.esn.name} />
-          <VideoPlayer
-            src={cw.productVideo.src}
-            poster={cw.productVideo.poster}
-            label={cw.productVideo.label}
-            className="relative col-span-2 aspect-[16/9] w-full rounded-2xl lg:col-span-2"
-          />
+          <TexturePanel variant="community" className="col-span-2 aspect-[16/9] w-full rounded-2xl lg:col-span-2" label="Produktvideo" />
         </div>
 
         <p className="mt-6 max-w-2xl text-sm text-paper/60">{moreNutritionEsn.intro}</p>
-        <p className="mt-2 text-xs text-paper/40">
-          Video: {cw.name} ({cw.handle}) bei seinem Besuch im Sportpark Pollack.
-        </p>
 
         <div className="mt-6 flex flex-wrap items-center gap-4">
           <Button href="/partner-produkte" variant="primary">

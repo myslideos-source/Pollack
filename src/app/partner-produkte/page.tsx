@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { PageHero } from "@/components/shared/PageHero";
 import { Container } from "@/components/shared/Container";
 import { Button } from "@/components/shared/Button";
 import { TexturePanel } from "@/components/shared/TexturePanel";
 import { MediaPanel } from "@/components/shared/MediaPanel";
-import { VideoPlayer } from "@/components/shared/VideoPlayer";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbJsonLd } from "@/lib/breadcrumb";
 import { hansefit, moreNutritionEsn } from "@/content/partners";
-import { christianWolfShoutout as cw } from "@/content/community";
 
 export const metadata: Metadata = {
   title: "Partner & Produkte",
@@ -71,12 +70,7 @@ export default function PartnerProduktePage() {
             <TexturePanel variant="performance" className="aspect-square w-full rounded-2xl" label="Produktbild 1" />
             <TexturePanel variant="performance" className="aspect-square w-full rounded-2xl" label="Produktbild 2" />
             <TexturePanel variant="performance" className="aspect-square w-full rounded-2xl" label="Produktbild 3" />
-            <VideoPlayer
-              src={cw.productVideo.src}
-              poster={cw.productVideo.poster}
-              label={cw.productVideo.label}
-              className="aspect-[4/3] w-full rounded-2xl"
-            />
+            <TexturePanel variant="community" className="aspect-[4/3] w-full rounded-2xl" label="Produktvideo" />
           </div>
 
           <div className="mt-10 grid gap-6 sm:grid-cols-2">
@@ -96,7 +90,11 @@ export default function PartnerProduktePage() {
 
           <p className="mt-8 text-sm text-paper/50">{moreNutritionEsn.availabilityNote}</p>
           <p className="mt-2 text-xs text-paper/40">
-            Video: {cw.name} ({cw.handle}) bei seinem Besuch im Sportpark Pollack.
+            Video vom Regal-Besuch:{" "}
+            <Link href="/#christian-wolf" className="underline underline-offset-2 hover:text-paper/70">
+              auf der Startseite ansehen
+            </Link>
+            .
           </p>
 
           <div className="mt-8">

@@ -1,16 +1,19 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { TexturePanel } from "@/components/shared/TexturePanel";
+import { MediaPanel } from "@/components/shared/MediaPanel";
 import { juergenPollack } from "@/content/about";
 
 export function PollackFeature() {
   return (
     <section className="bg-ink py-16 sm:py-24">
       <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16 lg:px-8">
-        <TexturePanel
+        <MediaPanel
+          src={juergenPollack.portraitSrc}
+          alt={juergenPollack.portraitAlt}
           variant="kampfkunst"
-          className="aspect-[4/5] w-full rounded-2xl"
+          className="relative aspect-[4/5] w-full rounded-2xl"
           label={juergenPollack.name}
+          sizes="(min-width: 1024px) 45vw, 100vw"
         />
         <div>
           <span className="font-display text-sm uppercase tracking-[0.3em] text-red">
