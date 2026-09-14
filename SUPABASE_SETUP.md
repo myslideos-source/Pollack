@@ -50,10 +50,18 @@ eingetragen werden.
 
 ### 3.2 Ersten Admin-Nutzer anlegen
 
-Es gibt bewusst **keine öffentliche Registrierung** — neue Nutzer:innen werden ausschließlich
-über `/admin/benutzer` eingeladen (siehe ADMIN_MANUAL.md). Das Einladen setzt aber bereits einen
-angemeldeten Admin voraus — ein Henne-Ei-Problem beim allerersten Zugang. Um es aufzulösen, den
-ersten Admin-Nutzer einmalig manuell im Supabase-Dashboard anlegen:
+✅ **Erledigt.** Der erste Admin-Zugang (`d.musotto@t-online.de`) wurde bereits angelegt — Login
+unter `/admin/login` mit dem vereinbarten Passwort möglich. Bitte das Passwort nach dem ersten
+Login über „Passwort vergessen" auf der Login-Seite einmal selbst ändern, damit es nur noch dir
+bekannt ist (es wurde für die Einrichtung kurz im Chat übertragen).
+
+Die folgenden Schritte sind nur noch relevant, falls **künftig** ein weiterer Zugang ohne
+funktionierenden Service-Role-Key (also ohne die Einladungsfunktion unter „Benutzer") angelegt
+werden muss:
+
+Es gibt bewusst **keine öffentliche Registrierung** — neue Nutzer:innen werden normalerweise
+über `/admin/benutzer` eingeladen (siehe ADMIN_MANUAL.md). Alternativ lässt sich ein Zugang auch
+manuell im Supabase-Dashboard anlegen:
 
 1. Supabase-Dashboard → **Authentication → Users → Add user → Create new user**.
    E-Mail-Adresse und ein Startpasswort vergeben (z. B. Jürgens E-Mail-Adresse).
@@ -120,17 +128,19 @@ versehentlicher Client-Nutzung geschützt ist.
 
 ## 5. Bekannte Einschränkungen
 
-- **Kein Admin-Nutzer wurde von Claude angelegt** — siehe Abschnitt 3.2, das ist strukturell
-  nicht ohne den `service_role`-Schlüssel möglich.
+- **Der erste Admin-Nutzer wurde per SQL direkt in der Datenbank angelegt** (nicht über die
+  offizielle `auth.admin.inviteUserByEmail`-API, da der `service_role`-Schlüssel dafür fehlte) —
+  funktional identisch (bestätigter E-Mail-Login, `profiles`-Rolle `admin`), aber ungewöhnlicher
+  Weg. Weitere Nutzer:innen sollten normal über `/admin/benutzer` eingeladen werden, sobald
+  `SUPABASE_SERVICE_ROLE_KEY` gesetzt ist.
 - **Login/Logout, Rollen und der vollständige Anfragen-zu-Veröffentlichung-Ablauf konnten in
-  dieser Sitzung nicht Ende-zu-Ende im Browser getestet werden** — zum einen, weil kein
-  Test-Nutzer angelegt werden konnte (s. o.), zum anderen, weil diese Sandbox-Umgebung keinen
-  Netzwerkzugriff auf den Supabase-Host hat (Organisationsrichtlinie am Egress-Proxy). Verifiziert
-  wurde stattdessen: TypeScript, ESLint und der Produktions-Build laufen fehlerfrei durch, alle
-  RLS-Policies wurden direkt in der Datenbank als `anon`-Rolle gegengeprüft (siehe Commit-Historie),
-  und der Code wurde sorgfältig gegen das tatsächliche Datenbankschema gelesen. Ein kurzer
-  manueller Durchklick nach dem Deployment (Login, eine Test-Anfrage abschicken, einen Abschnitt
-  bearbeiten und veröffentlichen) wird empfohlen.
+  dieser Sitzung nicht Ende-zu-Ende im Browser getestet werden** — diese Sandbox-Umgebung hat
+  keinen Netzwerkzugriff auf den Supabase-Host (Organisationsrichtlinie am Egress-Proxy).
+  Verifiziert wurde stattdessen: TypeScript, ESLint und der Produktions-Build laufen fehlerfrei
+  durch, alle RLS-Policies wurden direkt in der Datenbank als `anon`-Rolle gegengeprüft (siehe
+  Commit-Historie), und der Code wurde sorgfältig gegen das tatsächliche Datenbankschema gelesen.
+  Ein kurzer manueller Durchklick nach dem Deployment (Login, eine Test-Anfrage abschicken, einen
+  Abschnitt bearbeiten und veröffentlichen) wird empfohlen.
 - **Bilder-Zuschnitt (Crop) in der Medienbibliothek**: Die Datenbank-Spalte `media.crop` ist
   vorbereitet, es gibt aber noch keine Bedienoberfläche dafür — Bilder werden aktuell
   unbeschnitten verwendet.
