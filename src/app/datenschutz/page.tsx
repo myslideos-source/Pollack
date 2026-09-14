@@ -52,13 +52,18 @@ export default function DatenschutzPage() {
             findet keine Verbindung zu Google Fonts oder anderen Schriftarten-Servern statt.
           </p>
 
-          <h2 className="mt-8 font-display text-xl uppercase tracking-wide text-paper">Kontaktformular</h2>
+          <h2 className="mt-8 font-display text-xl uppercase tracking-wide text-paper">
+            Kontakt- und Probetraining-Formular
+          </h2>
           <p className="mt-3">
-            Das Kontaktformular öffnet aktuell dein lokales E-Mail-Programm mit einer vorausgefüllten
-            Nachricht an {contact.email} – es werden keine Formulardaten automatisch an einen Server
-            dieser Website oder Dritte übertragen oder gespeichert. Solltest du uns per E-Mail
-            kontaktieren, verarbeiten wir deine Angaben ausschließlich zur Bearbeitung deiner Anfrage
-            (Art. 6 Abs. 1 lit. b DSGVO).
+            Wenn du unser Kontakt- oder Probetraining-Formular ausfüllst, werden deine Angaben (Name,
+            E-Mail-Adresse, optional Telefonnummer, gewünschter Bereich, gewünschter Termin, Nachricht)
+            auf einem Server unseres Datenbank-Dienstleisters Supabase (Supabase Inc., Region Frankfurt,
+            EU) gespeichert und ausschließlich zur Bearbeitung deiner Anfrage durch unser Team
+            verarbeitet (Art. 6 Abs. 1 lit. b DSGVO). Der Versand erfolgt nur, wenn du der Verarbeitung
+            aktiv zustimmst. Du kannst jederzeit die Löschung deiner Anfrage verlangen; wende dich dazu
+            an {contact.email}. Zur Vermeidung von Missbrauch speichern wir zusätzlich einen technisch
+            nicht auf dich persönlich rückführbaren Hash-Wert deiner IP-Adresse für eine begrenzte Zeit.
           </p>
 
           <h2 className="mt-8 font-display text-xl uppercase tracking-wide text-paper">
