@@ -1,4 +1,5 @@
 import { Hero } from "@/components/home/Hero";
+import { Imagefilm } from "@/components/home/Imagefilm";
 import { TrustStats } from "@/components/home/TrustStats";
 import { GoalSelector } from "@/components/home/GoalSelector";
 import { TrainingWorlds } from "@/components/home/TrainingWorlds";
@@ -18,6 +19,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <Imagefilm />
       <TrustStats />
       <GoalSelector />
       <TrainingWorlds />

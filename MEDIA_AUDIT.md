@@ -214,3 +214,35 @@ Auftraggeber weitergeleitet wurde. Beide Clips sind daher im UI sichtbar mit Nam
 (`@christian.wolf`) und Plattform gekennzeichnet — siehe **TODO_CLIENT.md Punkt 17** für den
 offenen Punkt: eine ausdrückliche Repost-Freigabe von Christian Wolf liegt uns nicht vor und
 sollte vor einem echten Go-Live eingeholt werden.
+
+### Sechste Lieferung: der offizielle Sportpark-Imagefilm
+
+Der Auftraggeber hat den professionell produzierten Sportpark-Imagefilm direkt als Datei
+hochgeladen (nachdem der zuvor genannte externe CDN-Link wegen der Netzwerk-Restriktion dieser
+Umgebung nicht erreichbar war, siehe TODO_CLIENT.md Punkt 1). Quelldatei: `.mov`, 1280×720,
+81,6 s mit Ton, 23,9 MB — Drohnenaufnahme des Gebäudes, Interview-Ausschnitt, Motion-Graphics-
+Kapitel zu Training/FIVE/Karate/Selbstverteidigung/Regeneration.
+
+| Datei | Verarbeitung | Verwendung |
+|---|---|---|
+| `public/media/video/imagefilm.mp4` (81,6 s, 22,9 MB) | Re-encodiert: H.264 CRF 26 + AAC 112k, `faststart` | Vollständiger Film, lädt erst nach Klick auf Play |
+| `public/media/video/imagefilm-teaser.mp4` (5 s, 505 KB, **ohne Ton**) | Ausschnitt 1,0–6,0 s (die Drohnen-Einstellung), auf 960 px Breite skaliert, H.264 CRF 30, kein Audiotrack | Stummer Ambient-Loop als Vorschau, bevor geklickt wird |
+| `public/media/video/imagefilm-poster.webp` | Frame bei 3 s extrahiert, als WebP exportiert | Poster für beide Video-Elemente sowie `prefers-reduced-motion`-Fallback |
+
+**Platzierung — neue Sektion direkt unter dem Hero:** `src/components/home/Imagefilm.tsx`, auf
+der Startseite zwischen `Hero` und `TrustStats` eingebaut (`src/app/page.tsx`). Konzept: ein
+großflächiger, dunkler Cinema-Ausschnitt mit dem stummen Drohnen-Loop als Ambient-Textur
+(einzige Ausnahme neben dem Hero selbst, die automatisch abspielen darf — bewusst nur an dieser
+prominenten Stelle direkt nach dem Hero), einem pulsierenden Play-Button (`animate-ping`, spielt
+bewusst mit dem Marken-Motiv „Puls des Sportparks") und der Überschrift „Spür den Puls." Klick
+lädt den vollständigen Film mit Ton und Steuerleiste nach — vorher wird kein Byte der 23-MB-Datei
+angefragt (per Netzwerk-Request-Log verifiziert).
+
+**Ein echter Bug wurde dabei gefunden und behoben:** Ohne einen expliziten `key`-Prop auf den
+beiden `<video>`-Elementen (Vorschau-Loop vs. vollständiger Film) hat React beim Umschalten den
+bestehenden DOM-Node wiederverwendet statt einen neuen zu erzeugen — der Browser lädt eine neue
+`<source>` aber nicht automatisch nach, wenn nur das umgebende Element per DOM-Diffing
+aktualisiert wird. Ergebnis: Nach Klick auf Play blieb `video.currentSrc` fälschlich auf der
+Teaser-Datei stehen. Behoben durch `key="teaser"` / `key="full"` auf den beiden Video-Elementen
+(erzwingt einen frischen DOM-Node) — per Netzwerk-Log verifiziert, dass nach dem Fix korrekt
+`imagefilm.mp4` anstelle von `imagefilm-teaser.mp4` angefragt wird.
