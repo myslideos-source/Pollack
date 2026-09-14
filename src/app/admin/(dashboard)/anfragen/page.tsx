@@ -110,14 +110,14 @@ export default async function AnfragenPage({
         ))}
       </div>
 
-      <div className="mt-4 grid flex-1 gap-4 overflow-hidden lg:grid-cols-[1.3fr_1fr]">
-        <div className="overflow-y-auto rounded-2xl border border-paper/10 bg-anthracite">
+      <div className="mt-4 grid flex-1 gap-4 lg:overflow-hidden lg:grid-cols-[1.3fr_1fr]">
+        <div className="overflow-auto rounded-2xl border border-paper/10 bg-anthracite lg:max-h-full">
           <table className="w-full text-sm">
             <thead className="sticky top-0 bg-anthracite text-left text-xs uppercase tracking-wide text-paper/40">
               <tr className="border-b border-paper/10">
                 <th className="px-4 py-3 font-medium">Name</th>
-                <th className="px-4 py-3 font-medium">Anfrageart</th>
-                <th className="px-4 py-3 font-medium">Datum</th>
+                <th className="hidden px-4 py-3 font-medium sm:table-cell">Anfrageart</th>
+                <th className="hidden px-4 py-3 font-medium sm:table-cell">Datum</th>
                 <th className="px-4 py-3 font-medium">Status</th>
               </tr>
             </thead>
@@ -136,8 +136,12 @@ export default async function AnfragenPage({
                         {i.status === "neu" ? <span className="ml-2 inline-block h-1.5 w-1.5 rounded-full bg-red align-middle" /> : null}
                       </Link>
                     </td>
-                    <td className="px-4 py-3 text-paper/60">{inquiryAreaLabels[i.area as keyof typeof inquiryAreaLabels] ?? i.area}</td>
-                    <td className="px-4 py-3 text-paper/60">{new Date(i.created_at).toLocaleDateString("de-DE")}</td>
+                    <td className="hidden px-4 py-3 text-paper/60 sm:table-cell">
+                      {inquiryAreaLabels[i.area as keyof typeof inquiryAreaLabels] ?? i.area}
+                    </td>
+                    <td className="hidden px-4 py-3 text-paper/60 sm:table-cell">
+                      {new Date(i.created_at).toLocaleDateString("de-DE")}
+                    </td>
                     <td className="px-4 py-3">
                       <span className={`rounded-full border px-2.5 py-1 text-xs ${inquiryStatusColors[i.status as InquiryStatus]}`}>
                         {inquiryStatusLabels[i.status as InquiryStatus] ?? i.status}
@@ -156,7 +160,7 @@ export default async function AnfragenPage({
           </table>
         </div>
 
-        <div className="overflow-y-auto">
+        <div className="overflow-y-auto lg:max-h-full">
           {openInquiry ? (
             <InquiryDetailPanel
               inquiry={openInquiry}

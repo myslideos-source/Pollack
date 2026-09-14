@@ -16,6 +16,7 @@ import {
   Settings,
   UserCog,
   History,
+  X,
 } from "lucide-react";
 import type { Profile } from "@/lib/auth";
 
@@ -27,7 +28,17 @@ type NavItem = {
   badge?: number;
 };
 
-export function AdminSidebar({ profile, inboxCount }: { profile: Profile; inboxCount: number }) {
+export function AdminSidebar({
+  profile,
+  inboxCount,
+  open,
+  onClose,
+}: {
+  profile: Profile;
+  inboxCount: number;
+  open: boolean;
+  onClose: () => void;
+}) {
   const pathname = usePathname();
 
   const navItems: NavItem[] = [
@@ -46,49 +57,72 @@ export function AdminSidebar({ profile, inboxCount }: { profile: Profile; inboxC
   ];
 
   return (
-    <aside className="flex h-full w-64 shrink-0 flex-col border-r border-paper/10 bg-anthracite">
-      <div className="flex h-16 items-center border-b border-paper/10 px-5">
-        <Image
-          src="/logo/sportpark-pollack-logo-white.webp"
-          alt="Sportpark Pollack"
-          width={180}
-          height={62}
-          className="h-8 w-auto"
+    <>
+      {open ? (
+        <div
+          className="fixed inset-0 z-40 bg-ink/70 lg:hidden"
+          onClick={onClose}
+          aria-hidden="true"
         />
-      </div>
+      ) : null}
 
-      <nav className="flex-1 space-y-0.5 overflow-y-auto px-3 py-4" aria-label="Admin-Navigation">
-        {navItems.map((item) => {
-          if (item.adminOnly && profile.role !== "admin") return null;
-          const active = item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href);
-          const Icon = item.icon;
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`flex items-center justify-between gap-2 rounded-xl px-3 py-2.5 text-sm transition-colors ${
-                active ? "bg-red/15 text-red" : "text-paper/70 hover:bg-paper/5 hover:text-paper"
-              }`}
-              aria-current={active ? "page" : undefined}
-            >
-              <span className="flex items-center gap-2.5">
-                <Icon size={18} />
-                {item.label}
-              </span>
-              {item.badge ? (
-                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-red px-1.5 text-xs font-semibold text-paper">
-                  {item.badge}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 flex h-full w-72 max-w-[85vw] shrink-0 flex-col border-r border-paper/10 bg-anthracite transition-transform duration-200 ease-out lg:static lg:z-auto lg:w-64 lg:max-w-none lg:translate-x-0 ${
+          open ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="flex h-16 items-center justify-between border-b border-paper/10 px-5">
+          <Image
+            src="/logo/sportpark-pollack-logo-white.webp"
+            alt="Sportpark Pollack"
+            width={180}
+            height={62}
+            className="h-8 w-auto"
+          />
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-paper/60 hover:text-paper lg:hidden"
+            aria-label="Menü schließen"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        <nav className="flex-1 space-y-0.5 overflow-y-auto px-3 py-4" aria-label="Admin-Navigation">
+          {navItems.map((item) => {
+            if (item.adminOnly && profile.role !== "admin") return null;
+            const active = item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href);
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={onClose}
+                className={`flex items-center justify-between gap-2 rounded-xl px-3 py-2.5 text-sm transition-colors ${
+                  active ? "bg-red/15 text-red" : "text-paper/70 hover:bg-paper/5 hover:text-paper"
+                }`}
+                aria-current={active ? "page" : undefined}
+              >
+                <span className="flex items-center gap-2.5">
+                  <Icon size={18} />
+                  {item.label}
                 </span>
-              ) : null}
-            </Link>
-          );
-        })}
-      </nav>
+                {item.badge ? (
+                  <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-red px-1.5 text-xs font-semibold text-paper">
+                    {item.badge}
+                  </span>
+                ) : null}
+              </Link>
+            );
+          })}
+        </nav>
 
-      <div className="border-t border-paper/10 px-5 py-4 text-xs text-paper/40">
-        <p>Sportpark Pollack</p>
-        <p>In Bewegung. Seit 1987.</p>
-      </div>
-    </aside>
+        <div className="border-t border-paper/10 px-5 py-4 text-xs text-paper/40">
+          <p>Sportpark Pollack</p>
+          <p>In Bewegung. Seit 1987.</p>
+        </div>
+      </aside>
+    </>
   );
 }
