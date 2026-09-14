@@ -241,16 +241,13 @@ mitzuteilen, damit sie an einer Stelle (`src/content/programs.ts`) gepflegt werd
 Mitglieder und Nichtmitglieder unterscheidet. Aktuell zeigt `/preise` dafür einheitlich „Preis
 auf Anfrage".
 
-## 15. Hansefit — Logo-Datei und genaue Konditionen
+## 15. Hansefit — genaue Konditionen
 
-Der neue Hansefit-Partnerbereich auf der Startseite und auf `/partner-produkte`
-(`src/components/home/PartnerHansefit.tsx`, `src/app/partner-produkte/page.tsx`) verwendet
-aktuell **kein echtes Hansefit-Logo**, sondern einen Text-Schriftzug als Platzhalter — die
-offizielle Logodatei liegt uns nicht vor. Bitte das offizielle Hansefit-Logo (Vektor- oder
-hochauflösende PNG-Datei) sowie ggf. Hansefit-Markenrichtlinien zur Verfügung stellen. Zusätzlich
-bestätigen: Gelten für Hansefit-Mitglieder bei uns besondere Einschränkungen (Zeiten, Bereiche),
-die auf der Seite erwähnt werden sollten? Aktuell wird bewusst nichts über die vom Auftraggeber
-genannte Kernaussage („Hansefit-Mitglieder können bei uns trainieren") hinaus behauptet.
+Das offizielle Hansefit-Logo ist inzwischen hinterlegt (`public/media/partner/hansefit-logo.webp`,
+eingebunden auf der Startseite und auf `/partner-produkte`). Weiterhin offen: Gelten für
+Hansefit-Mitglieder bei uns besondere Einschränkungen (Zeiten, Bereiche), die auf der Seite
+erwähnt werden sollten? Aktuell wird bewusst nichts über die vom Auftraggeber genannte
+Kernaussage („Hansefit-Mitglieder können bei uns trainieren") hinaus behauptet.
 
 ## 16. MORE Nutrition & ESN — Produktbilder und Produktvideo
 

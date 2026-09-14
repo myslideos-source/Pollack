@@ -1,13 +1,8 @@
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/shared/Button";
 import { loadPartners } from "@/lib/content/partners-data";
 
-/**
- * Official Hansefit logo file has not been supplied yet (see MEDIA_AUDIT.md) — the
- * wordmark below is a placeholder text lockup, not the real brand mark. Swap the
- * <span> block for an <Image> of the official logo once it is provided (or once an
- * admin uploads one via the Medienbibliothek and assigns it in Partner & Produkte).
- */
 export async function PartnerHansefit() {
   const partners = await loadPartners();
   const hansefit = partners.find((p) => p.name === "Hansefit");
@@ -20,9 +15,13 @@ export async function PartnerHansefit() {
         </span>
         <div className="mt-6 grid gap-10 rounded-3xl border border-ink/10 bg-paper p-8 sm:p-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-16">
           <div className="flex items-center justify-center rounded-2xl border border-ink/10 bg-ink/5 p-10">
-            <span className="font-display text-4xl font-extrabold uppercase tracking-tight text-ink sm:text-5xl">
-              Hanse<span className="text-red">fit</span>
-            </span>
+            <Image
+              src="/media/partner/hansefit-logo.webp"
+              alt="Hansefit Logo"
+              width={974}
+              height={620}
+              className="h-auto w-full max-w-[220px]"
+            />
           </div>
           <div>
             <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">

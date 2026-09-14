@@ -140,8 +140,8 @@ Fehlen weiterhin:
 - Bilder/Videos zu Milon, InBody, Selbstverteidigung, Massage/brainLight, Yoga (Nina), Jürgen
   Pollack im Porträt (sofern das Karate-Foto nicht dafür bestätigt wird), ESN-Produktbild
 - Fotos für die Gallery-Kachel „Community" ist jetzt belegt; kein offener Punkt mehr dort
-- Das offizielle Hansefit-Logo (im Partnerbereich auf der Startseite und auf
-  `/partner-produkte` aktuell durch einen Text-Schriftzug ersetzt, siehe TODO_CLIENT.md Punkt 15)
+- Das offizielle Hansefit-Logo ist jetzt hinterlegt (`public/media/partner/hansefit-logo.webp`,
+  im Partnerbereich auf der Startseite und auf `/partner-produkte`); kein offener Punkt mehr dort
 
 **Für alle noch fehlenden Motive gilt weiterhin:** Anstatt neue Stock-Fotos zu verwenden (was der
 Auftrag explizit ausschließt) oder Platzhalter zu bauen, die wie echte Fotos aussehen und damit

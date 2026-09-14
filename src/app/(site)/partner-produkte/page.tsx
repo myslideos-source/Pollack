@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { PageHero } from "@/components/shared/PageHero";
@@ -37,9 +38,13 @@ export default async function PartnerProduktePage() {
         <Container>
           <div className="grid gap-10 rounded-3xl border border-ink/10 bg-paper p-8 sm:p-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-16">
             <div className="flex items-center justify-center rounded-2xl border border-ink/10 bg-ink/5 p-10">
-              <span className="font-display text-4xl font-extrabold uppercase tracking-tight text-ink sm:text-5xl">
-                Hanse<span className="text-red">fit</span>
-              </span>
+              <Image
+                src="/media/partner/hansefit-logo.webp"
+                alt="Hansefit Logo"
+                width={974}
+                height={620}
+                className="h-auto w-full max-w-[220px]"
+              />
             </div>
             <div>
               <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
