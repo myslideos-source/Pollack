@@ -45,6 +45,41 @@ Das Projekt ist ein Standard-Next.js-App-Router-Projekt und Vercel-kompatibel
 (`vercel deploy` bzw. Verbindung des Git-Repos mit Vercel genügt, keine Sonderkonfiguration
 nötig). Node ≥ 20 wird empfohlen.
 
+## Medien-Upload für den Auftraggeber (`/admin/upload`)
+
+Damit der Auftraggeber Fotos/Videos nicht per Chat hochladen muss (dort gilt ein
+Datei-Größenlimit, siehe TODO_CLIENT.md), gibt es eine interne, passwortgeschützte
+Upload-Seite unter `/admin/upload`. Sie schreibt nicht in ein lokales Dateisystem (das würde
+bei den meisten Hosting-Setups, z. B. Vercel Serverless Functions, beim nächsten Deployment
+wieder verschwinden), sondern committet die Datei direkt per GitHub-Contents-API in dieses
+Repository unter `public/media/<bereich>/`.
+
+**Damit das funktioniert, müssen beim Hosting zwei Umgebungsvariablen gesetzt werden:**
+
+| Variable | Bedeutung |
+|---|---|
+| `ADMIN_UPLOAD_PASSWORD` | Passwort für `/admin/upload`. Aktuell testweise mit `Sportpark2026!Pollack` vorbelegt (im Chat vom Auftraggeber als Platzhalter bestätigt) — bitte vor dem Go-Live durch ein eigenes, sicheres Passwort ersetzen. |
+| `GITHUB_TOKEN` | Ein GitHub Personal Access Token (fine-grained, nur für dieses Repository, Berechtigung „Contents: Read and write") mit Schreibrecht auf `myslideos-source/Pollack`. Erstellbar unter GitHub → Settings → Developer settings → Fine-grained tokens. **Dieses Token kann nicht von Claude erzeugt werden** — es muss vom Repository-Owner selbst angelegt werden. |
+
+Optional: `GITHUB_OWNER`, `GITHUB_REPO`, `GITHUB_BRANCH` überschreiben die Standardwerte
+(`myslideos-source` / `Pollack` / der aktuelle Arbeits-Branch), falls das Repo verschoben oder
+der Ziel-Branch geändert wird.
+
+**Wichtige Einschränkungen:**
+
+- Ohne die beiden Variablen antwortet der Upload mit einer klaren Fehlermeldung, statt still zu
+  scheitern.
+- Viele Hosting-Anbieter begrenzen die Größe von Anfragen an Serverless-Funktionen (bei Vercel
+  z. B. je nach Tarif nur wenige MB). Für größere Videos kann das ein Limit sein — die Upload-Seite
+  selbst begrenzt auf 25 MB pro Datei, das jeweilige Hosting-Limit kann aber niedriger liegen.
+- Der Upload sortiert Dateien nur in `public/media/<bereich>/` ein. Wo genau eine Datei danach auf
+  der Seite erscheint (welche Programmseite, welcher Bereich), ist weiterhin eine bewusste
+  inhaltliche Entscheidung — bitte nach dem Upload kurz mitteilen, was hochgeladen wurde und wofür
+  es gedacht ist, dann wird es gezielt eingebaut.
+- Die Seite ist per `robots.txt` (`disallow: /admin`) und `noindex`-Meta von Suchmaschinen
+  ausgeschlossen, ist aber nicht öffentlich beworben — das Passwort ist der einzige Schutz, also
+  bitte ein wirklich sicheres Passwort setzen und das Token nicht teilen.
+
 ## Projektstruktur
 
 ```
