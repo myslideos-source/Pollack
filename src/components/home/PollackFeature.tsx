@@ -9,6 +9,8 @@ export type OwnerContent = {
   story: string;
   qualifications: string[];
   portrait: string | null;
+  portraitFocalX?: number;
+  portraitFocalY?: number;
 };
 
 export function PollackFeature({ content }: { content: OwnerContent }) {
@@ -23,6 +25,8 @@ export function PollackFeature({ content }: { content: OwnerContent }) {
           className="relative aspect-[4/5] w-full rounded-2xl"
           label={content.name}
           sizes="(min-width: 1024px) 45vw, 100vw"
+          focalX={content.portraitFocalX}
+          focalY={content.portraitFocalY}
         />
         <div>
           <span className="font-display text-sm uppercase tracking-[0.3em] text-red">{content.role}</span>

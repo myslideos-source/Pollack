@@ -95,6 +95,41 @@ export async function updateMediaAction(formData: FormData): Promise<{ error?: s
   return {};
 }
 
+const cropSchema = z.object({
+  id: z.string().uuid(),
+  x: z.coerce.number().min(0).max(100),
+  y: z.coerce.number().min(0).max(100),
+});
+
+/**
+ * Sets a photo's focal point (object-position, as a 0–100% pair) so an object-cover crop keeps
+ * the right part of the image in frame — e.g. a person's face — at every breakpoint it's shown
+ * at. Stored on the media row itself (not per-usage) since the same photo should crop the same
+ * way everywhere it's reused. Media isn't part of the draft/publish workflow — it's live as
+ * soon as it's uploaded — so this busts the public site's cache immediately, not just on the
+ * next publish.
+ */
+export async function updateMediaCropAction(formData: FormData): Promise<{ error?: string }> {
+  await requireStaff();
+  const parsed = cropSchema.safeParse({
+    id: formData.get("id"),
+    x: formData.get("x"),
+    y: formData.get("y"),
+  });
+  if (!parsed.success) return { error: "Ungültige Eingabe." };
+
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("media")
+    .update({ crop: { x: Math.round(parsed.data.x), y: Math.round(parsed.data.y) } })
+    .eq("id", parsed.data.id);
+  if (error) return { error: "Bildausschnitt konnte nicht gespeichert werden." };
+
+  revalidatePath("/admin/medien");
+  revalidatePath("/", "layout");
+  return {};
+}
+
 export async function deleteMediaAction(formData: FormData): Promise<{ error?: string }> {
   const profile = await requireStaff();
   const id = formData.get("id");

@@ -75,6 +75,8 @@ export default async function PartnerProduktePage() {
               className="relative col-span-2 aspect-[16/9] w-full rounded-2xl lg:col-span-2 lg:row-span-2 lg:aspect-auto"
               label="Aufmacherbild"
               sizes="(min-width: 1024px) 50vw, 100vw"
+              focalX={more?.imageFocalX}
+              focalY={more?.imageFocalY}
             />
             <TexturePanel variant="performance" className="aspect-square w-full rounded-2xl" label="Produktbild 1" />
             <TexturePanel variant="performance" className="aspect-square w-full rounded-2xl" label="Produktbild 2" />

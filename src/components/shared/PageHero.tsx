@@ -10,6 +10,8 @@ export function PageHero({
   texture = "performance",
   image,
   imageAlt,
+  imageFocalX,
+  imageFocalY,
   breadcrumbs,
 }: {
   eyebrow?: string;
@@ -18,12 +20,22 @@ export function PageHero({
   texture?: TextureVariant;
   image?: string;
   imageAlt?: string;
+  imageFocalX?: number;
+  imageFocalY?: number;
   breadcrumbs: { label: string; href?: string }[];
 }) {
   return (
     <section className="relative overflow-hidden bg-ink pb-14 pt-28 sm:pb-20 sm:pt-36">
       {image ? (
-        <MediaPanel src={image} alt={imageAlt} className="absolute inset-0" priority sizes="100vw" />
+        <MediaPanel
+          src={image}
+          alt={imageAlt}
+          className="absolute inset-0"
+          priority
+          sizes="100vw"
+          focalX={imageFocalX}
+          focalY={imageFocalY}
+        />
       ) : (
         <TexturePanel variant={texture} className="absolute inset-0" />
       )}

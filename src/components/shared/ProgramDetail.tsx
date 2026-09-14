@@ -27,6 +27,8 @@ export function ProgramDetail({ program }: { program: Program }) {
         texture={program.texture}
         image={program.image}
         imageAlt={program.imageAlt}
+        imageFocalX={program.imageFocalX}
+        imageFocalY={program.imageFocalY}
         breadcrumbs={[
           { label: "Start", href: "/" },
           { label: catMeta.title, href: `/${program.category}` },

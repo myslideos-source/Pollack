@@ -21,6 +21,9 @@ export type Program = {
   /** Real photo path, when one has been supplied — falls back to the TexturePanel otherwise. */
   image?: string;
   imageAlt?: string;
+  /** Object-position percentages (0–100) for the image's crop, set in the Medienbibliothek. */
+  imageFocalX?: number;
+  imageFocalY?: number;
   /** Click-to-play video, shown below the description when supplied (see VideoPlayer). */
   video?: { src: string; poster: string; label: string };
   legacyPaths: string[];

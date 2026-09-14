@@ -1,6 +1,6 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
-import { resolveMediaSrc } from "@/lib/content/media";
+import { resolveMedia, resolveMediaSrc } from "@/lib/content/media";
 
 export type PublicPartner = {
   id: string;
@@ -16,6 +16,8 @@ export type PublicProduct = {
   category: string | null;
   description: string | null;
   imageSrc: string | null;
+  imageFocalX: number;
+  imageFocalY: number;
   recommended: boolean;
   partnerId: string | null;
 };
@@ -50,14 +52,19 @@ export async function loadProducts(): Promise<PublicProduct[]> {
   if (error) console.error("[loadProducts]", error);
 
   return Promise.all(
-    (data ?? []).map(async (p) => ({
-      id: p.id,
-      name: p.name,
-      category: p.category,
-      description: p.description,
-      imageSrc: await resolveMediaSrc(p.image_media_id),
-      recommended: p.recommended,
-      partnerId: p.partner_id,
-    })),
+    (data ?? []).map(async (p) => {
+      const image = await resolveMedia(p.image_media_id);
+      return {
+        id: p.id,
+        name: p.name,
+        category: p.category,
+        description: p.description,
+        imageSrc: image?.src ?? null,
+        imageFocalX: image?.focalX ?? 50,
+        imageFocalY: image?.focalY ?? 50,
+        recommended: p.recommended,
+        partnerId: p.partner_id,
+      };
+    }),
   );
 }

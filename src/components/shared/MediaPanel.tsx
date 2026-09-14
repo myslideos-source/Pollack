@@ -21,6 +21,8 @@ export function MediaPanel({
   sizes = "(min-width: 1024px) 50vw, 100vw",
   priority = false,
   label,
+  focalX = 50,
+  focalY = 50,
 }: {
   src?: string | null;
   alt?: string;
@@ -29,6 +31,10 @@ export function MediaPanel({
   sizes?: string;
   priority?: boolean;
   label?: string;
+  /** Object-position percentages (0–100) set via the Medienbibliothek's Bildausschnitt picker,
+   *  so the crop keeps the right part of the photo — e.g. a person's face — in frame. */
+  focalX?: number;
+  focalY?: number;
 }) {
   if (!src) {
     return <TexturePanel variant={variant} className={className} label={label} />;
@@ -43,6 +49,7 @@ export function MediaPanel({
         sizes={sizes}
         priority={priority}
         className="object-cover"
+        style={{ objectPosition: `${focalX}% ${focalY}%` }}
       />
     </div>
   );

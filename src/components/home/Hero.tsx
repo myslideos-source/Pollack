@@ -12,7 +12,11 @@ export type HeroContent = {
   ctaPrimaryLabel: string;
   ctaSecondaryLabel: string;
   imageDesktopSrc: string | null;
+  imageDesktopFocalX?: number;
+  imageDesktopFocalY?: number;
   imageMobileSrc: string | null;
+  imageMobileFocalX?: number;
+  imageMobileFocalY?: number;
 };
 
 export function Hero({ content }: { content: HeroContent }) {
@@ -21,6 +25,10 @@ export function Hero({ content }: { content: HeroContent }) {
   const hasVideo = Boolean(heroMedia.videoSrc);
   const imageDesktopSrc = content.imageDesktopSrc ?? heroMedia.imageDesktopSrc;
   const imageMobileSrc = content.imageMobileSrc ?? heroMedia.imageMobileSrc;
+  const desktopFocalX = content.imageDesktopSrc ? content.imageDesktopFocalX ?? 50 : 50;
+  const desktopFocalY = content.imageDesktopSrc ? content.imageDesktopFocalY ?? 50 : 50;
+  const mobileFocalX = content.imageMobileSrc ? content.imageMobileFocalX ?? 50 : desktopFocalX;
+  const mobileFocalY = content.imageMobileSrc ? content.imageMobileFocalY ?? 50 : desktopFocalY;
 
   useEffect(() => {
     if (videoRef.current) videoRef.current.muted = muted;
@@ -50,7 +58,13 @@ export function Hero({ content }: { content: HeroContent }) {
             <img
               src={imageDesktopSrc}
               alt={heroMedia.imageAlt}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover [object-position:var(--op-desktop)] max-sm:[object-position:var(--op-mobile)]"
+              style={
+                {
+                  "--op-desktop": `${desktopFocalX}% ${desktopFocalY}%`,
+                  "--op-mobile": `${mobileFocalX}% ${mobileFocalY}%`,
+                } as React.CSSProperties
+              }
               fetchPriority="high"
             />
           </picture>

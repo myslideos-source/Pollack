@@ -77,6 +77,7 @@ export function AdminTopbar({
           <button
             type="submit"
             disabled={publishPending || pendingCount === 0}
+            title={pendingCount === 0 ? "Keine Entwürfe zum Veröffentlichen — zuerst einen Bereich bearbeiten und als Entwurf speichern." : undefined}
             className="flex items-center gap-1.5 rounded-full bg-red px-2.5 py-2 text-sm font-medium text-paper transition-colors hover:bg-red-dark disabled:opacity-40 sm:px-4"
           >
             {publishState.status === "success" ? (

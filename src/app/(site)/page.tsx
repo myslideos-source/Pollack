@@ -16,7 +16,7 @@ import { HomeOpeningHours } from "@/components/home/HomeOpeningHours";
 import { HomeContact } from "@/components/home/HomeContact";
 import { FinalCta } from "@/components/home/FinalCta";
 import { getSection, sectionField } from "@/lib/content/sections";
-import { resolveMediaSrc } from "@/lib/content/media";
+import { resolveMedia, resolveMediaSrc } from "@/lib/content/media";
 
 const FALLBACK_HERO: HeroContent = {
   headline: "Stark. Beweglich. Bereit.",
@@ -40,13 +40,18 @@ async function loadHero(): Promise<HeroContent> {
   const section = await getSection("home.hero");
   if (!section) return FALLBACK_HERO;
   const c = section.content;
+  const [desktop, mobile] = await Promise.all([resolveMedia(c.image), resolveMedia(c.imageMobile)]);
   return {
     headline: sectionField.str(c, "headline") ?? FALLBACK_HERO.headline,
     subline: sectionField.str(c, "subline") ?? FALLBACK_HERO.subline,
     ctaPrimaryLabel: sectionField.str(c, "ctaPrimaryLabel") ?? FALLBACK_HERO.ctaPrimaryLabel,
     ctaSecondaryLabel: sectionField.str(c, "ctaSecondaryLabel") ?? FALLBACK_HERO.ctaSecondaryLabel,
-    imageDesktopSrc: await resolveMediaSrc(c.image),
-    imageMobileSrc: await resolveMediaSrc(c.imageMobile),
+    imageDesktopSrc: desktop?.src ?? null,
+    imageDesktopFocalX: desktop?.focalX ?? 50,
+    imageDesktopFocalY: desktop?.focalY ?? 50,
+    imageMobileSrc: mobile?.src ?? null,
+    imageMobileFocalX: mobile?.focalX ?? 50,
+    imageMobileFocalY: mobile?.focalY ?? 50,
   };
 }
 
@@ -73,13 +78,16 @@ async function loadOwner(): Promise<OwnerContent | null> {
   const section = await getSection("home.owner");
   if (!section) return null;
   const c = section.content;
+  const portrait = await resolveMedia(c.portrait);
   return {
     name: sectionField.str(c, "name") ?? "",
     role: sectionField.str(c, "role") ?? "",
     intro: sectionField.str(c, "intro") ?? "",
     story: sectionField.str(c, "story") ?? "",
     qualifications: sectionField.list(c, "qualifications"),
-    portrait: await resolveMediaSrc(c.portrait),
+    portrait: portrait?.src ?? null,
+    portraitFocalX: portrait?.focalX ?? 50,
+    portraitFocalY: portrait?.focalY ?? 50,
   };
 }
 

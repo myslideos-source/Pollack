@@ -18,6 +18,8 @@ export function ProgramGrid({ programs }: { programs: Program[] }) {
             variant={program.texture}
             className="relative aspect-[16/10] w-full"
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            focalX={program.imageFocalX}
+            focalY={program.imageFocalY}
           />
           <div className="flex flex-1 flex-col p-5">
             <h3 className="font-display text-xl uppercase tracking-wide text-paper">{program.title}</h3>

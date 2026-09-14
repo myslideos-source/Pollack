@@ -1,7 +1,7 @@
 import "server-only";
 import type { Program } from "@/content/programs";
 import { getSection, sectionField } from "@/lib/content/sections";
-import { resolveMediaSrc } from "@/lib/content/media";
+import { resolveMedia, resolveMediaSrc } from "@/lib/content/media";
 
 /**
  * Maps a static content/programs.ts slug to its website_sections slug. Only programs that are
@@ -38,7 +38,7 @@ export async function mergeProgramWithSection(base: Program): Promise<Program> {
 
   const description = sectionField.str(c, "description");
   const features = sectionField.list(c, "features");
-  const image = await resolveMediaSrc(c.image);
+  const resolvedImage = await resolveMedia(c.image);
   const video = await resolveMediaSrc(c.video);
 
   return {
@@ -47,7 +47,11 @@ export async function mergeProgramWithSection(base: Program): Promise<Program> {
     summary: sectionField.str(c, "shortDescription") ?? base.summary,
     description: description ? description.split("\n\n") : base.description,
     bullets: features.length > 0 ? features : base.bullets,
-    image: image ?? base.image,
-    video: video ? { src: video, poster: base.video?.poster ?? image ?? base.image ?? "", label: base.video?.label ?? base.title } : base.video,
+    image: resolvedImage?.src ?? base.image,
+    imageFocalX: resolvedImage ? resolvedImage.focalX : base.imageFocalX,
+    imageFocalY: resolvedImage ? resolvedImage.focalY : base.imageFocalY,
+    video: video
+      ? { src: video, poster: base.video?.poster ?? resolvedImage?.src ?? base.image ?? "", label: base.video?.label ?? base.title }
+      : base.video,
   };
 }

@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Pencil, Trash2, X, Check } from "lucide-react";
+import { Pencil, Trash2, X, Check, Crosshair } from "lucide-react";
 import { updateMediaAction, deleteMediaAction } from "@/app/admin/actions/media";
+import { FocalPointEditor } from "./FocalPointEditor";
 
 type MediaItem = {
   id: string;
@@ -15,6 +16,7 @@ type MediaItem = {
   file_size: number;
   width: number | null;
   height: number | null;
+  crop: unknown;
   created_at: string;
 };
 
@@ -33,6 +35,14 @@ const AREAS = [
 function publicUrl(item: Pick<MediaItem, "storage_bucket" | "storage_path">): string {
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
   return `${base}/storage/v1/object/public/${item.storage_bucket}/${item.storage_path}`;
+}
+
+function readCrop(crop: unknown): { x: number; y: number } {
+  if (crop && typeof crop === "object") {
+    const { x, y } = crop as { x?: unknown; y?: unknown };
+    return { x: typeof x === "number" ? x : 50, y: typeof y === "number" ? y : 50 };
+  }
+  return { x: 50, y: 50 };
 }
 
 function formatSize(bytes: number): string {
@@ -107,8 +117,10 @@ export function MediaGrid({ items, usedIds }: { items: MediaItem[]; usedIds: str
   const used = new Set(usedIds);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const [focalEditingId, setFocalEditingId] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | "unused">("all");
   const [isPending, startTransition] = useTransition();
+  const focalEditingItem = items.find((i) => i.id === focalEditingId) ?? null;
 
   const visible = filter === "unused" ? items.filter((i) => !used.has(i.id)) : items;
 
@@ -177,7 +189,7 @@ export function MediaGrid({ items, usedIds }: { items: MediaItem[]; usedIds: str
                   {item.width && item.height ? ` · ${item.width}×${item.height}` : ""}
                   {item.area ? ` · ${AREAS.find((a) => a.value === item.area)?.label ?? item.area}` : ""}
                 </p>
-                <div className="mt-2 flex items-center gap-3">
+                <div className="mt-2 flex flex-wrap items-center gap-3">
                   <button
                     type="button"
                     onClick={() => setEditingId(item.id)}
@@ -185,6 +197,15 @@ export function MediaGrid({ items, usedIds }: { items: MediaItem[]; usedIds: str
                   >
                     <Pencil size={12} /> Bearbeiten
                   </button>
+                  {item.file_type === "image" ? (
+                    <button
+                      type="button"
+                      onClick={() => setFocalEditingId(item.id)}
+                      className="flex items-center gap-1 text-[11px] text-paper/60 hover:text-paper"
+                    >
+                      <Crosshair size={12} /> Bildausschnitt
+                    </button>
+                  ) : null}
                   {confirmDeleteId === item.id ? (
                     <>
                       <button
@@ -221,6 +242,16 @@ export function MediaGrid({ items, usedIds }: { items: MediaItem[]; usedIds: str
 
       {filter === "unused" && visible.length === 0 ? (
         <p className="mt-6 text-center text-sm text-paper/40">Alle Medien werden aktuell verwendet.</p>
+      ) : null}
+
+      {focalEditingItem ? (
+        <FocalPointEditor
+          mediaId={focalEditingItem.id}
+          src={publicUrl(focalEditingItem)}
+          title={focalEditingItem.title}
+          initial={readCrop(focalEditingItem.crop)}
+          onClose={() => setFocalEditingId(null)}
+        />
       ) : null}
     </div>
   );
