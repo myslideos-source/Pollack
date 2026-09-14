@@ -1,11 +1,11 @@
 "use client";
 
-import { useActionState, useState, useTransition } from "react";
+import { useActionState, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, Eye, UploadCloud, CheckCircle2, ChevronDown, LogOut, Menu } from "lucide-react";
 import type { Profile } from "@/lib/auth";
 import { signOutAction } from "@/app/admin/actions/auth";
-import { publishAllDraftsAction, togglePreviewModeAction, type PublishActionState } from "@/app/admin/actions/publish";
+import { publishAllDraftsAction, type PublishActionState } from "@/app/admin/actions/publish";
 
 const ROLE_LABEL: Record<string, string> = { admin: "Inhaber", redakteur: "Redakteur" };
 
@@ -20,7 +20,6 @@ export function AdminTopbar({
 }) {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isPending, startTransition] = useTransition();
   const [publishState, publishAction, publishPending] = useActionState<PublishActionState, FormData>(
     publishAllDraftsAction,
     { status: "idle" },
@@ -34,13 +33,6 @@ export function AdminTopbar({
     if (typeof query === "string" && query.trim()) {
       router.push(`/admin/anfragen?q=${encodeURIComponent(query.trim())}`);
     }
-  }
-
-  function handlePreview() {
-    startTransition(async () => {
-      await togglePreviewModeAction(true);
-      window.open("/", "_blank", "noopener,noreferrer");
-    });
   }
 
   return (
@@ -72,14 +64,14 @@ export function AdminTopbar({
           {pendingCount > 0 ? `${pendingCount} Entwurf/Entwürfe ungespeichert` : "Alle Änderungen gespeichert"}
         </div>
 
-        <button
-          type="button"
-          onClick={handlePreview}
-          disabled={isPending}
-          className="flex items-center gap-1.5 rounded-full border border-paper/20 px-2.5 py-2 text-sm text-paper transition-colors hover:border-paper/40 disabled:opacity-60 sm:px-4"
+        <a
+          href="/admin/preview-enable"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1.5 rounded-full border border-paper/20 px-2.5 py-2 text-sm text-paper transition-colors hover:border-paper/40 sm:px-4"
         >
           <Eye size={15} /> <span className="hidden sm:inline">Vorschau</span>
-        </button>
+        </a>
 
         <form action={publishAction}>
           <button

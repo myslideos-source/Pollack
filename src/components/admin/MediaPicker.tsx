@@ -13,6 +13,8 @@ type MediaItem = {
   storage_path: string;
 };
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 function publicUrl(item: MediaItem): string {
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
   return `${base}/storage/v1/object/public/${item.storage_bucket}/${item.storage_path}`;
@@ -31,15 +33,31 @@ export function MediaPicker({
   const [items, setItems] = useState<MediaItem[]>([]);
   const [selected, setSelected] = useState<MediaItem | null>(null);
   const [loading, setLoading] = useState(false);
+  // Some fields still hold a plain static path (e.g. "/media/hero/hero2-desktop.webp") carried
+  // over from the initial content seed rather than a media-library UUID — shown as a lightweight
+  // preview instead of triggering a lookup that can only ever come back empty for a non-UUID id.
+  const [rawPath, setRawPath] = useState<string | null>(null);
 
+  // Determining whether `value` is a raw path or a media UUID is a plain synchronous check, not
+  // an async lookup — resolved during render (this codebase's usual "adjust state during render"
+  // pattern) rather than inside an effect. Only the real UUID case needs the effect below, for
+  // the actual Supabase round trip.
   const [lastValue, setLastValue] = useState(value);
   if (value !== lastValue) {
     setLastValue(value);
-    if (!value) setSelected(null);
+    if (!value) {
+      setSelected(null);
+      setRawPath(null);
+    } else if (!UUID_RE.test(value)) {
+      setRawPath(value);
+      setSelected(null);
+    } else {
+      setRawPath(null);
+    }
   }
 
   useEffect(() => {
-    if (!value) return;
+    if (!value || !UUID_RE.test(value)) return;
     const supabase = createClient();
     supabase
       .from("media")
@@ -95,6 +113,22 @@ export function MediaPicker({
             <X size={16} />
           </button>
         </div>
+      ) : rawPath ? (
+        <div className="flex items-center gap-3 rounded-xl border border-paper/15 bg-ink p-2.5">
+          {fileType === "video" ? (
+            <span className="flex h-12 w-12 items-center justify-center rounded-lg bg-paper/10 text-xs text-paper/50">Video</span>
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element -- small admin thumbnail, next/image adds no benefit here
+            <img src={rawPath} alt="" className="h-12 w-12 rounded-lg object-cover" />
+          )}
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm text-paper">Aktuelle Datei</p>
+            <p className="truncate text-xs text-paper/40">Noch nicht in der Medienbibliothek — {rawPath}</p>
+          </div>
+          <button type="button" onClick={() => setOpen(true)} className="shrink-0 text-xs text-red hover:text-red-dark">
+            Ändern
+          </button>
+        </div>
       ) : (
         <button
           type="button"
@@ -133,6 +167,7 @@ export function MediaPicker({
                     onClick={() => {
                       onChange(item.id);
                       setSelected(item);
+                      setRawPath(null);
                       setOpen(false);
                     }}
                     className="group relative aspect-square overflow-hidden rounded-xl border border-paper/10 bg-ink"
