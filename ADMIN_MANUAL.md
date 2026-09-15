@@ -96,3 +96,26 @@ eines Bereichs jederzeit wiederherstellen.
 ## Einstellungen (nur Admin)
 
 Die Benachrichtigungs-E-Mail-Adresse, an die bei jeder neuen Anfrage eine Benachrichtigung geht.
+
+## Mitgliederportal
+
+Über die Kachel „Mitgliederportal" im Dashboard bzw. „Mitgliederportal" in der Seitenleiste geht
+es zu `/trainer` — dem Bereich für Trainer:innen und Admins, getrennt vom öffentlichen `/admin`-CMS:
+
+- **Übersicht** (`/trainer`): offene Plan-Freigaben, offene Änderungsanfragen, ungelesene
+  Nachrichten, Mitglieder ohne Trainingsplan, anstehende Analysetermine.
+- **Mitglieder** (`/trainer/mitglieder`): Liste aller zugewiesenen Mitglieder (Admins sehen alle).
+  Als Admin lassen sich hier neue Mitglieder/Trainer:innen per E-Mail einladen und Mitglieder
+  einem/einer Trainer:in zuweisen.
+- **Mitgliederdetail**: Stammdaten, Gesundheitsangaben, Trainingsplan bearbeiten (Sätze/Wiederholungen/
+  Pause/Gewicht je Übung, Übung tauschen) und **freigeben** — ein neu erstellter Plan ist erst nach
+  dieser Freigabe für das Mitglied sichtbar, niemals automatisch —, Körperwerte-Verlauf,
+  Nachrichten-Chat.
+
+Unter `/admin/uebungen` (im CMS-Admin) pflegt ihr den gemeinsamen Übungskatalog (Name, Muskelgruppe,
+Beschreibung, Bild) — daraus bauen sich neue Trainingsplan-Vorlagen zusammen.
+
+Mitglieder selbst melden sich unter `/login` an (Button „Mitglieder-Login" im Seitenkopf) und
+sehen dort ihr eigenes Dashboard, ihren Trainingsplan, den aktiven Trainingsmodus, ihren
+Fortschritt sowie den Chat mit ihrem Trainer/ihrer Trainerin — alles unter `/mitglied`. Details zur
+Einrichtung der Demo-Zugänge stehen in SUPABASE_SETUP.md, Abschnitt 3.5.

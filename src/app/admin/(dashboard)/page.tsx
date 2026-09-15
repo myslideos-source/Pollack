@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Mail, CalendarCheck, PhoneCall, CheckCircle2, BarChart3, CalendarClock, ArrowRight } from "lucide-react";
+import { Mail, CalendarCheck, PhoneCall, CheckCircle2, BarChart3, CalendarClock, ArrowRight, Users, ClipboardCheck, Dumbbell, MessageCircle } from "lucide-react";
 import { requireStaff } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { inquiryAreaLabels } from "@/lib/validation/inquiry";
@@ -35,6 +35,11 @@ export default async function AdminDashboardPage() {
     { data: upcomingAppointments },
     { data: recentSections },
     { data: weeklyVisitors },
+    { count: activeMembers },
+    { count: activePlans },
+    { count: pendingPlans },
+    { count: trainingsToday },
+    { count: newMessages },
   ] = await Promise.all([
     supabase.from("inquiries").select("id", { count: "exact", head: true }).eq("status", "neu"),
     supabase
@@ -78,6 +83,11 @@ export default async function AdminDashboardPage() {
       .order("updated_at", { ascending: false })
       .limit(5),
     supabase.rpc("get_weekly_visitor_count"),
+    supabase.from("profiles").select("id", { count: "exact", head: true }).eq("role", "mitglied"),
+    supabase.from("training_plans").select("id", { count: "exact", head: true }).eq("status", "active"),
+    supabase.from("training_plans").select("id", { count: "exact", head: true }).eq("status", "pending_review"),
+    supabase.from("workout_sessions").select("id", { count: "exact", head: true }).gte("started_at", todayStart.toISOString()),
+    supabase.from("coach_messages").select("id", { count: "exact", head: true }).eq("sender_role", "member").is("read_at", null),
   ]);
 
   const firstName = profile.full_name.split(" ")[0];
@@ -140,6 +150,35 @@ export default async function AdminDashboardPage() {
             </div>
           </div>
         </div>
+      </div>
+
+      <h2 className="mt-8 font-display text-lg text-paper">Mitgliederportal</h2>
+      <div className="mt-3 grid grid-cols-2 gap-4 lg:grid-cols-5">
+        <Link href="/trainer/mitglieder" className="rounded-2xl border border-paper/10 bg-anthracite p-4 transition-colors hover:border-paper/25">
+          <Users size={18} className="text-red" />
+          <p className="mt-3 font-display text-2xl font-semibold text-paper">{activeMembers ?? 0}</p>
+          <p className="text-xs text-paper/50">Aktive Mitglieder</p>
+        </Link>
+        <Link href="/trainer/mitglieder" className="rounded-2xl border border-paper/10 bg-anthracite p-4 transition-colors hover:border-paper/25">
+          <Dumbbell size={18} className="text-red" />
+          <p className="mt-3 font-display text-2xl font-semibold text-paper">{activePlans ?? 0}</p>
+          <p className="text-xs text-paper/50">Aktive Trainingspläne</p>
+        </Link>
+        <Link href="/trainer" className="rounded-2xl border border-paper/10 bg-anthracite p-4 transition-colors hover:border-paper/25">
+          <ClipboardCheck size={18} className="text-red" />
+          <p className="mt-3 font-display text-2xl font-semibold text-paper">{pendingPlans ?? 0}</p>
+          <p className="text-xs text-paper/50">Offene Freigaben</p>
+        </Link>
+        <div className="rounded-2xl border border-paper/10 bg-anthracite p-4">
+          <CalendarCheck size={18} className="text-red" />
+          <p className="mt-3 font-display text-2xl font-semibold text-paper">{trainingsToday ?? 0}</p>
+          <p className="text-xs text-paper/50">Trainings heute</p>
+        </div>
+        <Link href="/trainer" className="rounded-2xl border border-paper/10 bg-anthracite p-4 transition-colors hover:border-paper/25">
+          <MessageCircle size={18} className="text-red" />
+          <p className="mt-3 font-display text-2xl font-semibold text-paper">{newMessages ?? 0}</p>
+          <p className="text-xs text-paper/50">Neue Nachrichten</p>
+        </Link>
       </div>
 
       {(draftCount ?? 0) > 0 ? (

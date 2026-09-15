@@ -24,3 +24,9 @@ export const inviteUserSchema = z.object({
   fullName: z.string().trim().min(1, "Name erforderlich."),
   role: z.enum(["admin", "redakteur"]),
 });
+
+export const inviteMemberSchema = z.object({
+  email: z.string().trim().min(1, "E-Mail-Adresse erforderlich.").email("Ungültige E-Mail-Adresse."),
+  fullName: z.string().trim().min(1, "Name erforderlich."),
+  role: z.enum(["mitglied", "trainer"]),
+});

@@ -17,6 +17,8 @@ import {
   UserCog,
   History,
   X,
+  Dumbbell,
+  ClipboardList,
 } from "lucide-react";
 import type { Profile } from "@/lib/auth";
 
@@ -51,6 +53,8 @@ export function AdminSidebar({
     { href: "/admin/oeffnungszeiten", label: "Öffnungszeiten", icon: Clock },
     { href: "/admin/partner", label: "Partner & Produkte", icon: Handshake },
     { href: "/admin/team", label: "Team", icon: Users },
+    { href: "/trainer", label: "Mitgliederportal", icon: Dumbbell },
+    { href: "/admin/uebungen", label: "Übungen", icon: ClipboardList },
     { href: "/admin/einstellungen", label: "Einstellungen", icon: Settings, adminOnly: true },
     { href: "/admin/benutzer", label: "Benutzer", icon: UserCog, adminOnly: true },
     { href: "/admin/verlauf", label: "Änderungsverlauf", icon: History },

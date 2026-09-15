@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { Menu, X, Phone, MessageCircle } from "lucide-react";
+import { Menu, X, Phone, MessageCircle, User } from "lucide-react";
 import { primaryNav } from "@/content/site";
 import { OpenStatusBadge } from "@/components/shared/OpenStatusBadge";
 import type { ContactContent } from "@/lib/content/contact";
@@ -92,6 +92,12 @@ export function Header({
         <div className="hidden items-center gap-3 xl:flex">
           <OpenStatusBadge hours={hours} special={special} />
           <Link
+            href="/login"
+            className="flex items-center gap-2 rounded-full border border-paper/20 bg-ink px-4 py-2.5 font-display text-sm uppercase tracking-wide text-paper transition-colors hover:border-red hover:text-red"
+          >
+            <User size={15} /> Mitglieder-Login
+          </Link>
+          <Link
             href="/kontakt#probetraining"
             className="rounded-full bg-red px-5 py-2.5 font-display text-sm uppercase tracking-wide text-paper transition-colors hover:bg-red-dark"
           >
@@ -99,16 +105,25 @@ export function Header({
           </Link>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setMenuOpen((v) => !v)}
-          className="flex h-11 w-11 items-center justify-center rounded-full border border-paper/20 text-paper xl:hidden"
-          aria-expanded={menuOpen}
-          aria-controls="mobile-menu"
-          aria-label={menuOpen ? "Menü schließen" : "Menü öffnen"}
-        >
-          {menuOpen ? <X size={22} /> : <Menu size={22} />}
-        </button>
+        <div className="flex items-center gap-2 xl:hidden">
+          <Link
+            href="/login"
+            aria-label="Mitglieder-Login"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-paper/20 text-paper transition-colors hover:border-red hover:text-red"
+          >
+            <User size={18} />
+          </Link>
+          <button
+            type="button"
+            onClick={() => setMenuOpen((v) => !v)}
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-paper/20 text-paper"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            aria-label={menuOpen ? "Menü schließen" : "Menü öffnen"}
+          >
+            {menuOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
       </div>
 
       {menuOpen ? (
@@ -150,6 +165,12 @@ export function Header({
               className="rounded-full bg-red py-3 text-center font-display text-sm uppercase tracking-wide text-paper"
             >
               Probetraining starten
+            </Link>
+            <Link
+              href="/login"
+              className="flex items-center justify-center gap-2 rounded-full border border-paper/20 bg-ink py-3 font-display text-sm uppercase tracking-wide text-paper"
+            >
+              <User size={16} /> Mitglieder-Login
             </Link>
           </div>
         </div>

@@ -35,3 +35,35 @@ export async function requireAdmin(): Promise<Profile> {
   if (profile.role !== "admin") redirect("/admin?error=forbidden");
   return profile;
 }
+
+/** For any /mitglied page. Redirects to the shared login if not signed in, or if signed in as
+ *  a different role — a trainer/admin browsing their own account should use /trainer or /admin. */
+export async function requireMember(): Promise<Profile> {
+  const profile = await getCurrentProfile();
+  if (!profile) redirect("/login?next=/mitglied");
+  if (profile.role !== "mitglied") redirect(`${roleHomePath(profile.role)}?error=forbidden`);
+  return profile;
+}
+
+/** For any /trainer page. Admins may also access the trainer area (they see every member). */
+export async function requireTrainerOrAdmin(): Promise<Profile> {
+  const profile = await getCurrentProfile();
+  if (!profile) redirect("/login?next=/trainer");
+  if (profile.role !== "trainer" && profile.role !== "admin") redirect(`${roleHomePath(profile.role)}?error=forbidden`);
+  return profile;
+}
+
+/** Where a freshly signed-in user should land, based on their role. */
+export function roleHomePath(role: string): string {
+  switch (role) {
+    case "admin":
+    case "redakteur":
+      return "/admin";
+    case "trainer":
+      return "/trainer";
+    case "mitglied":
+      return "/mitglied";
+    default:
+      return "/";
+  }
+}

@@ -18,6 +18,10 @@ angewendet:
 | `0003_advisor_fixes.sql` | Behebt alle von Supabase-Advisors gemeldeten Sicherheits-/Performance-Hinweise |
 | `0004_notification_email_getter.sql` | `get_notification_email()`-Funktion + Start-Wert für die Benachrichtigungs-E-Mail |
 | `0005_seed_content.sql` | Übernimmt die ursprünglichen Website-Inhalte (Startseite, Trainingsbereiche, Preise, Öffnungszeiten, Partner, Team) in die Datenbank |
+| `0006_page_views_analytics.sql` | Tabelle für Seitenaufrufe (Grundlage für Statistiken im Admin-Bereich) |
+| `0007_page_views_revoke_anon.sql` | Entzieht der `anon`-Rolle unnötige Rechte auf die Seitenaufruf-Tabelle |
+| `0008_member_portal.sql` | Mitgliederportal: Rollen `trainer`/`mitglied`, alle Portal-Tabellen (Trainingspläne, Workouts, Nachrichten, Körperwerte, Einwilligungen …), RLS-Policies, `generate_draft_plan()`/`approve_training_plan()` |
+| `0009_member_portal_seed_content.sql` | Übungskatalog (15 Übungen) + 3 Trainingsplan-Vorlagen für die automatische Plan-Erstellung |
 
 Das Projekt ist betriebsbereit. **Was noch manuell zu tun ist, steht in Abschnitt 3.**
 
@@ -109,6 +113,24 @@ Medienbibliothek **auswählen** (nur neu **ersetzen**). Ein Admin kann jedes Fel
 „Aus Medienbibliothek wählen" auf ein frisch unter `/admin/medien` hochgeladenes Bild/Video
 umstellen — danach ist es vollständig in der Medienbibliothek verwaltet.
 
+### 3.5 Mitgliederportal (`/mitglied`, `/trainer`)
+
+✅ **Erledigt.** Migration `0008_member_portal.sql` wurde angewendet, `0009_member_portal_seed_content.sql`
+hat einen Übungskatalog und drei Trainingsplan-Vorlagen befüllt. Für die Demo wurden zwei echte
+Supabase-Auth-Konten angelegt (Passwort `Demo2024!`, kann jederzeit über „Passwort vergessen" auf
+`/login` geändert werden):
+
+- **Mitglied „Domenico"** (`mitglied.demo@sportpark-pollack.de`) — mit ausgefülltem Profil, einem
+  bereits freigegebenen Trainingsplan und ~5 Wochen Trainingsverlauf.
+- **Trainer „Jürgen Pollack"** (`trainer.demo@sportpark-pollack.de`) — Domenico als zugewiesenes
+  Mitglied.
+
+Diese Zugangsdaten liegen ausschließlich in `.env.local` (`DEMO_MEMBER_*`/`DEMO_TRAINER_*`, siehe
+Abschnitt 4) und werden vom „Demo ansehen"-Button auf `/login` genutzt — nirgends im Quellcode
+oder in einer committeten Migration. Echte Mitglieder/Trainer:innen werden künftig regulär über
+`/trainer/mitglieder` (Trainer/Admin, „Einladen") eingeladen, genau wie Admin-Zugänge über
+`/admin/benutzer`.
+
 ## 4. Umgebungsvariablen
 
 Siehe `.env.example` für die vollständige, aktuell gültige Liste. Kurzüberblick:
@@ -120,6 +142,9 @@ Siehe `.env.example` für die vollständige, aktuell gültige Liste. Kurzüberbl
 | `SUPABASE_SERVICE_ROLE_KEY` | Ja (für Nutzerverwaltung) | Project Settings → API → `service_role` Key (geheim!) |
 | `RESEND_API_KEY` | Optional | resend.com → API Keys |
 | `RESEND_FROM_EMAIL` | Optional | Eigene, bei Resend verifizierte Absenderadresse |
+| `GOOGLE_PLACES_API_KEY` / `GOOGLE_PLACE_ID` | Optional | Google Cloud Console (Places API „New") — für die live Google-Bewertung auf der Startseite |
+| `DEMO_MEMBER_EMAIL` / `DEMO_MEMBER_PASSWORD` | Optional | Demo-Mitgliedskonto für den „Demo ansehen"-Button auf `/login` (siehe 3.5) |
+| `DEMO_TRAINER_EMAIL` / `DEMO_TRAINER_PASSWORD` | Optional | Demo-Trainerkonto für den „Demo ansehen"-Button auf `/login` (siehe 3.5) |
 
 `SUPABASE_SERVICE_ROLE_KEY` niemals mit `NEXT_PUBLIC_`-Präfix versehen oder im Browser verwenden
 — er hebelt die Row-Level-Security vollständig aus. Er wird ausschließlich in

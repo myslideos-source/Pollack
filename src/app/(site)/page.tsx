@@ -7,6 +7,7 @@ import { TrainingWorlds } from "@/components/home/TrainingWorlds";
 import { HealthTeaser } from "@/components/home/HealthTeaser";
 import { Expansion2026 } from "@/components/home/Expansion2026";
 import { PollackFeature, type OwnerContent } from "@/components/home/PollackFeature";
+import { MemberPortalTeaser } from "@/components/home/MemberPortalTeaser";
 import { CommunityShoutout } from "@/components/home/CommunityShoutout";
 import { PartnerHansefit } from "@/components/home/PartnerHansefit";
 import { MoreNutritionEsnTeaser } from "@/components/home/MoreNutritionEsnTeaser";
@@ -110,6 +111,7 @@ export default async function HomePage() {
       <HealthTeaser />
       <Expansion2026 />
       {owner ? <PollackFeature content={owner} /> : null}
+      <MemberPortalTeaser />
       <CommunityShoutout />
       <PartnerHansefit />
       <MoreNutritionEsnTeaser />
