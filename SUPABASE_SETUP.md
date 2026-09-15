@@ -116,20 +116,17 @@ umstellen — danach ist es vollständig in der Medienbibliothek verwaltet.
 ### 3.5 Mitgliederportal (`/mitglied`, `/trainer`)
 
 ✅ **Erledigt.** Migration `0008_member_portal.sql` wurde angewendet, `0009_member_portal_seed_content.sql`
-hat einen Übungskatalog und drei Trainingsplan-Vorlagen befüllt. Für die Demo wurden zwei echte
-Supabase-Auth-Konten angelegt (Passwort `Demo2024!`, kann jederzeit über „Passwort vergessen" auf
-`/login` geändert werden):
+hat einen Übungskatalog und drei Trainingsplan-Vorlagen befüllt. Für Vorführzwecke wurden zwei
+echte Supabase-Auth-Konten angelegt (Passwort `Demo2024!`, kann jederzeit über „Passwort vergessen"
+auf `/login` geändert werden) — Anmeldung ganz normal über das Login-Formular:
 
 - **Mitglied „Domenico"** (`mitglied.demo@sportpark-pollack.de`) — mit ausgefülltem Profil, einem
   bereits freigegebenen Trainingsplan und ~5 Wochen Trainingsverlauf.
 - **Trainer „Jürgen Pollack"** (`trainer.demo@sportpark-pollack.de`) — Domenico als zugewiesenes
   Mitglied.
 
-Diese Zugangsdaten liegen ausschließlich in `.env.local` (`DEMO_MEMBER_*`/`DEMO_TRAINER_*`, siehe
-Abschnitt 4) und werden vom „Demo ansehen"-Button auf `/login` genutzt — nirgends im Quellcode
-oder in einer committeten Migration. Echte Mitglieder/Trainer:innen werden künftig regulär über
-`/trainer/mitglieder` (Trainer/Admin, „Einladen") eingeladen, genau wie Admin-Zugänge über
-`/admin/benutzer`.
+Echte Mitglieder/Trainer:innen werden künftig regulär über `/trainer/mitglieder` (Trainer/Admin,
+„Einladen") eingeladen, genau wie Admin-Zugänge über `/admin/benutzer`.
 
 ## 4. Umgebungsvariablen
 
@@ -143,8 +140,6 @@ Siehe `.env.example` für die vollständige, aktuell gültige Liste. Kurzüberbl
 | `RESEND_API_KEY` | Optional | resend.com → API Keys |
 | `RESEND_FROM_EMAIL` | Optional | Eigene, bei Resend verifizierte Absenderadresse |
 | `GOOGLE_PLACES_API_KEY` / `GOOGLE_PLACE_ID` | Optional | Google Cloud Console (Places API „New") — für die live Google-Bewertung auf der Startseite |
-| `DEMO_MEMBER_EMAIL` / `DEMO_MEMBER_PASSWORD` | Optional | Demo-Mitgliedskonto für den „Demo ansehen"-Button auf `/login` (siehe 3.5) |
-| `DEMO_TRAINER_EMAIL` / `DEMO_TRAINER_PASSWORD` | Optional | Demo-Trainerkonto für den „Demo ansehen"-Button auf `/login` (siehe 3.5) |
 
 `SUPABASE_SERVICE_ROLE_KEY` niemals mit `NEXT_PUBLIC_`-Präfix versehen oder im Browser verwenden
 — er hebelt die Row-Level-Security vollständig aus. Er wird ausschließlich in

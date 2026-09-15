@@ -47,28 +47,6 @@ export async function signInSharedAction(_prev: AuthActionState, formData: FormD
   redirect(target);
 }
 
-/**
- * Signs in as the seeded demo account for the given portal role. Reads the demo credentials
- * from server-only env vars (DEMO_MEMBER_EMAIL/PASSWORD, DEMO_TRAINER_EMAIL/PASSWORD) — never
- * hardcoded in source, and unset by default, so this fails with a clear message until an admin
- * sets them.
- */
-export async function demoSignInAction(role: "mitglied" | "trainer"): Promise<void> {
-  const email = role === "mitglied" ? process.env.DEMO_MEMBER_EMAIL : process.env.DEMO_TRAINER_EMAIL;
-  const password = role === "mitglied" ? process.env.DEMO_MEMBER_PASSWORD : process.env.DEMO_TRAINER_PASSWORD;
-  if (!email || !password) {
-    redirect("/login?error=demo_not_configured");
-  }
-
-  const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) {
-    redirect("/login?error=demo_not_configured");
-  }
-
-  redirect(role === "mitglied" ? "/mitglied/training" : "/trainer");
-}
-
 export async function signOutSharedAction(): Promise<void> {
   const supabase = await createClient();
   await supabase.auth.signOut();

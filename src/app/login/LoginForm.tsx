@@ -2,13 +2,8 @@
 
 import { useActionState, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { AlertCircle, CheckCircle2, Sparkles } from "lucide-react";
-import {
-  signInSharedAction,
-  requestPasswordResetSharedAction,
-  demoSignInAction,
-  type AuthActionState,
-} from "@/app/actions/member-auth";
+import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { signInSharedAction, requestPasswordResetSharedAction, type AuthActionState } from "@/app/actions/member-auth";
 
 const inputClass =
   "w-full rounded-xl border border-paper/15 bg-ink px-4 py-3 text-paper placeholder:text-paper/30 outline-none transition-colors focus:border-red focus:ring-1 focus:ring-red";
@@ -17,7 +12,6 @@ export function LoginForm() {
   const searchParams = useSearchParams();
   const next = searchParams.get("next") ?? "";
   const linkError = searchParams.get("error") === "invalid_link";
-  const demoNotConfigured = searchParams.get("error") === "demo_not_configured";
   const forbidden = searchParams.get("error") === "forbidden";
 
   const [mode, setMode] = useState<"login" | "forgot">("login");
@@ -50,13 +44,6 @@ export function LoginForm() {
               Dieser Bereich ist für dein Konto nicht zugänglich.
             </p>
           ) : null}
-          {demoNotConfigured ? (
-            <p className="mt-5 flex items-start gap-2 rounded-xl border border-sand/30 bg-sand/10 p-3 text-sm text-sand">
-              <AlertCircle size={16} className="mt-0.5 shrink-0" />
-              Der Demo-Zugang ist auf diesem System noch nicht eingerichtet.
-            </p>
-          ) : null}
-
           <form action={loginFormAction} className="mt-6 flex flex-col gap-4">
             <input type="hidden" name="next" value={next} />
             <div>
@@ -111,33 +98,6 @@ export function LoginForm() {
               {loginPending ? "Anmelden …" : "Anmelden"}
             </button>
           </form>
-
-          <div className="mt-8 border-t border-paper/10 pt-6">
-            <p className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-paper/50">
-              <Sparkles size={13} /> Demo ansehen
-            </p>
-            <p className="mt-1.5 text-xs text-paper/50">
-              Ohne eigenes Konto direkt mit einem Beispiel-Zugang durchklicken.
-            </p>
-            <div className="mt-3 flex flex-col gap-2 sm:flex-row">
-              <form action={demoSignInAction.bind(null, "mitglied")} className="flex-1">
-                <button
-                  type="submit"
-                  className="w-full rounded-full border border-paper/20 px-4 py-2.5 text-sm text-paper transition-colors hover:border-paper/40"
-                >
-                  Demo: Mitglied
-                </button>
-              </form>
-              <form action={demoSignInAction.bind(null, "trainer")} className="flex-1">
-                <button
-                  type="submit"
-                  className="w-full rounded-full border border-paper/20 px-4 py-2.5 text-sm text-paper transition-colors hover:border-paper/40"
-                >
-                  Demo: Trainer
-                </button>
-              </form>
-            </div>
-          </div>
         </>
       ) : (
         <>
