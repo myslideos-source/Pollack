@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { ChevronRight, Dumbbell } from "lucide-react";
 import { requireMember } from "@/lib/auth";
 import { loadActivePlan, loadPendingPlan, weekdayLabel } from "@/lib/member/data";
@@ -44,7 +45,20 @@ export default async function TrainingsplanPage() {
                 <ul className="mt-3 divide-y divide-paper/10">
                   {day.exercises.map((ex) => (
                     <li key={ex.id} className="flex items-start gap-3 py-2.5">
-                      <Dumbbell size={15} className="mt-0.5 shrink-0 text-paper/30" />
+                      {ex.imageSrc ? (
+                        <div className="relative mt-0.5 h-9 w-9 shrink-0 overflow-hidden rounded-lg">
+                          <Image
+                            src={ex.imageSrc}
+                            alt=""
+                            fill
+                            sizes="36px"
+                            className="object-cover"
+                            style={{ objectPosition: `${ex.imageFocalX}% ${ex.imageFocalY}%` }}
+                          />
+                        </div>
+                      ) : (
+                        <Dumbbell size={15} className="mt-0.5 shrink-0 text-paper/30" />
+                      )}
                       <div className="min-w-0 flex-1">
                         <p className="text-sm text-paper">{ex.name}</p>
                         <p className="text-xs text-paper/50">

@@ -71,14 +71,14 @@ export function Header({
           />
         </Link>
 
-        <nav className="hidden items-center gap-0.5 xl:flex" aria-label="Hauptnavigation">
+        <nav className="hidden items-center gap-0.5 min-[1680px]:flex" aria-label="Hauptnavigation">
           {primaryNav.map((item) => {
             const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`whitespace-nowrap rounded-full px-2.5 py-2 font-display text-[13px] uppercase tracking-normal transition-colors 2xl:px-3 2xl:text-sm 2xl:tracking-wide ${
+                className={`whitespace-nowrap rounded-full px-2.5 py-2 font-display text-[13px] uppercase tracking-normal transition-colors ${
                   active ? "text-red" : "text-paper/80 hover:text-paper"
                 }`}
                 aria-current={active ? "page" : undefined}
@@ -89,7 +89,7 @@ export function Header({
           })}
         </nav>
 
-        <div className="hidden items-center gap-3 xl:flex">
+        <div className="hidden items-center gap-3 min-[1680px]:flex">
           <OpenStatusBadge hours={hours} special={special} />
           <Link
             href="/login"
@@ -105,7 +105,7 @@ export function Header({
           </Link>
         </div>
 
-        <div className="flex items-center gap-2 xl:hidden">
+        <div className="flex items-center gap-2 min-[1680px]:hidden">
           <Link
             href="/login"
             aria-label="Mitglieder-Login"
@@ -129,7 +129,7 @@ export function Header({
       {menuOpen ? (
         <div
           id="mobile-menu"
-          className="fixed inset-0 top-[64px] z-40 flex flex-col bg-ink px-6 py-8 xl:hidden"
+          className="fixed inset-0 top-[64px] z-40 flex flex-col bg-ink px-6 py-8 min-[1680px]:hidden"
         >
           <nav className="flex flex-1 flex-col gap-1" aria-label="Mobile Hauptnavigation">
             {primaryNav.map((item) => (

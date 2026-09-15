@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { X, ChevronRight, MessageCircle, SkipForward, Dumbbell, Plus, Award } from "lucide-react";
 import type { PlanDay } from "@/lib/member/data";
@@ -317,9 +318,20 @@ export function ActiveWorkout({
         <h1 className="mt-1 font-display text-3xl font-bold text-paper">{exercise.name}</h1>
 
         <div className="relative mt-4 aspect-video w-full overflow-hidden rounded-2xl border border-paper/10 bg-anthracite">
-          <div className="flex h-full w-full items-center justify-center text-paper/25">
-            <Dumbbell size={40} />
-          </div>
+          {exercise.imageSrc ? (
+            <Image
+              src={exercise.imageSrc}
+              alt={exercise.name}
+              fill
+              sizes="(min-width: 640px) 448px, 100vw"
+              className="object-cover"
+              style={{ objectPosition: `${exercise.imageFocalX}% ${exercise.imageFocalY}%` }}
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center text-paper/25">
+              <Dumbbell size={40} />
+            </div>
+          )}
         </div>
 
         {exercise.description ? <p className="mt-3 text-sm text-paper/60">{exercise.description}</p> : null}

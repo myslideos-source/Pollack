@@ -1,6 +1,7 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import { weekdayLabel, todayWeekday } from "@/lib/member/weekday";
+import { resolveMedia } from "@/lib/content/media";
 
 export { weekdayLabel, todayWeekday };
 
@@ -74,6 +75,8 @@ export type PlanExercise = {
   muscleGroup: string | null;
   description: string | null;
   imageSrc: string | null;
+  imageFocalX: number;
+  imageFocalY: number;
   sets: number;
   reps: string;
   restSeconds: number;
@@ -135,6 +138,14 @@ async function loadPlanTree(planId: string): Promise<PlanDay[]> {
 
   const byId = new Map((exerciseDetails ?? []).map((e) => [e.id, e]));
 
+  const imageByExerciseId = new Map<string, { src: string; focalX: number; focalY: number }>();
+  await Promise.all(
+    (exerciseDetails ?? []).map(async (e) => {
+      const resolved = await resolveMedia(e.image_media_id);
+      if (resolved) imageByExerciseId.set(e.id, resolved);
+    }),
+  );
+
   return days.map((day) => ({
     id: day.id,
     weekday: day.weekday,
@@ -145,13 +156,16 @@ async function loadPlanTree(planId: string): Promise<PlanDay[]> {
       .map((e) => {
         const detail = byId.get(e.exercise_id);
         const alt = e.alternative_exercise_id ? byId.get(e.alternative_exercise_id) : null;
+        const image = imageByExerciseId.get(e.exercise_id) ?? null;
         return {
           id: e.id,
           exerciseId: e.exercise_id,
           name: detail?.name ?? "Übung",
           muscleGroup: detail?.muscle_group ?? null,
           description: detail?.description ?? null,
-          imageSrc: null,
+          imageSrc: image?.src ?? null,
+          imageFocalX: image?.focalX ?? 50,
+          imageFocalY: image?.focalY ?? 50,
           sets: e.sets,
           reps: e.reps,
           restSeconds: e.rest_seconds,
