@@ -48,7 +48,10 @@ function SettingsPanel({
 
   return (
     <div className="fixed inset-0 z-[100] flex items-end justify-center bg-ink/70 backdrop-blur-sm print:hidden sm:items-center sm:p-6">
-      <div className="max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-t-3xl border border-paper/10 bg-anthracite p-6 shadow-2xl sm:rounded-3xl sm:p-8">
+      <div
+        className="max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-t-3xl border border-paper/10 bg-anthracite p-6 shadow-2xl sm:rounded-3xl sm:p-8"
+        style={{ paddingBottom: "max(1.5rem, env(safe-area-inset-bottom))" }}
+      >
         <div className="flex items-start justify-between gap-4">
           <h2 className="font-display text-lg font-bold text-paper">Cookie-Einstellungen</h2>
           {showClose ? (

@@ -47,6 +47,18 @@ export const SECTION_FIELD_SCHEMAS: Record<string, FieldDef[]> = {
     { key: "qualifications", label: "Qualifikationen", type: "list" },
     { key: "portrait", label: "Porträtfoto", type: "media" },
   ],
+  expansion: [
+    { key: "eyebrow", label: "Kicker-Text", type: "text" },
+    { key: "headline", label: "Überschrift", type: "text" },
+    { key: "intro", label: "Einleitung", type: "textarea" },
+    { key: "atmosphereNote", label: "Hinweis zur Gestaltung/Atmosphäre", type: "textarea" },
+    { key: "statusNote", label: "Status-Hinweis (z. B. \"ab Juli 2026\")", type: "text" },
+    { key: "groupTraining", label: "Training – Punkte", type: "list" },
+    { key: "groupGesundheit", label: "Gesundheit – Punkte", type: "list" },
+    { key: "groupKampfkunst", label: "Kampfkunst – Punkte", type: "list" },
+    { key: "groupRegeneration", label: "Regeneration – Punkte", type: "list" },
+    { key: "image", label: "Bild", type: "media" },
+  ],
   faq: [{ key: "items", label: "Fragen & Antworten (Frage — Antwort)", type: "list" }],
   notice: [
     { key: "text", label: "Hinweistext", type: "textarea" },
@@ -82,6 +94,7 @@ export const WEBSITE_SECTION_DEFS: {
   { slug: "home.trust_stats", sectionKey: "trust_stats", page: "home", title: "Startseite – Kennzahlen", sortOrder: 2 },
   { slug: "home.owner", sectionKey: "owner", page: "home", title: "Startseite – Jürgen Pollack", sortOrder: 3 },
   { slug: "home.notice", sectionKey: "notice", page: "home", title: "Startseite – Hinweisbanner", sortOrder: 4 },
+  { slug: "home.expansion", sectionKey: "expansion", page: "home", title: "Startseite – Erweiterung 2026", sortOrder: 5 },
 
   { slug: "program.fitness", sectionKey: "program", page: "training", title: "Training – Fitness", sortOrder: 0 },
   { slug: "program.technogym", sectionKey: "program", page: "training", title: "Training – Technogym", sortOrder: 1 },

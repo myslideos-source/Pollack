@@ -29,6 +29,5 @@ export const expansion2026 = {
   ],
   atmosphereNote:
     "Gestalterisch setzen wir auf eine ruhige, natürliche Atmosphäre: Mooswände, Bambus-Elemente und eine Kaminfeuer-Optik sollen den Regenerationsbereich spürbar von der Trainingsfläche abheben.",
-  statusNote:
-    "Der genaue Umsetzungsstand der Erweiterung ließ sich zum Zeitpunkt dieses Relaunches nicht eindeutig bestätigen – wir verwenden deshalb bewusst weiterhin ‚ab Juli 2026' statt einer unbestätigten Abschlussmeldung. Siehe TODO_CLIENT.md.",
+  statusNote: "Aktueller Umsetzungsstand: ab Juli 2026.",
 } as const;

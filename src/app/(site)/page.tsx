@@ -5,7 +5,7 @@ import { GoogleReviewsBadge } from "@/components/home/GoogleReviewsBadge";
 import { GoalSelector } from "@/components/home/GoalSelector";
 import { TrainingWorlds } from "@/components/home/TrainingWorlds";
 import { HealthTeaser } from "@/components/home/HealthTeaser";
-import { Expansion2026 } from "@/components/home/Expansion2026";
+import { Expansion2026, type ExpansionContent } from "@/components/home/Expansion2026";
 import { PollackFeature, type OwnerContent } from "@/components/home/PollackFeature";
 import { MemberPortalTeaser } from "@/components/home/MemberPortalTeaser";
 import { CommunityShoutout } from "@/components/home/CommunityShoutout";
@@ -18,6 +18,7 @@ import { HomeContact } from "@/components/home/HomeContact";
 import { FinalCta } from "@/components/home/FinalCta";
 import { getSection, sectionField } from "@/lib/content/sections";
 import { resolveMedia, resolveMediaSrc } from "@/lib/content/media";
+import { expansion2026 } from "@/content/expansion";
 
 const FALLBACK_HERO: HeroContent = {
   headline: "Stark. Beweglich. Bereit.",
@@ -75,6 +76,43 @@ async function loadTrustStats(): Promise<string[]> {
   return section ? sectionField.list(section.content, "items") : [];
 }
 
+const FALLBACK_EXPANSION: ExpansionContent = {
+  eyebrow: expansion2026.eyebrow,
+  headline: expansion2026.headline,
+  intro: expansion2026.intro,
+  atmosphereNote: expansion2026.atmosphereNote,
+  statusNote: expansion2026.statusNote,
+  groups: expansion2026.groups.map((g) => ({ title: g.title, items: [...g.items] })),
+  image: null,
+};
+
+async function loadExpansion(): Promise<ExpansionContent> {
+  const section = await getSection("home.expansion");
+  if (!section) return FALLBACK_EXPANSION;
+  const c = section.content;
+  const image = await resolveMedia(c.image);
+  const groupDefs: { key: string; title: string }[] = [
+    { key: "groupTraining", title: FALLBACK_EXPANSION.groups[0]?.title ?? "Training" },
+    { key: "groupGesundheit", title: FALLBACK_EXPANSION.groups[1]?.title ?? "Gesundheit" },
+    { key: "groupKampfkunst", title: FALLBACK_EXPANSION.groups[2]?.title ?? "Kampfkunst" },
+    { key: "groupRegeneration", title: FALLBACK_EXPANSION.groups[3]?.title ?? "Regeneration" },
+  ];
+  const groups = groupDefs
+    .map((g, i) => ({ title: g.title, items: sectionField.list(c, g.key).length > 0 ? sectionField.list(c, g.key) : FALLBACK_EXPANSION.groups[i]?.items ?? [] }))
+    .filter((g) => g.items.length > 0);
+  return {
+    eyebrow: sectionField.str(c, "eyebrow") ?? FALLBACK_EXPANSION.eyebrow,
+    headline: sectionField.str(c, "headline") ?? FALLBACK_EXPANSION.headline,
+    intro: sectionField.str(c, "intro") ?? FALLBACK_EXPANSION.intro,
+    atmosphereNote: sectionField.str(c, "atmosphereNote") ?? FALLBACK_EXPANSION.atmosphereNote,
+    statusNote: sectionField.str(c, "statusNote") ?? FALLBACK_EXPANSION.statusNote,
+    groups: groups.length > 0 ? groups : FALLBACK_EXPANSION.groups,
+    image: image?.src ?? null,
+    imageFocalX: image?.focalX ?? 50,
+    imageFocalY: image?.focalY ?? 50,
+  };
+}
+
 async function loadOwner(): Promise<OwnerContent | null> {
   const section = await getSection("home.owner");
   if (!section) return null;
@@ -93,11 +131,12 @@ async function loadOwner(): Promise<OwnerContent | null> {
 }
 
 export default async function HomePage() {
-  const [hero, imagefilm, trustStats, owner] = await Promise.all([
+  const [hero, imagefilm, trustStats, owner, expansion] = await Promise.all([
     loadHero(),
     loadImagefilm(),
     loadTrustStats(),
     loadOwner(),
+    loadExpansion(),
   ]);
 
   return (
@@ -109,7 +148,7 @@ export default async function HomePage() {
       <GoalSelector />
       <TrainingWorlds />
       <HealthTeaser />
-      <Expansion2026 />
+      <Expansion2026 content={expansion} />
       {owner ? <PollackFeature content={owner} /> : null}
       <MemberPortalTeaser />
       <CommunityShoutout />

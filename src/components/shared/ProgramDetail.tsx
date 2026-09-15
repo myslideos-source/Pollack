@@ -1,4 +1,4 @@
-import { Check, ArrowRight, Info } from "lucide-react";
+import { Check, ArrowRight } from "lucide-react";
 import { PageHero } from "@/components/shared/PageHero";
 import { Container } from "@/components/shared/Container";
 import { Button } from "@/components/shared/Button";
@@ -85,13 +85,6 @@ export function ProgramDetail({ program }: { program: Program }) {
               </h2>
               <Accordion items={program.faq} />
             </div>
-          ) : null}
-
-          {program.openQuestion ? (
-            <p className="mt-8 flex items-start gap-2 rounded-xl border border-sand/25 bg-sand/10 p-4 text-sm text-paper/70">
-              <Info size={16} className="mt-0.5 shrink-0 text-sand" />
-              {program.openQuestion}
-            </p>
           ) : null}
 
           <div className="mt-10 flex flex-wrap gap-3">

@@ -16,8 +16,6 @@ export type Program = {
   quote?: string;
   /** FAQ / safety-notice accordion, e.g. Solarium safety information. */
   faq?: ProgramFaqItem[];
-  /** Inline note for anything not yet confirmed by the client (rendered subtly, not hidden). */
-  openQuestion?: string;
   /** Real photo path, when one has been supplied — falls back to the TexturePanel otherwise. */
   image?: string;
   imageAlt?: string;
@@ -151,7 +149,6 @@ export const programs: Program[] = [
       "Trainings- und Ernährungsberatung im Anschluss",
       "Verlaufskontrolle über mehrere Termine",
     ],
-    openQuestion: "Mitglieder- und Nichtmitgliederpreis für die InBody-Analyse noch zu bestätigen.",
     legacyPaths: ["/programm/inbody"],
     texture: "health",
   },
@@ -209,7 +206,6 @@ export const programs: Program[] = [
       "Sicherheit für Schulweg und Pausenhof",
       "Disziplin und Respekt, spielerisch vermittelt",
     ],
-    openQuestion: "Genaues Mindestalter für den Einstieg noch zu bestätigen.",
     image: "/media/kampfkunst/kinderkarate.webp",
     imageAlt: "Kind trainiert Kinderkarate am Kickschild im Sportpark Pollack",
     legacyPaths: ["/programm/kinderkarate"],
@@ -233,7 +229,6 @@ export const programs: Program[] = [
       "Angeleitet von einem ausgebildeten Gewaltschutztrainer",
       "Auch als Personaltraining buchbar",
     ],
-    openQuestion: "Aktuelle Kursdauer, Zielgruppen-Details und Kursgebühren noch zu bestätigen.",
     legacyPaths: ["/programm/selbstverteidigung"],
     texture: "kampfkunst",
   },
@@ -252,7 +247,6 @@ export const programs: Program[] = [
       "Eigener, ruhiger Massageraum",
       "Entspannung nach dem Training",
     ],
-    openQuestion: "Ob die Hydrojet-Massageliege weiterhin angeboten wird, ist noch zu bestätigen.",
     legacyPaths: ["/programm/massage"],
     texture: "regeneration",
   },
@@ -272,7 +266,6 @@ export const programs: Program[] = [
       "Für Einsteiger:innen und Fortgeschrittene",
       "Eigenes Kinderyoga-Angebot",
     ],
-    openQuestion: "Aktuelle Kurstage, Uhrzeiten, Altersgruppe für Kinderyoga und direkte Kontaktdaten von Nina noch zu bestätigen.",
     legacyPaths: [],
     texture: "regeneration",
   },

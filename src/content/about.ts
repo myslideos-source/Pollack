@@ -35,8 +35,6 @@ export const yogaTrainerin = {
   brand: "NINYASA Yoga",
   intro:
     "Unter dem Namen NINYASA Yoga leitet Nina das Yoga- und Kinderyoga-Angebot im Sportpark Pollack – mit Atemübungen, Meditation und verschiedenen Yogastilen für Einsteiger:innen ebenso wie für Fortgeschrittene.",
-  openQuestion:
-    "Aktuelle Kurstage, Uhrzeiten und direkte Kontaktdaten von Nina noch zu bestätigen.",
 } as const;
 
 export const studioStory = {
