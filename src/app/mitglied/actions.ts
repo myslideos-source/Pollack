@@ -98,7 +98,8 @@ export async function completeOnboardingAction(
   }
 
   revalidatePath("/mitglied");
-  redirect("/mitglied");
+  revalidatePath("/mitglied/training");
+  redirect("/mitglied/training");
 }
 
 const loggedSetSchema = z.object({

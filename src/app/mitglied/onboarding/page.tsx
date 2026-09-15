@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Erstanalyse" };
 export default async function OnboardingPage() {
   const profile = await requireMember();
   const member = await loadMemberProfile(profile.id);
-  if (member?.onboardingCompletedAt) redirect("/mitglied");
+  if (member?.onboardingCompletedAt) redirect("/mitglied/training");
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6">

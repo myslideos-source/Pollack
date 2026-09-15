@@ -66,7 +66,7 @@ export async function demoSignInAction(role: "mitglied" | "trainer"): Promise<vo
     redirect("/login?error=demo_not_configured");
   }
 
-  redirect(role === "mitglied" ? "/mitglied" : "/trainer");
+  redirect(role === "mitglied" ? "/mitglied/training" : "/trainer");
 }
 
 export async function signOutSharedAction(): Promise<void> {

@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 import { requireMember } from "@/lib/auth";
-import { loadActivePlan, loadLastSetsForPlanExercises, todayWeekday, weekdayLabel } from "@/lib/member/data";
+import { loadMemberProfile, loadActivePlan, loadLastSetsForPlanExercises, todayWeekday, weekdayLabel } from "@/lib/member/data";
 import { ActiveWorkout } from "@/components/member/ActiveWorkout";
 
 export const metadata: Metadata = { title: "Training" };
@@ -13,6 +14,9 @@ export default async function TrainingPage({
   searchParams: Promise<{ tag?: string }>;
 }) {
   const profile = await requireMember();
+  const member = await loadMemberProfile(profile.id);
+  if (!member?.onboardingCompletedAt) redirect("/mitglied/onboarding");
+
   const plan = await loadActivePlan(profile.id);
   const { tag } = await searchParams;
 

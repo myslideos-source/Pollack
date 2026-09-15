@@ -62,7 +62,7 @@ export function roleHomePath(role: string): string {
     case "trainer":
       return "/trainer";
     case "mitglied":
-      return "/mitglied";
+      return "/mitglied/training";
     default:
       return "/";
   }
