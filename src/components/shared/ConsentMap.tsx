@@ -1,17 +1,26 @@
 "use client";
 
-import { useState } from "react";
 import { MapPin, ExternalLink } from "lucide-react";
 import { contact } from "@/content/site";
+import { useCookieConsent, useConsentGiven } from "./CookieConsentProvider";
 
 /**
  * Privacy-friendly by default: no third-party map is loaded until the visitor actively
- * opts in. Before consent we show a static address card and a plain outbound link to
- * Google Maps (a user-initiated navigation, not an embed, so it needs no consent gate).
+ * opts in — either globally via the cookie banner's "Externe Medien" category, or with the
+ * one-off button below (which also records that choice globally, so it stays consistent
+ * with the banner and is just as revocable via "Cookie-Einstellungen" in the footer). Before
+ * consent we show a static address card and a plain outbound link to Google Maps (a
+ * user-initiated navigation, not an embed, so it needs no consent gate).
  */
 export function ConsentMap() {
-  const [consented, setConsented] = useState(false);
+  const consented = useConsentGiven("externalMedia");
+  const { categories, saveSelection } = useCookieConsent();
   const query = encodeURIComponent(`${contact.street}, ${contact.zip} ${contact.city}`);
+
+  function loadMap() {
+    if (!categories) return;
+    saveSelection({ ...categories, externalMedia: true });
+  }
 
   if (consented) {
     return (
@@ -39,7 +48,7 @@ export function ConsentMap() {
       <div className="flex flex-wrap gap-3">
         <button
           type="button"
-          onClick={() => setConsented(true)}
+          onClick={loadMap}
           className="rounded-full border border-paper/30 px-4 py-2 text-sm text-paper hover:border-paper/60"
         >
           Karte laden (OpenStreetMap)

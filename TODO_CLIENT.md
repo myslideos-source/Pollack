@@ -182,15 +182,27 @@ schon jetzt nutzbar ist — dann ergänzen wir es in `src/content/programs.ts`.
 
 ## 7. Rechtstexte (Impressum & Datenschutzerklärung)
 
-Impressum und Datenschutzerklärung wurden **strukturiert neu aufgebaut** (Pflichtangaben nach
-§ 5 TMG bzw. DSGVO-Standardgliederung), aber **nicht von einer sachkundigen Stelle geprüft**.
-Offene Punkte:
+**Update:** Beide Seiten wurden vollständig neu aufgebaut — Grundlage ist jetzt § 5 DDG (nicht
+mehr das abgelöste § 5 TMG), die Datenschutzerklärung deckt inzwischen auch das Mitgliederportal
+(inkl. gesondertem Abschnitt zu gesundheitsbezogenen Angaben) sowie ein neues Cookie-Consent-
+Management ab. Alle genannten Dienste (Vercel, Supabase, Resend, Google Places, OpenStreetMap)
+wurden gegen den tatsächlichen Code geprüft — nichts Erfundenes, nichts Ungenutztes. Der alte Link
+zur (mittlerweile abgeschalteten) EU-OS-Plattform wurde entfernt; die Verbraucherschlichtungs-
+Aussage erscheint erst nach Bestätigung.
 
+Offene Punkte, zentral gepflegt in `src/content/legal-config.ts` (jedes Feld dort direkt
+ausfüllen, die Seiten übernehmen den Wert automatisch — **keine Suche-und-Ersetze-Aktion im
+Seitentext nötig**). Ein Build-Log-Warnhinweis erinnert bei jedem Deployment automatisch daran,
+solange etwas offen ist:
+
+- Vollständiger Name des Inhabers/der Inhaberin
+- Rechtsform (Einzelunternehmen, GbR, GmbH …) und ggf. vertretungsberechtigte Person
 - Umsatzsteuer-Identifikationsnummer (fehlt aktuell komplett)
-- Handelsregistereintrag/Rechtsform, falls zutreffend (Einzelunternehmen vs. andere Rechtsform)
-- Endgültige Formulierung zur Verbraucherschlichtung (§ 36 VSBG)
-- Konkreter Hosting-Anbieter für den Datenschutz-Abschnitt „Hosting & Server-Logfiles", sobald
-  das finale Deployment-Ziel feststeht
+- Handelsregister-/Vereinsregistereintrag + Registernummer, falls vorhanden
+- Zuständige Aufsichtsbehörde für den Betrieb — für ein Fitnessstudio in der Regel nicht
+  einschlägig, sollte aber trotzdem einmal ausdrücklich bestätigt werden
+- Endgültige Bestätigung der Verbraucherschlichtungs-Aussage (§ 36 VSBG)
+- Ob „Ortner MEDIA" weiterhin als Bildrechteinhaber genannt werden soll
 - Allgemeine juristische Prüfung beider Seiten vor Veröffentlichung
 
 ## 8. Standort-Koordinaten

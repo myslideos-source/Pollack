@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Download, ShieldCheck } from "lucide-react";
+import Link from "next/link";
+import { Download, ShieldCheck, FileText } from "lucide-react";
 import { requireMember } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { loadMemberProfile } from "@/lib/member/data";
@@ -117,6 +118,12 @@ export default async function ProfilPage() {
           </a>
           <ProfileActions consentActive={consentActive} />
         </div>
+        <Link
+          href="/datenschutz"
+          className="mt-4 inline-flex items-center gap-1.5 text-sm text-paper/50 underline underline-offset-2 hover:text-paper"
+        >
+          <FileText size={14} /> Vollständige Datenschutzerklärung lesen
+        </Link>
       </section>
     </div>
   );

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { getCurrentProfile, roleHomePath } from "@/lib/auth";
@@ -36,6 +37,14 @@ export default async function LoginPage() {
         <Suspense>
           <LoginForm />
         </Suspense>
+        <div className="mt-6 flex justify-center gap-4 text-xs text-paper/40">
+          <Link href="/impressum" className="hover:text-paper/70">
+            Impressum
+          </Link>
+          <Link href="/datenschutz" className="hover:text-paper/70">
+            Datenschutz
+          </Link>
+        </div>
       </div>
     </div>
   );

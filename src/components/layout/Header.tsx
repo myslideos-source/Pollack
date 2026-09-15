@@ -45,7 +45,7 @@ export function Header({
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full transition-colors duration-300 ${
+      className={`sticky top-0 z-50 w-full transition-colors duration-300 print:hidden ${
         menuOpen
           ? "bg-ink"
           : scrolled
@@ -172,6 +172,10 @@ export function Header({
             >
               <User size={16} /> Mitglieder-Login
             </Link>
+            <div className="mt-2 flex justify-center gap-4 text-xs text-paper/40">
+              <Link href="/impressum">Impressum</Link>
+              <Link href="/datenschutz">Datenschutz</Link>
+            </div>
           </div>
         </div>
       ) : null}

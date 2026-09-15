@@ -5,6 +5,8 @@ import { MobileCtaBar } from "@/components/layout/MobileCtaBar";
 import { WhatsAppFloatingButton } from "@/components/layout/WhatsAppFloatingButton";
 import { PreviewBanner } from "@/components/shared/PreviewBanner";
 import { ViewTracker } from "@/components/shared/ViewTracker";
+import { CookieConsentProvider } from "@/components/shared/CookieConsentProvider";
+import { CookieBanner } from "@/components/shared/CookieBanner";
 import { siteConfig, contact as staticContact } from "@/content/site";
 import { loadContact } from "@/lib/content/contact";
 import { loadOpeningHours } from "@/lib/content/opening-hours-data";
@@ -57,7 +59,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
   };
 
   return (
-    <>
+    <CookieConsentProvider>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <ViewTracker />
       {previewActive ? <PreviewBanner /> : null}
@@ -68,6 +70,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       <Footer contact={contact} hours={hours} rating={{ rating, reviewCount }} />
       <MobileCtaBar contact={contact} />
       <WhatsAppFloatingButton contact={contact} />
-    </>
+      <CookieBanner />
+    </CookieConsentProvider>
   );
 }

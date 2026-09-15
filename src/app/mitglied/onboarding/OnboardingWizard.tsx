@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import Link from "next/link";
 import { AlertCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { completeOnboardingAction, type OnboardingActionState } from "@/app/mitglied/actions";
 
@@ -190,8 +191,15 @@ export function OnboardingWizard() {
           </p>
           <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-paper/15 bg-ink px-4 py-3 text-sm text-paper">
             <input type="checkbox" name="consent" required={step === 4} className="mt-0.5 accent-red" />
-            Ich willige ein, dass meine Angaben zur Erstellung meines Trainingsplans gespeichert und verarbeitet
-            werden. Ich kann diese Einwilligung jederzeit in meinem Profil widerrufen.
+            <span>
+              Ich willige ein, dass meine Angaben — einschließlich gesundheitsbezogener Angaben — zur Erstellung
+              meines Trainingsplans gespeichert und verarbeitet werden. Ich kann diese Einwilligung jederzeit in
+              meinem Profil widerrufen. Details in der{" "}
+              <Link href="/datenschutz" target="_blank" className="underline underline-offset-2 hover:text-red">
+                Datenschutzerklärung
+              </Link>
+              .
+            </span>
           </label>
         </div>
 

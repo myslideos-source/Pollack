@@ -106,12 +106,12 @@ export function ContactForm({
 
       <label className="flex items-start gap-2.5 text-xs text-paper/60">
         <input required type="checkbox" name="consent" className="mt-0.5" />
-        Ich bin damit einverstanden, dass meine Angaben zur Bearbeitung meiner Anfrage verwendet werden.
-        Details in der{" "}
-        <a href="/datenschutz" className="underline">
+        Ich habe die{" "}
+        <a href="/datenschutz" target="_blank" className="underline">
           Datenschutzerklärung
-        </a>
-        .
+        </a>{" "}
+        zur Kenntnis genommen und bin mit der Verarbeitung meiner Angaben zur Bearbeitung meiner Anfrage
+        einverstanden.
       </label>
 
       {state.status === "error" ? (

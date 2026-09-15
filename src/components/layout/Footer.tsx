@@ -6,6 +6,7 @@ import { googleReviews } from "@/content/reviews";
 import { WEEKDAYS, type OpeningHour } from "@/lib/opening-hours";
 import type { ContactContent } from "@/lib/content/contact";
 import type { GoogleRating } from "@/lib/content/google-reviews";
+import { CookieSettingsLink } from "@/components/shared/CookieSettingsLink";
 
 function formatDay(ranges: OpeningHour[]): string {
   if (ranges.length === 0 || ranges.every((r) => r.closed)) return "geschlossen";
@@ -26,7 +27,7 @@ export function Footer({
 }) {
   const hasHours = hours.length > 0;
   return (
-    <footer className="border-t border-paper/10 bg-ink text-paper">
+    <footer className="border-t border-paper/10 bg-ink text-paper print:hidden">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-4 lg:px-8">
         <div className="lg:col-span-1">
           <Image
@@ -130,6 +131,7 @@ export function Footer({
             <Link href="/datenschutz" className="hover:text-paper/80">
               Datenschutz
             </Link>
+            <CookieSettingsLink className="hover:text-paper/80" />
           </div>
         </div>
       </div>

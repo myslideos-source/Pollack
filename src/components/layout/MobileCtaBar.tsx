@@ -5,7 +5,7 @@ import type { ContactContent } from "@/lib/content/contact";
 export function MobileCtaBar({ contact }: { contact: ContactContent }) {
   return (
     <div
-      className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-3 border-t border-paper/10 bg-ink/95 backdrop-blur-md lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-3 border-t border-paper/10 bg-ink/95 backdrop-blur-md print:hidden lg:hidden"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <a
