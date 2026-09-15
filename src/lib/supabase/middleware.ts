@@ -34,8 +34,10 @@ function ensureVisitorCookie(request: NextRequest, response: NextResponse): Next
  */
 export async function updateSession(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  // /admin/login is excluded here since it's just a redirect stub to the shared /login page
+  // (which itself sends an already-signed-in visitor to their own role's area) — treating it
+  // as a protected route would loop.
   const isAdminRoute = pathname.startsWith("/admin") && pathname !== "/admin/login";
-  const isLoginRoute = pathname === "/admin/login";
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -43,7 +45,7 @@ export async function updateSession(request: NextRequest) {
   if (!supabaseUrl || !supabaseAnonKey) {
     console.error("[middleware] NEXT_PUBLIC_SUPABASE_URL/ANON_KEY missing — see SUPABASE_SETUP.md");
     if (isAdminRoute) {
-      const redirectUrl = new URL("/admin/login", request.url);
+      const redirectUrl = new URL("/login", request.url);
       redirectUrl.searchParams.set("next", pathname);
       return NextResponse.redirect(redirectUrl);
     }
@@ -71,20 +73,16 @@ export async function updateSession(request: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (isAdminRoute && !user) {
-      const redirectUrl = new URL("/admin/login", request.url);
+      const redirectUrl = new URL("/login", request.url);
       redirectUrl.searchParams.set("next", pathname);
       return NextResponse.redirect(redirectUrl);
-    }
-
-    if (isLoginRoute && user) {
-      return NextResponse.redirect(new URL("/admin", request.url));
     }
 
     return ensureVisitorCookie(request, response);
   } catch (error) {
     console.error("[middleware] Supabase session refresh failed", error);
     if (isAdminRoute) {
-      const redirectUrl = new URL("/admin/login", request.url);
+      const redirectUrl = new URL("/login", request.url);
       redirectUrl.searchParams.set("next", pathname);
       return NextResponse.redirect(redirectUrl);
     }

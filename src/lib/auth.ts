@@ -22,10 +22,13 @@ export async function getCurrentProfile(): Promise<Profile | null> {
   return profile;
 }
 
-/** For any /admin page reachable by both roles. Redirects to login if not signed in. */
+/** For any /admin page reachable by both staff roles. Redirects to the shared login if not
+ *  signed in, or away to the right area if signed in as a mitglied/trainer — role must be
+ *  checked here, not just presence of a profile, now that non-staff roles exist too. */
 export async function requireStaff(): Promise<Profile> {
   const profile = await getCurrentProfile();
-  if (!profile) redirect("/admin/login");
+  if (!profile) redirect("/login?next=/admin");
+  if (profile.role !== "admin" && profile.role !== "redakteur") redirect(`${roleHomePath(profile.role)}?error=forbidden`);
   return profile;
 }
 

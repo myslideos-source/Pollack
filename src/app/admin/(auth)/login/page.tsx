@@ -1,34 +1,20 @@
-import type { Metadata } from "next";
-import Image from "next/image";
-import { Suspense } from "react";
-import { LoginForm } from "./LoginForm";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Admin-Anmeldung",
-  robots: { index: false, follow: false },
-};
-
-export default function AdminLoginPage() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-ink px-4 py-12">
-      <div className="w-full max-w-md">
-        <div className="mb-8 flex flex-col items-center gap-3 text-center">
-          <Image
-            src="/logo/sportpark-pollack-logo-white.webp"
-            alt="Sportpark Pollack"
-            width={220}
-            height={76}
-            priority
-            className="h-14 w-auto"
-          />
-          <p className="font-display text-xs uppercase tracking-[0.3em] text-paper/50">
-            Sportpark Verwaltung
-          </p>
-        </div>
-        <Suspense>
-          <LoginForm />
-        </Suspense>
-      </div>
-    </div>
-  );
+/**
+ * Login is unified at /login now — it detects the signed-in profile's role (Mitglied, Trainer,
+ * Admin/Redakteur) and sends each to its own area, so staff no longer need a separate login
+ * page. This route stays only so old bookmarks/links to /admin/login keep working.
+ */
+export default async function AdminLoginRedirect({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const params = await searchParams;
+  const query = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (typeof value === "string") query.set(key, value);
+  }
+  if (!query.has("next")) query.set("next", "/admin");
+  redirect(`/login?${query.toString()}`);
 }

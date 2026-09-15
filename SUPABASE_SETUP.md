@@ -55,9 +55,11 @@ eingetragen werden.
 ### 3.2 Ersten Admin-Nutzer anlegen
 
 ✅ **Erledigt.** Der erste Admin-Zugang (`d.musotto@t-online.de`) wurde bereits angelegt — Login
-unter `/admin/login` mit dem vereinbarten Passwort möglich. Bitte das Passwort nach dem ersten
-Login über „Passwort vergessen" auf der Login-Seite einmal selbst ändern, damit es nur noch dir
-bekannt ist (es wurde für die Einrichtung kurz im Chat übertragen).
+unter `/login` (dem einen gemeinsamen Login für Mitglieder, Trainer und Admin/Redakteur — die
+Rolle wird nach der Anmeldung automatisch erkannt und in den passenden Bereich weitergeleitet)
+mit dem vereinbarten Passwort möglich. Bitte das Passwort nach dem ersten Login über „Passwort
+vergessen" auf der Login-Seite einmal selbst ändern, damit es nur noch dir bekannt ist (es wurde
+für die Einrichtung kurz im Chat übertragen).
 
 Die folgenden Schritte sind nur noch relevant, falls **künftig** ein weiterer Zugang ohne
 funktionierenden Service-Role-Key (also ohne die Einladungsfunktion unter „Benutzer") angelegt
@@ -78,7 +80,7 @@ manuell im Supabase-Dashboard anlegen:
    values ('<user-uuid-aus-schritt-2>', '<email-aus-schritt-1>', 'Jürgen Pollack', 'admin');
    ```
 
-4. Mit dieser E-Mail-Adresse und dem vergebenen Passwort unter `/admin/login` anmelden.
+4. Mit dieser E-Mail-Adresse und dem vergebenen Passwort unter `/login` anmelden.
 5. Direkt danach unter `/admin/einstellungen` das Passwort über „Passwort vergessen" auf ein
    eigenes, sicheres Passwort ändern (oder über das Supabase-Dashboard neu setzen).
 

@@ -30,7 +30,9 @@ export function LoginForm() {
       {mode === "login" ? (
         <>
           <h1 className="font-display text-2xl font-semibold text-paper">Anmelden</h1>
-          <p className="mt-1 text-sm text-paper/60">Melde dich mit deinem Mitglieder- oder Trainer-Konto an.</p>
+          <p className="mt-1 text-sm text-paper/60">
+            Melde dich mit deinem Konto an — du wirst automatisch in deinen Bereich weitergeleitet.
+          </p>
 
           {linkError ? (
             <p className="mt-5 flex items-start gap-2 rounded-xl border border-red/30 bg-red/10 p-3 text-sm text-red">

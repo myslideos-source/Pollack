@@ -6,8 +6,11 @@ Umgebungsvariablen, ersten Zugang anlegen) siehe SUPABASE_SETUP.md.
 
 ## Anmelden
 
-Unter `www.sportpark-pollack.de/admin` mit der eigenen E-Mail-Adresse und dem Passwort anmelden.
-Passwort vergessen → „Passwort vergessen" auf der Login-Seite, ein Link wird per E-Mail
+Unter `www.sportpark-pollack.de/admin` mit der eigenen E-Mail-Adresse und dem Passwort anmelden
+(ohne aktive Anmeldung landet man automatisch auf der gemeinsamen Login-Seite `/login` — dieselbe,
+über die sich auch Mitglieder und Trainer:innen anmelden; die Rolle wird nach dem Einloggen
+automatisch erkannt und in den passenden Bereich weitergeleitet, kein separater Admin-Login
+nötig). Passwort vergessen → „Passwort vergessen" auf der Login-Seite, ein Link wird per E-Mail
 zugeschickt. Es gibt **keine öffentliche Registrierung** — neue Zugänge werden ausschließlich von
 einem Admin unter „Benutzer" eingeladen.
 
