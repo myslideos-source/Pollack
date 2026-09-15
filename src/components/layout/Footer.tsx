@@ -113,7 +113,7 @@ export function Footer({
               ))}
             </ul>
           )}
-          <Link href="/kontakt" className="mt-4 inline-block text-sm text-red hover:text-red-dark">
+          <Link href="/#kontakt" className="mt-4 inline-block text-sm text-red hover:text-red-dark">
             Anfahrt &amp; Kontakt →
           </Link>
         </div>

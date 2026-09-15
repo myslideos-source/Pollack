@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/shared/Button";
 import { TexturePanel } from "@/components/shared/TexturePanel";
@@ -60,12 +59,12 @@ export async function MoreNutritionEsnTeaser() {
         </p>
 
         <div className="mt-6 flex flex-wrap items-center gap-4">
-          <Button href="/partner-produkte" variant="primary">
-            Produkte vor Ort entdecken <ArrowRight size={16} />
+          <Button href="/#probetraining" variant="primary">
+            Probetraining starten <ArrowRight size={16} />
           </Button>
-          <Link href="/partner-produkte" className="text-sm text-paper/50 hover:text-paper/80">
+          <span className="text-sm text-paper/50">
             Bei uns im Sportpark erhältlich – kein Online-Verkauf über diese Website.
-          </Link>
+          </span>
         </div>
       </div>
     </section>

@@ -98,7 +98,7 @@ export function Header({
             <User size={15} /> Mitglieder-Login
           </Link>
           <Link
-            href="/kontakt#probetraining"
+            href="/#probetraining"
             className="rounded-full bg-red px-5 py-2.5 font-display text-sm uppercase tracking-wide text-paper transition-colors hover:bg-red-dark"
           >
             Probetraining
@@ -161,7 +161,7 @@ export function Header({
               </a>
             </div>
             <Link
-              href="/kontakt#probetraining"
+              href="/#probetraining"
               className="rounded-full bg-red py-3 text-center font-display text-sm uppercase tracking-wide text-paper"
             >
               Probetraining starten

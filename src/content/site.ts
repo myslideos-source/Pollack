@@ -33,14 +33,14 @@ export function whatsappLink(message: string) {
 
 export const primaryNav = [
   { label: "Start", href: "/" },
-  { label: "Training", href: "/training" },
-  { label: "Gesundheit", href: "/gesundheit" },
-  { label: "Kampfkunst", href: "/kampfkunst" },
-  { label: "Regeneration", href: "/regeneration" },
-  { label: "Partner", href: "/partner-produkte" },
-  { label: "Preise", href: "/preise" },
-  { label: "Über uns", href: "/ueber-uns" },
-  { label: "Kontakt", href: "/kontakt" },
+  { label: "Training", href: "/#kraft-performance" },
+  { label: "Gesundheit", href: "/#gesundheit" },
+  { label: "Kampfkunst", href: "/#kampfkunst-selbstvertrauen" },
+  { label: "Regeneration", href: "/#regeneration-balance" },
+  { label: "Partner", href: "/#partner" },
+  { label: "Preise", href: "/#preise" },
+  { label: "Über uns", href: "/#ueber-uns" },
+  { label: "Kontakt", href: "/#kontakt" },
 ] as const;
 
 export const trustStats = [

@@ -1,6 +1,6 @@
-import { ArrowRight, Repeat, Move, ScanLine } from "lucide-react";
-import { Button } from "@/components/shared/Button";
+import { Repeat, Move, ScanLine } from "lucide-react";
 import { PulseLine } from "@/components/shared/PulseLine";
+import { ZielKompass } from "@/components/calculator/ZielKompass";
 
 const points = [
   {
@@ -22,7 +22,7 @@ const points = [
 
 export function HealthTeaser() {
   return (
-    <section className="bg-ink py-16 sm:py-24">
+    <section id="gesundheit" className="scroll-mt-20 bg-ink py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <PulseLine zone="health" className="mb-6 max-w-md opacity-80" />
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
@@ -50,9 +50,7 @@ export function HealthTeaser() {
         </div>
 
         <div className="mt-10">
-          <Button href="/gesundheit#ziel-kompass" variant="moss">
-            Gesundheits-Check starten <ArrowRight size={16} />
-          </Button>
+          <ZielKompass />
         </div>
       </div>
     </section>

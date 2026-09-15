@@ -252,7 +252,7 @@ export function ZielKompass() {
             <p className="text-sm text-paper/70">
               Ein Rechner kann schätzen. InBody zeigt, woraus dein Körper wirklich besteht.
             </p>
-            <Button href="/kontakt#anfrage" variant="moss" className="self-start">
+            <Button href="/#anfrage" variant="moss" className="self-start">
               InBody-Termin anfragen
             </Button>
           </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { ArrowRight, MessageCircle, RotateCcw } from "lucide-react";
 import { Button } from "@/components/shared/Button";
 import { whatsappLink } from "@/content/site";
@@ -128,12 +129,12 @@ export function TrainingFinder() {
               <div key={program!.slug} className="rounded-xl border border-paper/15 p-5">
                 <h3 className="font-display text-xl uppercase tracking-wide">{program!.title}</h3>
                 <p className="mt-2 text-sm text-paper/65">{program!.summary}</p>
-                <a
-                  href={`/${program!.category}/${program!.slug}`}
+                <Link
+                  href="/#trainingswelten"
                   className="mt-3 inline-flex items-center gap-1 text-sm text-red hover:text-red-dark"
                 >
                   Mehr erfahren <ArrowRight size={14} />
-                </a>
+                </Link>
               </div>
             ))}
           </div>
@@ -141,7 +142,7 @@ export function TrainingFinder() {
             <Button href={whatsappLink(waMessage)} variant="moss">
               <MessageCircle size={16} /> Ergebnis per WhatsApp senden
             </Button>
-            <Button href="/kontakt#probetraining" variant="secondary">
+            <Button href="/#probetraining" variant="secondary">
               Probetraining vereinbaren
             </Button>
             <button

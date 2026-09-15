@@ -70,7 +70,7 @@ export function GoalSelector() {
             {recommended.map((program) => (
               <Link
                 key={program!.slug}
-                href={`/${program!.category}/${program!.slug}`}
+                href="/#trainingswelten"
                 className="rounded-full border border-paper/15 px-4 py-2 text-sm font-medium text-paper hover:border-red hover:text-red"
               >
                 {program!.title}
@@ -78,7 +78,7 @@ export function GoalSelector() {
             ))}
           </div>
           <Link
-            href="/kontakt#probetraining"
+            href="/#probetraining"
             className="mt-6 inline-flex items-center gap-2 font-display text-sm uppercase tracking-wide text-red hover:text-red-dark"
           >
             Probetraining für dieses Ziel vereinbaren <ArrowRight size={16} />

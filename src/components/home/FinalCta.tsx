@@ -20,7 +20,7 @@ export function FinalCta() {
           <span className="text-red">Du musst nur anfangen.</span>
         </h2>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <Button href="/kontakt#probetraining" variant="primary">
+          <Button href="/#probetraining" variant="primary">
             Probetraining vereinbaren <ChevronRight size={16} />
           </Button>
           <Button href={whatsappLink("Hallo! Ich möchte gerne ein Probetraining im Sportpark Pollack vereinbaren.")} variant="secondary">

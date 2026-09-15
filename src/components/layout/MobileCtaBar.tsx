@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Phone, MessageCircle, CalendarCheck } from "lucide-react";
 import type { ContactContent } from "@/lib/content/contact";
 
@@ -24,10 +25,10 @@ export function MobileCtaBar({ contact }: { contact: ContactContent }) {
         <MessageCircle size={18} />
         <span className="text-[11px] font-medium uppercase tracking-wide">WhatsApp</span>
       </a>
-      <a href="/kontakt#probetraining" className="flex flex-col items-center gap-1 py-2.5 text-red">
+      <Link href="/#probetraining" className="flex flex-col items-center gap-1 py-2.5 text-red">
         <CalendarCheck size={18} />
         <span className="text-[11px] font-medium uppercase tracking-wide">Probetraining</span>
-      </a>
+      </Link>
     </div>
   );
 }

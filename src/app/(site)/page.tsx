@@ -3,7 +3,8 @@ import { Imagefilm, type ImagefilmContent } from "@/components/home/Imagefilm";
 import { TrustStats } from "@/components/home/TrustStats";
 import { GoogleReviewsBadge } from "@/components/home/GoogleReviewsBadge";
 import { GoalSelector } from "@/components/home/GoalSelector";
-import { TrainingWorlds } from "@/components/home/TrainingWorlds";
+import { ZielFinderSection } from "@/components/home/ZielFinderSection";
+import { TrainingWorlds, type TrainingWorldWithPrograms } from "@/components/home/TrainingWorlds";
 import { HealthTeaser } from "@/components/home/HealthTeaser";
 import { Expansion2026, type ExpansionContent } from "@/components/home/Expansion2026";
 import { PollackFeature, type OwnerContent } from "@/components/home/PollackFeature";
@@ -19,6 +20,9 @@ import { FinalCta } from "@/components/home/FinalCta";
 import { getSection, sectionField } from "@/lib/content/sections";
 import { resolveMedia, resolveMediaSrc } from "@/lib/content/media";
 import { expansion2026 } from "@/content/expansion";
+import { getProgram, type Program } from "@/content/programs";
+import { mergeProgramWithSection } from "@/lib/content/program-merge";
+import { TRAINING_WORLD_DEFS } from "@/content/training-worlds";
 
 const FALLBACK_HERO: HeroContent = {
   headline: "Stark. Beweglich. Bereit.",
@@ -130,13 +134,28 @@ async function loadOwner(): Promise<OwnerContent | null> {
   };
 }
 
+async function loadTrainingWorlds(): Promise<TrainingWorldWithPrograms[]> {
+  return Promise.all(
+    TRAINING_WORLD_DEFS.map(async (world) => {
+      const programs = await Promise.all(
+        world.programSlugs.map(async (slug) => {
+          const base = getProgram(slug);
+          return base ? mergeProgramWithSection(base) : null;
+        }),
+      );
+      return { ...world, programs: programs.filter((p): p is Program => p !== null) };
+    }),
+  );
+}
+
 export default async function HomePage() {
-  const [hero, imagefilm, trustStats, owner, expansion] = await Promise.all([
+  const [hero, imagefilm, trustStats, owner, expansion, trainingWorlds] = await Promise.all([
     loadHero(),
     loadImagefilm(),
     loadTrustStats(),
     loadOwner(),
     loadExpansion(),
+    loadTrainingWorlds(),
   ]);
 
   return (
@@ -145,8 +164,9 @@ export default async function HomePage() {
       {imagefilm ? <Imagefilm content={imagefilm} /> : null}
       {trustStats.length > 0 ? <TrustStats items={trustStats} /> : null}
       <GoogleReviewsBadge />
+      <ZielFinderSection />
       <GoalSelector />
-      <TrainingWorlds />
+      <TrainingWorlds worlds={trainingWorlds} />
       <HealthTeaser />
       <Expansion2026 content={expansion} />
       {owner ? <PollackFeature content={owner} /> : null}

@@ -104,10 +104,10 @@ export function Hero({ content }: { content: HeroContent }) {
           </h1>
           <p className="mt-6 max-w-md text-base text-paper/80 sm:text-lg">{content.subline}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Button href="/kontakt#probetraining" variant="primary">
+            <Button href="/#probetraining" variant="primary">
               {content.ctaPrimaryLabel} <ChevronRight size={16} />
             </Button>
-            <Button href="/trainingsfinder" variant="secondary">
+            <Button href="/#zielfinder" variant="secondary">
               {content.ctaSecondaryLabel}
             </Button>
           </div>

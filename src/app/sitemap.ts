@@ -1,29 +1,30 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/content/site";
-import { programs } from "@/content/programs";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes = [
-    "",
-    "/training",
-    "/gesundheit",
-    "/kampfkunst",
-    "/regeneration",
-    "/partner-produkte",
-    "/preise",
-    "/ueber-uns",
-    "/kontakt",
-    "/trainingsfinder",
-    "/impressum",
-    "/datenschutz",
+  const staticRoutes = [""];
+
+  const anchorRoutes = [
+    "/#zielfinder",
+    "/#trainingswelten",
+    "/#kraft-performance",
+    "/#ruecken-beweglichkeit",
+    "/#koerperanalyse-fortschritt",
+    "/#kampfkunst-selbstvertrauen",
+    "/#regeneration-balance",
+    "/#gesundheit",
+    "/#ueber-uns",
+    "/#partner",
+    "/#preise",
+    "/#kontakt",
   ];
 
-  const programRoutes = programs.map((p) => `/${p.category}/${p.slug}`);
+  const legalRoutes = ["/impressum", "/datenschutz"];
 
-  return [...staticRoutes, ...programRoutes].map((path) => ({
+  return [...staticRoutes, ...legalRoutes, ...anchorRoutes].map((path) => ({
     url: `${siteConfig.url}${path}`,
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
-    priority: path === "" ? 1 : 0.7,
+    priority: path === "" ? 1 : 0.6,
   }));
 }
