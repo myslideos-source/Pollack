@@ -27,13 +27,13 @@ export function GoalSelector() {
   const recommended = activeGoal.programSlugs.map((s) => getProgram(s)).filter(Boolean);
 
   return (
-    <section className="bg-surface py-16 text-ink sm:py-24">
+    <section className="bg-ink py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-          <h2 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
+          <h2 className="font-display text-4xl font-bold tracking-tight text-paper sm:text-5xl">
             Was möchtest du verändern?
           </h2>
-          <p className="max-w-sm text-sm text-ink/60">Fünf Ziele. Ein stärkeres Du.</p>
+          <p className="max-w-sm text-sm text-paper/60">Fünf Ziele. Ein stärkeres Du.</p>
         </div>
 
         <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
@@ -49,7 +49,7 @@ export function GoalSelector() {
                 className={`group flex flex-col items-start gap-3 rounded-2xl border px-5 py-6 text-left transition-all ${
                   active
                     ? ACCENT_CLASS[goal.accent]
-                    : "border-ink/10 bg-paper text-ink hover:border-ink/25"
+                    : "border-paper/10 bg-anthracite text-paper hover:border-paper/25"
                 }`}
               >
                 <Icon size={28} />
@@ -63,15 +63,15 @@ export function GoalSelector() {
           })}
         </div>
 
-        <div className="mt-10 rounded-2xl border border-ink/10 bg-paper p-6 sm:p-8">
+        <div className="mt-10 rounded-2xl border border-paper/10 bg-anthracite p-6 sm:p-8">
           <PulseLine zone={activeGoal.accent === "health" ? "health" : "performance"} className="mb-4 -mt-2 opacity-70" />
-          <p className="max-w-2xl text-lg text-ink/80">{activeGoal.blurb}</p>
+          <p className="max-w-2xl text-lg text-paper/80">{activeGoal.blurb}</p>
           <div className="mt-6 flex flex-wrap gap-3">
             {recommended.map((program) => (
               <Link
                 key={program!.slug}
                 href={`/${program!.category}/${program!.slug}`}
-                className="rounded-full border border-ink/15 px-4 py-2 text-sm font-medium text-ink hover:border-red hover:text-red"
+                className="rounded-full border border-paper/15 px-4 py-2 text-sm font-medium text-paper hover:border-red hover:text-red"
               >
                 {program!.title}
               </Link>

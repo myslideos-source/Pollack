@@ -33,7 +33,7 @@ export default function GesundheitPage() {
           <ProgramGrid programs={items} />
         </Container>
       </section>
-      <section className="bg-surface py-14 sm:py-20">
+      <section className="bg-ink py-14 sm:py-20">
         <Container>
           <ZielKompass />
         </Container>

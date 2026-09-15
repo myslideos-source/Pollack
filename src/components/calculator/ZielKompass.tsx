@@ -19,8 +19,8 @@ const BLOCKED_MESSAGES: Record<string, string> = {
 };
 
 const inputClass =
-  "w-full rounded-xl border border-ink/15 bg-white px-4 py-3 text-ink placeholder:text-ink/35 focus-visible:border-red";
-const labelClass = "text-sm font-medium text-ink/70";
+  "w-full rounded-xl border border-paper/15 bg-ink px-4 py-3 text-paper placeholder:text-paper/35 focus-visible:border-red";
+const labelClass = "text-sm font-medium text-paper/70";
 
 export function ZielKompass() {
   const [age, setAge] = useState(30);
@@ -58,11 +58,11 @@ export function ZielKompass() {
     : 0;
 
   return (
-    <div id="ziel-kompass" className="scroll-mt-28 rounded-3xl border border-ink/10 bg-paper p-6 text-ink sm:p-10">
+    <div id="ziel-kompass" className="scroll-mt-28 rounded-3xl border border-paper/10 bg-anthracite p-6 text-paper sm:p-10">
       <div className="grid gap-10 lg:grid-cols-2">
         <div>
-          <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">Sportpark Ziel-Kompass</h2>
-          <p className="mt-2 text-sm text-ink/60">
+          <h2 className="font-display text-3xl font-bold tracking-tight text-paper sm:text-4xl">Sportpark Ziel-Kompass</h2>
+          <p className="mt-2 text-sm text-paper/60">
             Eine unverbindliche Schätzung deines Energiebedarfs nach der Mifflin-St-Jeor-Formel – alles
             läuft ausschließlich in deinem Browser, nichts wird gespeichert oder übertragen.
           </p>
@@ -159,7 +159,7 @@ export function ZielKompass() {
                     onClick={() => setGoal(g.id)}
                     aria-pressed={goal === g.id}
                     className={`rounded-xl border px-3 py-2.5 text-sm font-medium transition-colors ${
-                      goal === g.id ? "border-red bg-red/10 text-red" : "border-ink/15 text-ink/70"
+                      goal === g.id ? "border-red bg-red/10 text-red" : "border-paper/15 text-paper/70"
                     }`}
                   >
                     {g.label}
@@ -168,7 +168,7 @@ export function ZielKompass() {
               </div>
             </fieldset>
 
-            <div className="col-span-2 mt-2 flex flex-col gap-2 border-t border-ink/10 pt-4 text-sm text-ink/70">
+            <div className="col-span-2 mt-2 flex flex-col gap-2 border-t border-paper/10 pt-4 text-sm text-paper/70">
               <span className={labelClass}>Bitte gib an, falls zutreffend:</span>
               <label className="flex items-center gap-2">
                 <input type="checkbox" checked={isMinor} onChange={(e) => setIsMinor(e.target.checked)} />
@@ -259,7 +259,7 @@ export function ZielKompass() {
         </div>
       </div>
 
-      <p className="mt-8 border-t border-ink/10 pt-6 text-xs text-ink/50">
+      <p className="mt-8 border-t border-paper/10 pt-6 text-xs text-paper/50">
         Der Rechner liefert eine unverbindliche Schätzung und ersetzt keine medizinische Beratung. Der
         tatsächliche Bedarf kann individuell abweichen.
       </p>

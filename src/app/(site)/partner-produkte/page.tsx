@@ -34,10 +34,10 @@ export default async function PartnerProduktePage() {
         breadcrumbs={[{ label: "Start", href: "/" }, { label: "Partner & Produkte" }]}
       />
 
-      <section className="bg-surface py-14 text-ink sm:py-20">
+      <section className="bg-ink py-14 sm:py-20">
         <Container>
-          <div className="grid gap-10 rounded-3xl border border-ink/10 bg-paper p-8 sm:p-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-16">
-            <div className="flex items-center justify-center rounded-2xl border border-ink/10 bg-ink/5 p-10">
+          <div className="grid gap-10 rounded-3xl border border-paper/10 bg-anthracite p-8 sm:p-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-16">
+            <div className="flex items-center justify-center rounded-2xl bg-paper p-10">
               <Image
                 src="/media/partner/hansefit-logo.webp"
                 alt="Hansefit Logo"
@@ -47,10 +47,10 @@ export default async function PartnerProduktePage() {
               />
             </div>
             <div>
-              <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
+              <h2 className="font-display text-3xl font-bold tracking-tight text-paper sm:text-4xl">
                 {hansefit ? `Mit ${hansefit.name} im Sportpark Pollack trainieren.` : "Hansefit"}
               </h2>
-              <p className="mt-4 max-w-xl text-ink/70">{hansefit?.description}</p>
+              <p className="mt-4 max-w-xl text-paper/70">{hansefit?.description}</p>
               <Button href="/kontakt#anfrage" variant="primary" className="mt-6">
                 {hansefit ? `Mit ${hansefit.name} trainieren` : "Kontakt aufnehmen"} <ArrowRight size={16} />
               </Button>
