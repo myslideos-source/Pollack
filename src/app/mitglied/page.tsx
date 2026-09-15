@@ -141,13 +141,13 @@ export default async function MemberDashboardPage() {
 
         <Link
           href="/mitglied/nachrichten"
-          className="flex items-center justify-between rounded-2xl border border-paper/10 bg-anthracite p-4 hover:border-paper/25"
+          className="flex items-center justify-between gap-3 rounded-2xl border border-paper/10 bg-anthracite p-4 hover:border-paper/25"
         >
-          <span className="flex items-center gap-3">
-            <MessageCircle size={18} className="text-paper/50" />
+          <span className="flex min-w-0 items-center gap-3">
+            <MessageCircle size={18} className="shrink-0 text-paper/50" />
             <span className="min-w-0">
               <span className="block text-sm text-paper">Letzte Nachricht vom Trainer</span>
-              <span className="block truncate text-xs text-paper/50">
+              <span className="line-clamp-2 break-words text-xs text-paper/50">
                 {latestMessage ? latestMessage.body : "Noch keine Nachrichten"}
               </span>
             </span>
