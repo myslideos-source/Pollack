@@ -4,6 +4,7 @@ import { TrustStats } from "@/components/home/TrustStats";
 import { GoogleReviewsBadge } from "@/components/home/GoogleReviewsBadge";
 import { GoalSelector } from "@/components/home/GoalSelector";
 import { ZielFinderSection } from "@/components/home/ZielFinderSection";
+import { Journey30Days } from "@/components/home/Journey30Days";
 import { TrainingWorlds, type TrainingWorldWithPrograms } from "@/components/home/TrainingWorlds";
 import { HealthTeaser } from "@/components/home/HealthTeaser";
 import { Expansion2026, type ExpansionContent } from "@/components/home/Expansion2026";
@@ -166,6 +167,7 @@ export default async function HomePage() {
       <GoogleReviewsBadge />
       <ZielFinderSection />
       <GoalSelector />
+      <Journey30Days />
       <TrainingWorlds worlds={trainingWorlds} />
       <HealthTeaser />
       <Expansion2026 content={expansion} />

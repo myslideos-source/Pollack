@@ -6,6 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const anchorRoutes = [
     "/#zielfinder",
+    "/#erste-30-tage",
     "/#trainingswelten",
     "/#kraft-performance",
     "/#ruecken-beweglichkeit",
