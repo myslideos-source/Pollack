@@ -14,6 +14,137 @@ export type Database = {
   }
   public: {
     Tables: {
+      achievement_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          idempotency_key: string
+          member_id: string
+          occurred_at: string
+          processed_at: string | null
+          reference_id: string | null
+          value: number | null
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          idempotency_key: string
+          member_id: string
+          occurred_at?: string
+          processed_at?: string | null
+          reference_id?: string | null
+          value?: number | null
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          idempotency_key?: string
+          member_id?: string
+          occurred_at?: string
+          processed_at?: string | null
+          reference_id?: string | null
+          value?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "achievement_events_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      achievements: {
+        Row: {
+          category: string
+          created_at: string
+          custom_icon_media_id: string | null
+          description: string
+          icon_key: string
+          id: string
+          is_active: boolean
+          is_manual: boolean
+          is_secret: boolean
+          metric_type: string
+          parent_achievement_id: string | null
+          rule_config: Json
+          share_text: string | null
+          slug: string
+          sort_order: number
+          threshold: number | null
+          tier: string | null
+          title: string
+          updated_at: string
+          valid_from: string | null
+          valid_until: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          custom_icon_media_id?: string | null
+          description: string
+          icon_key: string
+          id?: string
+          is_active?: boolean
+          is_manual?: boolean
+          is_secret?: boolean
+          metric_type: string
+          parent_achievement_id?: string | null
+          rule_config?: Json
+          share_text?: string | null
+          slug: string
+          sort_order?: number
+          threshold?: number | null
+          tier?: string | null
+          title: string
+          updated_at?: string
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          custom_icon_media_id?: string | null
+          description?: string
+          icon_key?: string
+          id?: string
+          is_active?: boolean
+          is_manual?: boolean
+          is_secret?: boolean
+          metric_type?: string
+          parent_achievement_id?: string | null
+          rule_config?: Json
+          share_text?: string | null
+          slug?: string
+          sort_order?: number
+          threshold?: number | null
+          tier?: string | null
+          title?: string
+          updated_at?: string
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "achievements_custom_icon_media_id_fkey"
+            columns: ["custom_icon_media_id"]
+            isOneToOne: false
+            referencedRelation: "media"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "achievements_parent_achievement_id_fkey"
+            columns: ["parent_achievement_id"]
+            isOneToOne: false
+            referencedRelation: "achievements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       appointments: {
         Row: {
           appointment_type: string
@@ -521,6 +652,83 @@ export type Database = {
           {
             foreignKeyName: "media_uploaded_by_fkey"
             columns: ["uploaded_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      member_achievements: {
+        Row: {
+          achievement_id: string
+          awarded_by: string | null
+          created_at: string
+          id: string
+          internal_note: string | null
+          member_id: string
+          progress: number
+          revoke_reason: string | null
+          revoked_at: string | null
+          revoked_by: string | null
+          trainer_message: string | null
+          unlocked_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          achievement_id: string
+          awarded_by?: string | null
+          created_at?: string
+          id?: string
+          internal_note?: string | null
+          member_id: string
+          progress?: number
+          revoke_reason?: string | null
+          revoked_at?: string | null
+          revoked_by?: string | null
+          trainer_message?: string | null
+          unlocked_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          achievement_id?: string
+          awarded_by?: string | null
+          created_at?: string
+          id?: string
+          internal_note?: string | null
+          member_id?: string
+          progress?: number
+          revoke_reason?: string | null
+          revoked_at?: string | null
+          revoked_by?: string | null
+          trainer_message?: string | null
+          unlocked_at?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "member_achievements_achievement_id_fkey"
+            columns: ["achievement_id"]
+            isOneToOne: false
+            referencedRelation: "achievements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "member_achievements_awarded_by_fkey"
+            columns: ["awarded_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "member_achievements_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "member_achievements_revoked_by_fkey"
+            columns: ["revoked_by"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -1477,6 +1685,15 @@ export type Database = {
     Functions: {
       approve_training_plan: { Args: { p_plan_id: string }; Returns: boolean }
       assigned_trainer_of: { Args: { p_member_id: string }; Returns: string }
+      award_manual_achievement: {
+        Args: {
+          p_achievement_slug: string
+          p_internal_note?: string
+          p_member_id: string
+          p_trainer_message?: string
+        }
+        Returns: string
+      }
       current_profile_role: { Args: never; Returns: string }
       generate_draft_plan: {
         Args: { p_member_id: string; p_template_id: string }
@@ -1495,6 +1712,10 @@ export type Database = {
         Args: { p_actor: string; p_section_id: string }
         Returns: boolean
       }
+      revoke_member_achievement: {
+        Args: { p_member_achievement_id: string; p_reason: string }
+        Returns: boolean
+      }
       submit_inquiry: {
         Args: {
           p_area: string
@@ -1509,6 +1730,18 @@ export type Database = {
           p_source: string
         }
         Returns: string
+      }
+      unlock_achievement: {
+        Args: {
+          p_achievement_slug: string
+          p_member_id: string
+          p_progress: number
+          p_unlock?: boolean
+        }
+        Returns: {
+          member_achievement_id: string
+          unlocked_now: boolean
+        }[]
       }
     }
     Enums: {
