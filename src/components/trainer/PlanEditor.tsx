@@ -2,12 +2,59 @@
 
 import { useTransition } from "react";
 import { useState } from "react";
-import { CheckCircle2, AlertCircle } from "lucide-react";
+import Image from "next/image";
+import { CheckCircle2, AlertCircle, ImagePlus } from "lucide-react";
 import type { ActivePlan } from "@/lib/member/data";
-import { updatePlanExerciseAction, swapPlanExerciseAction, approveTrainingPlanAction } from "@/app/trainer/actions";
+import { updatePlanExerciseAction, swapPlanExerciseAction, approveTrainingPlanAction, updatePlanDayCoverAction } from "@/app/trainer/actions";
 import { weekdayLabel } from "@/lib/member/weekday";
+import { MediaPicker } from "@/components/admin/MediaPicker";
 
 const inputClass = "w-full rounded-lg border border-paper/15 bg-ink px-2.5 py-1.5 text-sm text-paper outline-none focus:border-red";
+
+function DayCoverEditor({ memberId, day }: { memberId: string; day: ActivePlan["days"][number] }) {
+  const [open, setOpen] = useState(false);
+  const [mediaId, setMediaId] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+  const [saved, setSaved] = useState(false);
+
+  function save(formData: FormData) {
+    formData.set("id", day.id);
+    if (mediaId) formData.set("coverMediaId", mediaId);
+    startTransition(async () => {
+      await updatePlanDayCoverAction(memberId, formData);
+      setSaved(true);
+    });
+  }
+
+  return (
+    <div className="mb-3 flex items-start gap-3 rounded-xl border border-paper/10 bg-ink p-3">
+      <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-lg border border-paper/10">
+        <Image src={day.coverImageSrc} alt="" fill className="object-cover" style={{ objectPosition: `${day.coverImageFocalX}% ${day.coverImageFocalY}%` }} />
+      </div>
+      <div className="min-w-0 flex-1">
+        {open ? (
+          <form action={save} onChange={() => setSaved(false)} className="flex flex-col gap-2">
+            <MediaPicker value={mediaId} onChange={setMediaId} fileType="image" />
+            <input name="coverAlt" defaultValue={day.hasCustomCover ? day.coverImageAlt : ""} placeholder="Alt-Text (optional)" className={inputClass} />
+            <div className="flex items-center gap-2">
+              <button type="submit" disabled={isPending} className="rounded-full bg-paper/10 px-3 py-1.5 text-xs text-paper hover:bg-paper/20 disabled:opacity-60">
+                {isPending ? "…" : saved ? "Gespeichert" : "Speichern"}
+              </button>
+              <button type="button" onClick={() => setOpen(false)} className="text-xs text-paper/40 hover:text-paper">
+                Fertig
+              </button>
+            </div>
+          </form>
+        ) : (
+          <button type="button" onClick={() => setOpen(true)} className="flex items-center gap-1.5 text-xs text-paper/50 hover:text-paper">
+            <ImagePlus size={13} /> {day.hasCustomCover ? "Titelbild ändern" : "Eigenes Titelbild festlegen"}
+          </button>
+        )}
+        {!open ? <p className="mt-1 text-[11px] text-paper/30">{day.hasCustomCover ? "Eigenes Bild" : "Standardbild für diese Kategorie"}</p> : null}
+      </div>
+    </div>
+  );
+}
 
 function ExerciseRow({
   memberId,
@@ -141,7 +188,10 @@ export function PlanEditor({
           <h3 className="font-display text-sm uppercase tracking-wide text-paper/70">
             {weekdayLabel(day.weekday)} – {day.title}
           </h3>
-          <div className="mt-3 flex flex-col gap-2">
+          <div className="mt-3">
+            <DayCoverEditor memberId={memberId} day={day} />
+          </div>
+          <div className="mt-1 flex flex-col gap-2">
             {day.exercises.map((ex) => (
               <ExerciseRow key={ex.id} memberId={memberId} exercise={ex} exerciseCatalog={exerciseCatalog} />
             ))}

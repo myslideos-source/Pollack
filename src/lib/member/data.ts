@@ -2,6 +2,7 @@ import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import { weekdayLabel, todayWeekday } from "@/lib/member/weekday";
 import { resolveMedia } from "@/lib/content/media";
+import { defaultCoverForTitle } from "@/lib/member/training-cover";
 
 export { weekdayLabel, todayWeekday };
 
@@ -93,6 +94,11 @@ export type PlanDay = {
   title: string;
   sortOrder: number;
   exercises: PlanExercise[];
+  coverImageSrc: string;
+  coverImageAlt: string;
+  coverImageFocalX: number;
+  coverImageFocalY: number;
+  hasCustomCover: boolean;
 };
 
 export type ActivePlan = {
@@ -109,10 +115,24 @@ async function loadPlanTree(planId: string): Promise<PlanDay[]> {
   const supabase = await createClient();
   const { data: days } = await supabase
     .from("training_plan_days")
-    .select("id, weekday, title, sort_order")
+    .select("id, weekday, title, sort_order, cover_media_id, cover_alt")
     .eq("plan_id", planId)
     .order("sort_order");
   if (!days || days.length === 0) return [];
+
+  const coverByDayId = new Map<string, { src: string; alt: string; focalX: number; focalY: number; custom: boolean }>();
+  await Promise.all(
+    days.map(async (day) => {
+      const resolved = day.cover_media_id ? await resolveMedia(day.cover_media_id) : null;
+      const fallback = defaultCoverForTitle(day.title);
+      coverByDayId.set(
+        day.id,
+        resolved
+          ? { src: resolved.src, alt: day.cover_alt ?? fallback.alt, focalX: resolved.focalX, focalY: resolved.focalY, custom: true }
+          : { src: fallback.src, alt: day.cover_alt ?? fallback.alt, focalX: fallback.focalX, focalY: fallback.focalY, custom: false },
+      );
+    }),
+  );
 
   const { data: exercises } = await supabase
     .from("training_plan_exercises")
@@ -146,11 +166,18 @@ async function loadPlanTree(planId: string): Promise<PlanDay[]> {
     }),
   );
 
-  return days.map((day) => ({
+  return days.map((day) => {
+    const cover = coverByDayId.get(day.id)!;
+    return {
     id: day.id,
     weekday: day.weekday,
     title: day.title,
     sortOrder: day.sort_order,
+    coverImageSrc: cover.src,
+    coverImageAlt: cover.alt,
+    coverImageFocalX: cover.focalX,
+    coverImageFocalY: cover.focalY,
+    hasCustomCover: cover.custom,
     exercises: (exercises ?? [])
       .filter((e) => e.plan_day_id === day.id)
       .map((e) => {
@@ -176,7 +203,8 @@ async function loadPlanTree(planId: string): Promise<PlanDay[]> {
           alternativeExerciseName: alt?.name ?? null,
         };
       }),
-  }));
+    };
+  });
 }
 
 export async function loadActivePlan(memberId: string): Promise<ActivePlan | null> {
@@ -443,6 +471,17 @@ export type CoachMessage = {
   createdAt: string;
   readAt: string | null;
 };
+
+export async function loadUnreadMessageCount(memberId: string): Promise<number> {
+  const supabase = await createClient();
+  const { count } = await supabase
+    .from("coach_messages")
+    .select("id", { count: "exact", head: true })
+    .eq("member_id", memberId)
+    .eq("sender_role", "trainer")
+    .is("read_at", null);
+  return count ?? 0;
+}
 
 export async function loadLatestCoachMessage(memberId: string): Promise<CoachMessage | null> {
   const supabase = await createClient();

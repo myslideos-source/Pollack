@@ -120,6 +120,39 @@ export async function updatePlanExerciseAction(memberId: string, formData: FormD
   return {};
 }
 
+const dayCoverSchema = z.object({
+  id: z.string().uuid(),
+  coverMediaId: z.union([z.string().uuid(), z.literal("")]).optional(),
+  coverAlt: z.string().trim().optional(),
+});
+
+/** Trainer sets or clears a training day's cover photo (the image shown in the member's "today"
+ *  hero and the admin "Aktiver Plan der Woche" card) — picked from the media library via
+ *  MediaPicker, same pattern as the achievements custom icon. Clearing it falls back to the
+ *  local category default (see defaultCoverForTitle) rather than leaving the hero without a photo. */
+export async function updatePlanDayCoverAction(memberId: string, formData: FormData): Promise<{ error?: string }> {
+  await requireTrainerOrAdmin();
+  const parsed = dayCoverSchema.safeParse({
+    id: formData.get("id"),
+    coverMediaId: formData.get("coverMediaId") ?? "",
+    coverAlt: formData.get("coverAlt") || undefined,
+  });
+  if (!parsed.success) return { error: "Ungültige Eingabe." };
+  const d = parsed.data;
+
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("training_plan_days")
+    .update({ cover_media_id: d.coverMediaId === "" || d.coverMediaId === undefined ? null : d.coverMediaId, cover_alt: d.coverAlt ?? null })
+    .eq("id", d.id);
+  if (error) return { error: "Titelbild konnte nicht gespeichert werden." };
+
+  revalidatePath(`/trainer/mitglieder/${memberId}`);
+  revalidatePath("/mitglied");
+  revalidatePath("/admin");
+  return {};
+}
+
 const changeExerciseSchema = z.object({ id: z.string().uuid(), exerciseId: z.string().uuid() });
 
 /** Swaps which catalog exercise a plan row points at (e.g. replacing an exercise a member can't do). */

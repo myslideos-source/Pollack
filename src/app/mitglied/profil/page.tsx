@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Download, ShieldCheck, FileText } from "lucide-react";
+import { Download, ShieldCheck, FileText, Trophy, ChevronRight } from "lucide-react";
 import { requireMember } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { loadMemberProfile } from "@/lib/member/data";
+import { signOutSharedAction } from "@/app/actions/member-auth";
 import { ProfileActions } from "./ProfileActions";
 import { BodyMeasurementForm } from "./BodyMeasurementForm";
 
@@ -39,6 +40,17 @@ export default async function ProfilPage() {
     <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-8">
       <h1 className="font-display text-2xl font-bold text-paper sm:text-3xl">Dein Profil</h1>
       <p className="mt-1 text-sm text-paper/60">{profile.email}</p>
+
+      <Link
+        href="/mitglied/erfolge"
+        className="mt-4 flex items-center justify-between gap-3 rounded-2xl border border-paper/10 bg-anthracite p-4 hover:border-paper/25"
+      >
+        <span className="flex items-center gap-3">
+          <Trophy size={18} className="text-red" />
+          <span className="text-sm text-paper">Meine Erfolge</span>
+        </span>
+        <ChevronRight size={16} className="text-paper/30" />
+      </Link>
 
       {member ? (
         <section className="mt-6 rounded-2xl border border-paper/10 bg-anthracite p-5">
@@ -125,6 +137,12 @@ export default async function ProfilPage() {
           <FileText size={14} /> Vollständige Datenschutzerklärung lesen
         </Link>
       </section>
+
+      <form action={signOutSharedAction} className="mt-4">
+        <button type="submit" className="w-full rounded-2xl border border-paper/10 bg-anthracite p-4 text-center text-sm text-paper/70 hover:border-paper/25 hover:text-paper">
+          Abmelden
+        </button>
+      </form>
     </div>
   );
 }

@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import { CheckCircle2, Flame, Dumbbell, Target, Calendar, MessageCircle, ChevronRight } from "lucide-react";
 import { requireMember } from "@/lib/auth";
 import {
   loadMemberProfile,
@@ -11,6 +9,10 @@ import {
   loadLatestCoachMessage,
   todayWeekday,
 } from "@/lib/member/data";
+import { TrainingHeroCard } from "@/components/member/TrainingHeroCard";
+import { WeeklyStatCard } from "@/components/member/WeeklyStatCard";
+import { PremiumCard, EmptyState } from "@/components/sportpark/ui";
+import { SpCalendar, SpChevronRight, SpMessageCircle, SpDumbbell } from "@/components/icons/sportpark";
 
 export const metadata: Metadata = { title: "Start" };
 
@@ -18,10 +20,9 @@ function firstName(fullName: string): string {
   return fullName.trim().split(/\s+/)[0] ?? fullName;
 }
 
-function greeting(): string {
-  const hour = new Date().getHours();
+function greeting(hour: number): string {
   if (hour < 11) return "Guten Morgen";
-  if (hour < 18) return "Hallo";
+  if (hour < 18) return "Guten Tag";
   return "Guten Abend";
 }
 
@@ -39,137 +40,123 @@ export default async function MemberDashboardPage() {
   ]);
 
   const todayDay = activePlan?.days.find((d) => d.weekday === todayWeekday()) ?? null;
+  const weeklyGoal = member.trainingDaysPerWeek ?? activePlan?.days.length ?? 3;
+  const name = firstName(member.fullName);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
-      <h1 className="font-display text-2xl font-bold text-paper sm:text-3xl">
-        {greeting()}, {firstName(member.fullName)}
-      </h1>
-      <p className="mt-1 text-paper/60">Bereit für dein Training?</p>
-
-      {!activePlan ? (
-        pendingPlan ? (
-          <div className="mt-6 rounded-2xl border border-sand/30 bg-sand/10 p-5">
-            <p className="text-sm text-sand">
-              Dein Trainingsplan wartet aktuell auf die Freigabe durch dein Trainerteam. Du bekommst eine
-              Nachricht, sobald er startklar ist.
-            </p>
-          </div>
-        ) : (
-          <div className="mt-6 rounded-2xl border border-paper/10 bg-anthracite p-5">
-            <p className="text-sm text-paper/70">Für dich liegt noch kein Trainingsplan vor.</p>
-            <Link
-              href="/mitglied/onboarding"
-              className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-red hover:text-red-dark"
-            >
-              Erstanalyse starten <ChevronRight size={15} />
-            </Link>
-          </div>
-        )
-      ) : (
-        <div className="mt-6 rounded-2xl border border-paper/10 bg-anthracite p-6">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-moss/30 bg-moss/10 px-3 py-1 text-xs font-medium text-moss">
-            <CheckCircle2 size={13} />
-            Von {member.assignedTrainerName ? firstName(member.assignedTrainerName) : "deinem Trainer"} freigegeben
-          </span>
-
-          {todayDay ? (
-            <>
-              <h2 className="mt-4 font-display text-2xl font-bold text-paper">Heute: {todayDay.title}</h2>
-              <p className="mt-1 text-sm text-paper/60">
-                {member.sessionDurationMin ? `${member.sessionDurationMin} Min. · ` : ""}
-                {todayDay.exercises.length} Übungen
-              </p>
-              <Link
-                href="/mitglied/training"
-                className="mt-5 inline-flex items-center gap-1.5 rounded-full bg-red px-6 py-3 font-display text-sm uppercase tracking-wide text-paper transition-colors hover:bg-red-dark"
-              >
-                Training starten <ChevronRight size={16} />
-              </Link>
-            </>
-          ) : (
-            <>
-              <h2 className="mt-4 font-display text-2xl font-bold text-paper">Heute: Ruhetag</h2>
-              <p className="mt-1 text-sm text-paper/60">Kein Training nach Plan vorgesehen — gönn dir die Erholung.</p>
-              <Link
-                href="/mitglied/trainingsplan"
-                className="mt-5 inline-flex items-center gap-1.5 rounded-full border border-paper/20 px-5 py-2.5 text-sm text-paper hover:border-paper/40"
-              >
-                Wochenplan ansehen <ChevronRight size={15} />
-              </Link>
-            </>
-          )}
+    <div className="sp-scope mx-auto max-w-6xl px-5 py-6 sm:px-6 sm:py-8">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-sp-text-muted">{greeting(new Date().getHours())}</p>
+          <h1 className="sp-headline mt-1 text-[38px] font-extrabold leading-[0.95] text-sp-text sm:text-[42px]">Hallo, {name}</h1>
+          <p className="mt-1.5 text-sm text-sp-text-secondary">Bereit für dein Training?</p>
         </div>
-      )}
-
-      <div className="mt-4 grid grid-cols-3 gap-3">
-        <div className="rounded-2xl border border-paper/10 bg-anthracite p-4 text-center">
-          <Dumbbell size={18} className="mx-auto text-red" />
-          <p className="mt-2 font-display text-xl font-bold text-paper">{stats.sessionsThisWeek}</p>
-          <p className="text-[11px] text-paper/50">Trainings diese Woche</p>
-        </div>
-        <div className="rounded-2xl border border-paper/10 bg-anthracite p-4 text-center">
-          <Target size={18} className="mx-auto text-red" />
-          <p className="mt-2 font-display text-xl font-bold text-paper">{stats.volumeThisWeekKg.toLocaleString("de-DE")} kg</p>
-          <p className="text-[11px] text-paper/50">Bewegtes Gewicht</p>
-        </div>
-        <div className="rounded-2xl border border-paper/10 bg-anthracite p-4 text-center">
-          <Flame size={18} className="mx-auto text-red" />
-          <p className="mt-2 font-display text-xl font-bold text-paper">{stats.streakDays}</p>
-          <p className="text-[11px] text-paper/50">Tage Serie</p>
+        <div className="hidden shrink-0 text-right sm:block">
+          <p className="text-xs font-semibold uppercase leading-tight tracking-[0.16em] text-sp-text-muted">
+            Stärker
+            <br />
+            als gestern
+          </p>
+          <span className="mt-2 ml-auto block h-[2px] w-10 bg-sp-red" />
         </div>
       </div>
 
+      <div className="mt-6">
+        {activePlan && todayDay ? (
+          <TrainingHeroCard
+            trainerFirstName={member.assignedTrainerName ? firstName(member.assignedTrainerName) : null}
+            dayTitle={todayDay.title}
+            durationMin={member.sessionDurationMin}
+            exerciseCount={todayDay.exercises.length}
+            approved={activePlan.status === "active"}
+            imageSrc={todayDay.coverImageSrc}
+            imageAlt={todayDay.coverImageAlt}
+            focalX={todayDay.coverImageFocalX}
+            focalY={todayDay.coverImageFocalY}
+            href="/mitglied/training"
+          />
+        ) : activePlan ? (
+          <PremiumCard className="p-6">
+            <EmptyState
+              icon={SpDumbbell}
+              title="Heute: Ruhetag"
+              description="Kein Training nach Plan vorgesehen — gönn dir die Erholung."
+              action={
+                <a href="/mitglied/trainingsplan" className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-sp-red">
+                  Wochenplan ansehen <SpChevronRight size={15} />
+                </a>
+              }
+            />
+          </PremiumCard>
+        ) : pendingPlan ? (
+          <PremiumCard className="p-6">
+            <EmptyState
+              icon={SpDumbbell}
+              title="Dein Trainingsplan wartet auf Freigabe"
+              description="Du bekommst eine Nachricht, sobald er startklar ist."
+            />
+          </PremiumCard>
+        ) : (
+          <PremiumCard className="p-6">
+            <EmptyState
+              icon={SpDumbbell}
+              title="Für dich liegt noch kein Trainingsplan vor"
+              action={
+                <a href="/mitglied/onboarding" className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-sp-red">
+                  Erstanalyse starten <SpChevronRight size={15} />
+                </a>
+              }
+            />
+          </PremiumCard>
+        )}
+      </div>
+
+      <div className="mt-4">
+        <WeeklyStatCard
+          sessionsThisWeek={stats.sessionsThisWeek}
+          weeklyGoal={weeklyGoal}
+          volumeKg={stats.volumeThisWeekKg}
+          streakDays={stats.streakDays}
+        />
+      </div>
+
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
-        <Link
+        <a
           href="/mitglied/profil"
-          className="flex items-center justify-between rounded-2xl border border-paper/10 bg-anthracite p-4 hover:border-paper/25"
+          className="group flex items-center justify-between gap-3 rounded-sp-lg border border-sp-border bg-sp-surface-1 p-4 shadow-sp-card transition-colors hover:border-sp-border-strong"
         >
           <span className="flex items-center gap-3">
-            <Calendar size={18} className="text-paper/50" />
+            <SpCalendar size={20} strokeWidth={1.8} className="shrink-0 text-sp-text-secondary" />
             <span>
-              <span className="block text-sm text-paper">Nächste Körperanalyse</span>
-              <span className="block text-xs text-paper/50">
+              <span className="block text-sm text-sp-text">Nächste Körperanalyse</span>
+              <span className="block text-xs text-sp-text-muted">
                 {member.nextAnalysisDate
                   ? new Date(member.nextAnalysisDate).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit" })
                   : "Noch nicht geplant"}
               </span>
             </span>
           </span>
-          <ChevronRight size={16} className="text-paper/30" />
-        </Link>
+          <SpChevronRight size={18} strokeWidth={1.8} className="shrink-0 text-sp-text-muted" />
+        </a>
 
-        <Link
+        <a
           href="/mitglied/nachrichten"
-          className="flex items-center justify-between gap-3 rounded-2xl border border-paper/10 bg-anthracite p-4 hover:border-paper/25"
+          className="group flex items-center justify-between gap-3 rounded-sp-lg border border-sp-border bg-sp-surface-1 p-4 shadow-sp-card transition-colors hover:border-sp-border-strong"
         >
           <span className="flex min-w-0 items-center gap-3">
-            <MessageCircle size={18} className="shrink-0 text-paper/50" />
+            <SpMessageCircle size={20} strokeWidth={1.8} className="shrink-0 text-sp-text-secondary" />
             <span className="min-w-0">
-              <span className="block text-sm text-paper">Letzte Nachricht vom Trainer</span>
-              <span className="line-clamp-2 break-words text-xs text-paper/50">
+              <span className="block text-sm text-sp-text">
+                {latestMessage ? `Nachricht von ${firstName(latestMessage.senderName)}` : "Nachricht vom Trainer"}
+              </span>
+              <span className="line-clamp-2 break-words text-xs text-sp-text-muted">
                 {latestMessage ? latestMessage.body : "Noch keine Nachrichten"}
               </span>
             </span>
           </span>
-          <ChevronRight size={16} className="shrink-0 text-paper/30" />
-        </Link>
+          <SpChevronRight size={18} strokeWidth={1.8} className="shrink-0 text-sp-text-muted" />
+        </a>
       </div>
-
-      {stats.planCompletionPct !== null ? (
-        <Link
-          href="/mitglied/fortschritt"
-          className="mt-4 flex items-center justify-between rounded-2xl border border-paper/10 bg-anthracite p-4 hover:border-paper/25"
-        >
-          <div className="min-w-0 flex-1">
-            <p className="text-sm text-paper">Wochenfortschritt</p>
-            <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-paper/10">
-              <div className="h-full rounded-full bg-red" style={{ width: `${stats.planCompletionPct}%` }} />
-            </div>
-          </div>
-          <span className="ml-4 shrink-0 font-display text-sm text-paper">{stats.planCompletionPct}%</span>
-        </Link>
-      ) : null}
     </div>
   );
 }

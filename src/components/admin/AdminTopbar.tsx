@@ -2,19 +2,29 @@
 
 import { useActionState, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search, Eye, UploadCloud, CheckCircle2, ChevronDown, LogOut, Menu } from "lucide-react";
+import { Menu, Eye, UploadCloud, CheckCircle2, ChevronDown } from "lucide-react";
 import type { Profile } from "@/lib/auth";
 import { signOutAction } from "@/app/admin/actions/auth";
 import { publishAllDraftsAction, type PublishActionState } from "@/app/admin/actions/publish";
+import { IconButton, MemberAvatar } from "@/components/sportpark/ui";
+import { SpSearch, SpBell } from "@/components/icons/sportpark";
 
-const ROLE_LABEL: Record<string, string> = { admin: "Inhaber", redakteur: "Redakteur" };
+const ROLE_LABEL: Record<string, string> = { admin: "Administrator", redakteur: "Redakteur" };
+
+function greeting(hour: number): string {
+  if (hour < 11) return "Guten Morgen";
+  if (hour < 18) return "Guten Tag";
+  return "Guten Abend";
+}
 
 export function AdminTopbar({
   profile,
+  inboxCount,
   draftCount,
   onMenuClick,
 }: {
   profile: Profile;
+  inboxCount: number;
   draftCount: number;
   onMenuClick: () => void;
 }) {
@@ -26,6 +36,7 @@ export function AdminTopbar({
   );
 
   const pendingCount = publishState.status === "success" ? 0 : draftCount;
+  const firstName = profile.full_name.split(" ")[0];
 
   function handleSearch(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -36,31 +47,39 @@ export function AdminTopbar({
   }
 
   return (
-    <header className="flex h-16 shrink-0 items-center gap-2 border-b border-paper/10 bg-ink px-3 sm:gap-3 sm:px-6">
+    <header className="flex min-h-16 shrink-0 items-center gap-3 border-b border-sp-border bg-sp-bg px-4 py-2.5 sm:gap-4 sm:px-6">
       <button
         type="button"
         onClick={onMenuClick}
-        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-paper lg:hidden"
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-sp-text lg:hidden"
         aria-label="Menü öffnen"
       >
         <Menu size={20} />
       </button>
 
-      <form onSubmit={handleSearch} className="hidden min-w-0 flex-1 max-w-md md:block">
+      <div className="hidden min-w-0 lg:block">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sp-text-muted">Sportpark Verwaltung</p>
+        <h1 className="sp-headline text-2xl font-bold leading-tight text-sp-text">
+          {greeting(new Date().getHours())}, {firstName}
+        </h1>
+        <p className="text-xs text-sp-text-secondary">Hier hast du heute alles im Blick.</p>
+      </div>
+
+      <form onSubmit={handleSearch} className="hidden min-w-0 max-w-xs flex-1 md:block lg:ml-auto">
         <label className="relative block">
-          <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-paper/40" />
+          <SpSearch size={16} strokeWidth={1.8} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-sp-text-muted" />
           <input
             name="q"
             type="search"
-            placeholder="Suchen … (z. B. Mitglieder, Anfragen, Inhalte)"
-            className="w-full rounded-full border border-paper/15 bg-anthracite py-2 pl-9 pr-4 text-sm text-paper placeholder:text-paper/40 outline-none focus:border-red"
+            placeholder="Suchen …"
+            className="w-full rounded-full border border-sp-border bg-sp-surface-1 py-2.5 pl-10 pr-4 text-sm text-sp-text placeholder:text-sp-text-muted outline-none focus:border-sp-red"
           />
         </label>
       </form>
 
-      <div className="ml-auto flex shrink-0 items-center gap-1.5 sm:gap-3">
-        <div className="hidden items-center gap-2 text-xs text-paper/50 lg:flex">
-          <span className={`h-1.5 w-1.5 rounded-full ${pendingCount > 0 ? "bg-sand" : "bg-moss"}`} aria-hidden="true" />
+      <div className="ml-auto flex shrink-0 items-center gap-1.5 sm:gap-2.5">
+        <div className="hidden items-center gap-2 text-xs text-sp-text-muted xl:flex">
+          <span className={`h-1.5 w-1.5 rounded-full ${pendingCount > 0 ? "bg-sand" : "bg-sp-green"}`} aria-hidden="true" />
           {pendingCount > 0 ? `${pendingCount} Entwurf/Entwürfe ungespeichert` : "Alle Änderungen gespeichert"}
         </div>
 
@@ -68,55 +87,51 @@ export function AdminTopbar({
           href="/admin/preview-enable"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1.5 rounded-full border border-paper/20 px-2.5 py-2 text-sm text-paper transition-colors hover:border-paper/40 sm:px-4"
+          className="hidden items-center gap-1.5 rounded-full border border-sp-border px-3 py-2 text-xs text-sp-text-secondary transition-colors hover:border-sp-border-strong hover:text-sp-text sm:flex"
         >
-          <Eye size={15} /> <span className="hidden sm:inline">Vorschau</span>
+          <Eye size={14} /> Vorschau
         </a>
 
         <form action={publishAction}>
           <button
             type="submit"
             disabled={publishPending || pendingCount === 0}
-            title={pendingCount === 0 ? "Keine Entwürfe zum Veröffentlichen — zuerst einen Bereich bearbeiten und als Entwurf speichern." : undefined}
-            className="flex items-center gap-1.5 rounded-full bg-red px-2.5 py-2 text-sm font-medium text-paper transition-colors hover:bg-red-dark disabled:opacity-40 sm:px-4"
+            title={pendingCount === 0 ? "Keine Entwürfe zum Veröffentlichen." : undefined}
+            className="hidden items-center gap-1.5 rounded-full bg-sp-red px-3 py-2 text-xs font-medium text-sp-text transition-colors hover:bg-sp-red-light disabled:opacity-40 sm:flex"
           >
             {publishState.status === "success" ? (
               <>
-                <CheckCircle2 size={15} /> <span className="hidden sm:inline">Veröffentlicht</span>
+                <CheckCircle2 size={14} /> Veröffentlicht
               </>
             ) : (
               <>
-                <UploadCloud size={15} />{" "}
-                <span className="hidden sm:inline">{publishPending ? "Wird veröffentlicht …" : "Veröffentlichen"}</span>
+                <UploadCloud size={14} /> {publishPending ? "…" : "Veröffentlichen"}
               </>
             )}
           </button>
         </form>
 
+        <IconButton icon={SpBell} label="Benachrichtigungen" badge={inboxCount > 0} />
+
         <div className="relative">
           <button
             type="button"
             onClick={() => setMenuOpen((v) => !v)}
-            className="flex items-center gap-2 rounded-full py-1 pl-1 pr-1 text-sm text-paper hover:bg-paper/5 sm:pr-2"
+            className="flex items-center gap-2 rounded-full py-1 pl-1 pr-1 hover:bg-white/[0.04] sm:pr-2"
             aria-expanded={menuOpen}
           >
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red/20 font-display text-sm text-red">
-              {profile.full_name.slice(0, 1).toUpperCase()}
-            </span>
+            <MemberAvatar fullName={profile.full_name} size={34} />
             <span className="hidden text-left lg:block">
-              <span className="block leading-tight">{profile.full_name}</span>
-              <span className="block text-xs leading-tight text-paper/50">{ROLE_LABEL[profile.role] ?? profile.role}</span>
+              <span className="block text-sm leading-tight text-sp-text">{profile.full_name}</span>
+              <span className="block text-xs leading-tight text-sp-text-muted">{ROLE_LABEL[profile.role] ?? profile.role}</span>
             </span>
-            <ChevronDown size={14} className="hidden text-paper/40 sm:block" />
+            <ChevronDown size={14} className="hidden text-sp-text-muted sm:block" />
           </button>
           {menuOpen ? (
-            <div className="absolute right-0 top-12 z-10 w-48 rounded-xl border border-paper/10 bg-anthracite p-1.5 shadow-xl">
+            <div className="absolute right-0 top-12 z-10 w-48 rounded-sp-sm border border-sp-border bg-sp-surface-1 p-1.5 shadow-sp-card">
               <form action={signOutAction}>
-                <button
-                  type="submit"
-                  className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-paper/80 hover:bg-paper/5 hover:text-paper"
-                >
-                  <LogOut size={15} /> Abmelden
+                <button type="submit" className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-sp-text-secondary hover:bg-white/[0.04] hover:text-sp-text">
+                  Abmelden
                 </button>
               </form>
             </div>

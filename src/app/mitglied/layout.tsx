@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { requireMember } from "@/lib/auth";
 import { MemberShell } from "@/components/member/MemberShell";
+import { loadUnreadMessageCount } from "@/lib/member/data";
 
 export const metadata: Metadata = {
   title: { template: "%s · Mitgliederportal", default: "Mitgliederportal" },
@@ -10,11 +11,16 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0b0b0c",
+  themeColor: "#070908",
   viewportFit: "cover",
 };
 
 export default async function MemberLayout({ children }: { children: React.ReactNode }) {
   const profile = await requireMember();
-  return <MemberShell fullName={profile.full_name}>{children}</MemberShell>;
+  const unreadCount = await loadUnreadMessageCount(profile.id);
+  return (
+    <MemberShell fullName={profile.full_name} unreadCount={unreadCount}>
+      {children}
+    </MemberShell>
+  );
 }

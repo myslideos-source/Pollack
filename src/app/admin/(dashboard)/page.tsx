@@ -1,275 +1,304 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Mail, CalendarCheck, PhoneCall, CheckCircle2, BarChart3, CalendarClock, ArrowRight, Users, ClipboardCheck, Dumbbell, MessageCircle } from "lucide-react";
 import { requireStaff } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { inquiryAreaLabels } from "@/lib/validation/inquiry";
-import { inquiryStatusLabels, type InquiryStatus } from "@/lib/inquiry-labels";
+import { resolveMedia } from "@/lib/content/media";
+import { defaultCoverForTitle } from "@/lib/member/training-cover";
+import { todayWeekday } from "@/lib/member/weekday";
+import { StatCard, PremiumCard, StatusBadge, MemberAvatar, EmptyState, PrimaryButton } from "@/components/sportpark/ui";
+import { TrainingHeroCard } from "@/components/member/TrainingHeroCard";
+import {
+  SpUsers,
+  SpMessageCircle,
+  SpDumbbell,
+  SpCalendar,
+  SpArrowRight,
+  SpPlus,
+  SpActivity,
+  SpClock,
+} from "@/components/icons/sportpark";
 
-export const metadata: Metadata = { title: "Dashboard" };
+export const metadata: Metadata = { title: "Übersicht" };
 
-function greeting(hour: number): string {
-  if (hour < 11) return "Guten Morgen";
-  if (hour < 18) return "Guten Tag";
-  return "Guten Abend";
-}
+const APPOINTMENT_TYPE_LABEL: Record<string, string> = {
+  probetraining: "Probetraining",
+  beratung: "Beratung",
+  rueckruf: "Rückruf",
+  sonstiges: "Termin",
+};
 
 export default async function AdminDashboardPage() {
-  const profile = await requireStaff();
+  await requireStaff();
   const supabase = await createClient();
+
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);
-  const weekStart = new Date();
-  weekStart.setDate(weekStart.getDate() - 7);
+  const todayEnd = new Date(todayStart);
+  todayEnd.setDate(todayEnd.getDate() + 1);
+  const monthStart = new Date();
+  monthStart.setDate(1);
+  monthStart.setHours(0, 0, 0, 0);
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
   const [
-    { count: newTotal },
-    { count: newToday },
-    { count: trialUpcoming },
-    { count: trialThisWeek },
-    { count: callbacksOpen },
-    { count: callbacksOverdue },
-    { count: doneTotal },
-    { count: draftCount },
-    { data: recentInquiries },
-    { data: upcomingAppointments },
-    { data: recentSections },
-    { data: weeklyVisitors },
     { count: activeMembers },
+    { count: newMembersThisMonth },
+    { count: openInquiries },
+    { count: newInquiries },
     { count: activePlans },
-    { count: pendingPlans },
-    { count: trainingsToday },
-    { count: newMessages },
+    { count: plansUpdatedRecently },
+    { data: appointmentsToday },
+    { data: recentInquiries },
+    { data: recentLogs },
+    { data: topActivePlan },
   ] = await Promise.all([
-    supabase.from("inquiries").select("id", { count: "exact", head: true }).eq("status", "neu"),
-    supabase
-      .from("inquiries")
-      .select("id", { count: "exact", head: true })
-      .eq("status", "neu")
-      .gte("created_at", todayStart.toISOString()),
-    supabase
-      .from("appointments")
-      .select("id", { count: "exact", head: true })
-      .eq("appointment_type", "probetraining")
-      .in("status", ["geplant", "bestaetigt"]),
-    supabase
-      .from("appointments")
-      .select("id", { count: "exact", head: true })
-      .eq("appointment_type", "probetraining")
-      .in("status", ["geplant", "bestaetigt"])
-      .gte("starts_at", weekStart.toISOString()),
-    supabase.from("inquiries").select("id", { count: "exact", head: true }).eq("status", "rueckruf_geplant"),
-    supabase
-      .from("inquiries")
-      .select("id", { count: "exact", head: true })
-      .eq("status", "rueckruf_geplant")
-      .lt("callback_date", new Date().toISOString()),
-    supabase.from("inquiries").select("id", { count: "exact", head: true }).eq("status", "erledigt"),
-    supabase.from("website_drafts").select("id", { count: "exact", head: true }),
-    supabase
-      .from("inquiries")
-      .select("id, first_name, last_name, area, source, status, created_at")
-      .order("created_at", { ascending: false })
-      .limit(6),
-    supabase
-      .from("appointments")
-      .select("id, title, starts_at, appointment_type, status")
-      .gte("starts_at", new Date().toISOString())
-      .order("starts_at", { ascending: true })
-      .limit(5),
-    supabase
-      .from("website_sections")
-      .select("id, title, page, updated_at")
-      .order("updated_at", { ascending: false })
-      .limit(5),
-    supabase.rpc("get_weekly_visitor_count"),
     supabase.from("profiles").select("id", { count: "exact", head: true }).eq("role", "mitglied"),
+    supabase.from("profiles").select("id", { count: "exact", head: true }).eq("role", "mitglied").gte("created_at", monthStart.toISOString()),
+    supabase.from("inquiries").select("id", { count: "exact", head: true }).in("status", ["neu", "rueckruf_geplant"]),
+    supabase.from("inquiries").select("id", { count: "exact", head: true }).eq("status", "neu"),
     supabase.from("training_plans").select("id", { count: "exact", head: true }).eq("status", "active"),
-    supabase.from("training_plans").select("id", { count: "exact", head: true }).eq("status", "pending_review"),
-    supabase.from("workout_sessions").select("id", { count: "exact", head: true }).gte("started_at", todayStart.toISOString()),
-    supabase.from("coach_messages").select("id", { count: "exact", head: true }).eq("sender_role", "member").is("read_at", null),
+    supabase
+      .from("training_plans")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "active")
+      .gte("updated_at", sevenDaysAgo.toISOString()),
+    supabase
+      .from("appointments")
+      .select("id, title, appointment_type, starts_at, status")
+      .gte("starts_at", todayStart.toISOString())
+      .lt("starts_at", todayEnd.toISOString())
+      .neq("status", "abgesagt")
+      .order("starts_at", { ascending: true }),
+    supabase
+      .from("inquiries")
+      .select("id, first_name, last_name, area, status, created_at")
+      .in("status", ["neu", "rueckruf_geplant"])
+      .order("created_at", { ascending: false })
+      .limit(3),
+    supabase
+      .from("audit_logs")
+      .select("id, summary, created_at, actor:profiles(full_name)")
+      .order("created_at", { ascending: false })
+      .limit(5),
+    supabase
+      .from("training_plans")
+      .select("id, member_id, updated_at, member:profiles!training_plans_member_id_fkey(full_name)")
+      .eq("status", "active")
+      .order("updated_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
   ]);
 
-  const firstName = profile.full_name.split(" ")[0];
+  let planOfWeek: {
+    memberName: string;
+    memberId: string;
+    dayTitle: string;
+    exerciseCount: number;
+    durationMin: number | null;
+    coverSrc: string;
+    coverAlt: string;
+    focalX: number;
+    focalY: number;
+  } | null = null;
 
-  const stats = [
-    { label: "Neue Anfragen", value: newTotal ?? 0, hint: `+${newToday ?? 0} heute`, icon: Mail, href: "/admin/anfragen?status=neu" },
-    {
-      label: "Probetrainings",
-      value: trialUpcoming ?? 0,
-      hint: `+${trialThisWeek ?? 0} diese Woche`,
-      icon: CalendarCheck,
-      href: "/admin/termine",
-    },
-    {
-      label: "Offene Rückrufe",
-      value: callbacksOpen ?? 0,
-      hint: (callbacksOverdue ?? 0) > 0 ? `${callbacksOverdue} überfällig` : "alles im Zeitplan",
-      icon: PhoneCall,
-      href: "/admin/anfragen?status=rueckruf_geplant",
-    },
-    { label: "Erledigte Anfragen", value: doneTotal ?? 0, hint: "gesamt", icon: CheckCircle2, href: "/admin/anfragen?status=erledigt" },
-  ];
+  if (topActivePlan) {
+    const [{ data: day }, { data: memberProfile }] = await Promise.all([
+      supabase
+        .from("training_plan_days")
+        .select("id, title, cover_media_id, cover_alt")
+        .eq("plan_id", topActivePlan.id)
+        .eq("weekday", todayWeekday())
+        .maybeSingle(),
+      supabase.from("member_profiles").select("session_duration_min").eq("id", topActivePlan.member_id).maybeSingle(),
+    ]);
+
+    if (day) {
+      const { count: exerciseCount } = await supabase
+        .from("training_plan_exercises")
+        .select("id", { count: "exact", head: true })
+        .eq("plan_day_id", day.id);
+
+      const resolved = day.cover_media_id ? await resolveMedia(day.cover_media_id) : null;
+      const fallback = defaultCoverForTitle(day.title);
+      planOfWeek = {
+        memberName: (topActivePlan.member as unknown as { full_name: string } | null)?.full_name ?? "Mitglied",
+        memberId: topActivePlan.member_id,
+        dayTitle: day.title,
+        exerciseCount: exerciseCount ?? 0,
+        durationMin: memberProfile?.session_duration_min ?? null,
+        coverSrc: resolved?.src ?? fallback.src,
+        coverAlt: day.cover_alt ?? fallback.alt,
+        focalX: resolved?.focalX ?? fallback.focalX,
+        focalY: resolved?.focalY ?? fallback.focalY,
+      };
+    }
+  }
 
   return (
-    <div className="mx-auto max-w-7xl">
-      <div className="flex flex-col gap-1">
-        <h1 className="font-display text-3xl font-semibold text-paper">
-          {greeting(new Date().getHours())}, {firstName}
-        </h1>
-        <p className="text-sm text-paper/60">Sportpark Verwaltung</p>
+    <div className="sp-scope mx-auto max-w-7xl">
+      <h1 className="sr-only">Übersicht</h1>
+
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <StatCard
+          icon={SpUsers}
+          label="Aktive Mitglieder"
+          value={activeMembers ?? 0}
+          hint={`+${newMembersThisMonth ?? 0} diesen Monat`}
+          hintTone="positive"
+          href="/trainer/mitglieder"
+        />
+        <StatCard
+          icon={SpMessageCircle}
+          label="Neue Anfragen"
+          value={openInquiries ?? 0}
+          hint={`${newInquiries ?? 0} offen`}
+          hintTone="attention"
+          href="/admin/anfragen"
+        />
+        <StatCard
+          icon={SpDumbbell}
+          label="Trainingspläne"
+          value={activePlans ?? 0}
+          hint={`${plansUpdatedRecently ?? 0} aktualisiert`}
+          href="/trainer"
+        />
+        <StatCard
+          icon={SpCalendar}
+          label="Termine heute"
+          value={(appointmentsToday ?? []).length}
+          hint={
+            appointmentsToday && appointmentsToday.length > 0
+              ? `Nächster um ${new Date(appointmentsToday[0].starts_at).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}`
+              : "Keine Termine"
+          }
+          href="/admin/termine"
+        />
       </div>
 
-      <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        {stats.map((s) => (
-          <Link
-            key={s.label}
-            href={s.href}
-            className="rounded-2xl border border-paper/10 bg-anthracite p-5 transition-colors hover:border-paper/25"
-          >
-            <div className="flex items-center justify-between">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-red/15 text-red">
-                <s.icon size={20} />
-              </span>
-              <ArrowRight size={16} className="text-paper/30" />
-            </div>
-            <p className="mt-4 text-sm text-paper/60">{s.label}</p>
-            <p className="font-display text-3xl font-semibold text-paper">{s.value}</p>
-            <p className="mt-1 text-xs text-paper/40">{s.hint}</p>
-          </Link>
-        ))}
-
-        <div className="rounded-2xl border border-paper/10 bg-anthracite p-5 lg:col-span-4">
-          <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-red/15 text-red">
-              <BarChart3 size={20} />
-            </span>
-            <div>
-              <p className="text-sm text-paper/60">Besucher diese Woche</p>
-              <p className="font-display text-2xl font-semibold text-paper">{weeklyVisitors ?? 0}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <h2 className="mt-8 font-display text-lg text-paper">Mitgliederportal</h2>
-      <div className="mt-3 grid grid-cols-2 gap-4 lg:grid-cols-5">
-        <Link href="/trainer/mitglieder" className="rounded-2xl border border-paper/10 bg-anthracite p-4 transition-colors hover:border-paper/25">
-          <Users size={18} className="text-red" />
-          <p className="mt-3 font-display text-2xl font-semibold text-paper">{activeMembers ?? 0}</p>
-          <p className="text-xs text-paper/50">Aktive Mitglieder</p>
-        </Link>
-        <Link href="/trainer/mitglieder" className="rounded-2xl border border-paper/10 bg-anthracite p-4 transition-colors hover:border-paper/25">
-          <Dumbbell size={18} className="text-red" />
-          <p className="mt-3 font-display text-2xl font-semibold text-paper">{activePlans ?? 0}</p>
-          <p className="text-xs text-paper/50">Aktive Trainingspläne</p>
-        </Link>
-        <Link href="/trainer" className="rounded-2xl border border-paper/10 bg-anthracite p-4 transition-colors hover:border-paper/25">
-          <ClipboardCheck size={18} className="text-red" />
-          <p className="mt-3 font-display text-2xl font-semibold text-paper">{pendingPlans ?? 0}</p>
-          <p className="text-xs text-paper/50">Offene Freigaben</p>
-        </Link>
-        <div className="rounded-2xl border border-paper/10 bg-anthracite p-4">
-          <CalendarCheck size={18} className="text-red" />
-          <p className="mt-3 font-display text-2xl font-semibold text-paper">{trainingsToday ?? 0}</p>
-          <p className="text-xs text-paper/50">Trainings heute</p>
-        </div>
-        <Link href="/trainer" className="rounded-2xl border border-paper/10 bg-anthracite p-4 transition-colors hover:border-paper/25">
-          <MessageCircle size={18} className="text-red" />
-          <p className="mt-3 font-display text-2xl font-semibold text-paper">{newMessages ?? 0}</p>
-          <p className="text-xs text-paper/50">Neue Nachrichten</p>
-        </Link>
-      </div>
-
-      {(draftCount ?? 0) > 0 ? (
-        <div className="mt-6 flex items-center gap-3 rounded-2xl border border-sand/30 bg-sand/10 px-5 py-4 text-sm text-sand">
-          <CalendarClock size={18} />
-          {draftCount} unveröffentlichte Änderung{(draftCount ?? 0) === 1 ? "" : "en"} — über &bdquo;Veröffentlichen&ldquo;
-          oben rechts live schalten.
-        </div>
-      ) : null}
-
-      <div className="mt-8 grid gap-6 lg:grid-cols-2">
-        <div className="rounded-2xl border border-paper/10 bg-anthracite p-6">
+      <div className="mt-6 grid gap-5 lg:grid-cols-2">
+        <PremiumCard className="p-5">
           <div className="flex items-center justify-between">
-            <h2 className="font-display text-lg text-paper">Neueste Anfragen</h2>
-            <Link href="/admin/anfragen" className="text-xs text-red hover:text-red-dark">
-              Alle ansehen
-            </Link>
+            <div>
+              <h2 className="sp-headline text-xl font-bold text-sp-text">Neue Anfragen</h2>
+              <p className="text-xs text-sp-text-muted">Noch nicht bearbeitet</p>
+            </div>
+            <StatusBadge tone="attention">{newInquiries ?? 0} offen</StatusBadge>
           </div>
-          <ul className="mt-4 divide-y divide-paper/5">
-            {recentInquiries && recentInquiries.length > 0 ? (
-              recentInquiries.map((i) => (
-                <li key={i.id}>
-                  <Link href={`/admin/anfragen?open=${i.id}`} className="flex items-center justify-between gap-3 py-3 hover:bg-paper/[0.03]">
-                    <div>
-                      <p className="text-sm text-paper">
+
+          {recentInquiries && recentInquiries.length > 0 ? (
+            <ul className="mt-4 divide-y divide-sp-border">
+              {recentInquiries.map((i) => (
+                <li key={i.id} className="flex items-center justify-between gap-3 py-3">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <MemberAvatar fullName={`${i.first_name} ${i.last_name}`} size={34} />
+                    <div className="min-w-0">
+                      <p className="truncate text-sm text-sp-text">
                         {i.first_name} {i.last_name}
                       </p>
-                      <p className="text-xs text-paper/50">
-                        {inquiryAreaLabels[i.area as keyof typeof inquiryAreaLabels] ?? i.area} ·{" "}
-                        {new Date(i.created_at).toLocaleDateString("de-DE")}
+                      <p className="truncate text-xs text-sp-text-muted">
+                        {i.area} · {new Date(i.created_at).toLocaleString("de-DE", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}
                       </p>
                     </div>
-                    <span className="rounded-full border border-paper/15 px-2.5 py-1 text-xs text-paper/70">
-                      {inquiryStatusLabels[i.status as InquiryStatus] ?? i.status}
-                    </span>
+                  </div>
+                  <Link
+                    href={`/admin/anfragen?open=${i.id}`}
+                    className="shrink-0 rounded-full border border-sp-border px-3 py-1.5 text-xs text-sp-text-secondary hover:border-sp-border-strong hover:text-sp-text"
+                  >
+                    Öffnen
                   </Link>
                 </li>
-              ))
-            ) : (
-              <li className="py-6 text-center text-sm text-paper/40">Noch keine Anfragen eingegangen.</li>
-            )}
-          </ul>
-        </div>
-
-        <div className="rounded-2xl border border-paper/10 bg-anthracite p-6">
-          <div className="flex items-center justify-between">
-            <h2 className="font-display text-lg text-paper">Anstehende Termine</h2>
-            <Link href="/admin/termine" className="text-xs text-red hover:text-red-dark">
-              Alle ansehen
-            </Link>
-          </div>
-          <ul className="mt-4 divide-y divide-paper/5">
-            {upcomingAppointments && upcomingAppointments.length > 0 ? (
-              upcomingAppointments.map((a) => (
-                <li key={a.id} className="flex items-center justify-between gap-3 py-3">
-                  <div>
-                    <p className="text-sm text-paper">{a.title}</p>
-                    <p className="text-xs text-paper/50">
-                      {new Date(a.starts_at).toLocaleString("de-DE", { dateStyle: "medium", timeStyle: "short" })}
-                    </p>
-                  </div>
-                  <span className="rounded-full border border-paper/15 px-2.5 py-1 text-xs text-paper/70">{a.status}</span>
-                </li>
-              ))
-            ) : (
-              <li className="py-6 text-center text-sm text-paper/40">Keine anstehenden Termine.</li>
-            )}
-          </ul>
-        </div>
-      </div>
-
-      <div className="mt-6 rounded-2xl border border-paper/10 bg-anthracite p-6">
-        <h2 className="font-display text-lg text-paper">Zuletzt bearbeitete Inhalte</h2>
-        <ul className="mt-4 divide-y divide-paper/5">
-          {recentSections && recentSections.length > 0 ? (
-            recentSections.map((s) => (
-              <li key={s.id}>
-                <Link href={`/admin/website?section=${s.id}`} className="flex items-center justify-between gap-3 py-3 hover:bg-paper/[0.03]">
-                  <div>
-                    <p className="text-sm text-paper">{s.title}</p>
-                    <p className="text-xs text-paper/50">{s.page}</p>
-                  </div>
-                  <span className="text-xs text-paper/40">{new Date(s.updated_at).toLocaleDateString("de-DE")}</span>
-                </Link>
-              </li>
-            ))
+              ))}
+            </ul>
           ) : (
-            <li className="py-6 text-center text-sm text-paper/40">Noch keine Inhalte bearbeitet.</li>
+            <div className="py-6">
+              <EmptyState icon={SpMessageCircle} title="Keine offenen Anfragen" />
+            </div>
           )}
-        </ul>
+
+          <Link href="/admin/anfragen" className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-sp-red hover:text-sp-red-light">
+            Alle Anfragen ansehen <SpArrowRight size={14} />
+          </Link>
+        </PremiumCard>
+
+        <PremiumCard className="p-5">
+          <div className="flex items-center justify-between">
+            <h2 className="sp-headline text-xl font-bold text-sp-text">Heutige Termine</h2>
+            <PrimaryButton href="/admin/termine" icon={SpPlus} className="!h-9 !px-3.5 !text-[11px]">
+              Termin hinzufügen
+            </PrimaryButton>
+          </div>
+
+          {appointmentsToday && appointmentsToday.length > 0 ? (
+            <ol className="relative mt-5 ml-1 space-y-5 border-l-2 border-sp-red/40 pl-5">
+              {appointmentsToday.map((a) => (
+                <li key={a.id} className="relative">
+                  <span className="absolute -left-[26px] top-1 h-2.5 w-2.5 rounded-full bg-sp-red" aria-hidden="true" />
+                  <p className="text-sm font-medium text-sp-text">
+                    {new Date(a.starts_at).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}{" "}
+                    <span className="font-normal text-sp-text-secondary">{a.title || APPOINTMENT_TYPE_LABEL[a.appointment_type]}</span>
+                  </p>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <div className="py-6">
+              <EmptyState icon={SpClock} title="Keine Termine heute" />
+            </div>
+          )}
+        </PremiumCard>
       </div>
+
+      <div className="mt-5">
+        <h2 className="sp-headline text-xl font-bold text-sp-text">Aktiver Plan der Woche</h2>
+        <div className="mt-3">
+          {planOfWeek ? (
+            <Link href={`/trainer/mitglieder/${planOfWeek.memberId}`} className="block">
+              <TrainingHeroCard
+                trainerFirstName={null}
+                dayTitle={planOfWeek.dayTitle}
+                durationMin={planOfWeek.durationMin}
+                exerciseCount={planOfWeek.exerciseCount}
+                approved
+                imageSrc={planOfWeek.coverSrc}
+                imageAlt={planOfWeek.coverAlt}
+                focalX={planOfWeek.focalX}
+                focalY={planOfWeek.focalY}
+                href={`/trainer/mitglieder/${planOfWeek.memberId}`}
+              />
+            </Link>
+          ) : (
+            <PremiumCard className="p-6">
+              <EmptyState icon={SpDumbbell} title="Noch kein aktiver Trainingsplan" />
+            </PremiumCard>
+          )}
+        </div>
+      </div>
+
+      <PremiumCard className="mt-5 p-5">
+        <h2 className="sp-headline text-xl font-bold text-sp-text">Letzte Aktivitäten</h2>
+        {recentLogs && recentLogs.length > 0 ? (
+          <ul className="mt-4 divide-y divide-sp-border">
+            {recentLogs.map((log) => (
+              <li key={log.id} className="flex items-start justify-between gap-4 py-3">
+                <div className="flex min-w-0 items-start gap-3">
+                  <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sp-surface-2 text-sp-text-secondary">
+                    <SpActivity size={15} strokeWidth={1.8} />
+                  </span>
+                  <p className="text-sm text-sp-text-secondary">{log.summary}</p>
+                </div>
+                <p className="shrink-0 text-xs text-sp-text-muted">
+                  {new Date(log.created_at).toLocaleString("de-DE", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}
+                </p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="py-6">
+            <EmptyState icon={SpActivity} title="Noch keine Aktivitäten" />
+          </div>
+        )}
+      </PremiumCard>
     </div>
   );
 }

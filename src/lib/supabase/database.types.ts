@@ -1279,6 +1279,8 @@ export type Database = {
       }
       training_plan_days: {
         Row: {
+          cover_alt: string | null
+          cover_media_id: string | null
           id: string
           plan_id: string
           sort_order: number
@@ -1286,6 +1288,8 @@ export type Database = {
           weekday: string
         }
         Insert: {
+          cover_alt?: string | null
+          cover_media_id?: string | null
           id?: string
           plan_id: string
           sort_order?: number
@@ -1293,6 +1297,8 @@ export type Database = {
           weekday: string
         }
         Update: {
+          cover_alt?: string | null
+          cover_media_id?: string | null
           id?: string
           plan_id?: string
           sort_order?: number
@@ -1300,6 +1306,13 @@ export type Database = {
           weekday?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "training_plan_days_cover_media_id_fkey"
+            columns: ["cover_media_id"]
+            isOneToOne: false
+            referencedRelation: "media"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "training_plan_days_plan_id_fkey"
             columns: ["plan_id"]

@@ -33,3 +33,27 @@ export const poppinsBody = localFont({
   variable: "--font-body",
   display: "swap",
 });
+
+/**
+ * Sportpark member + admin portal type system (self-hosted, same no-CDN-request rationale as
+ * Poppins above). Manrope is a single variable-weight file (Google serves it that way for
+ * modern browsers); Barlow Condensed ships as four static weights for the sporty headlines.
+ * Scoped to the /mitglied and /admin route groups via the `.variable` class on their shells —
+ * the public marketing site keeps Poppins untouched.
+ */
+export const manrope = localFont({
+  src: [{ path: "../fonts/Manrope-Variable.woff2", weight: "400 800", style: "normal" }],
+  variable: "--font-ui",
+  display: "swap",
+});
+
+export const barlowCondensed = localFont({
+  src: [
+    { path: "../fonts/BarlowCondensed-600.woff2", weight: "600", style: "normal" },
+    { path: "../fonts/BarlowCondensed-700.woff2", weight: "700", style: "normal" },
+    { path: "../fonts/BarlowCondensed-800.woff2", weight: "800", style: "normal" },
+    { path: "../fonts/BarlowCondensed-900.woff2", weight: "900", style: "normal" },
+  ],
+  variable: "--font-headline",
+  display: "swap",
+});

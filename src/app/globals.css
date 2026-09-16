@@ -19,6 +19,44 @@
 
   --background: var(--color-ink);
   --foreground: var(--color-paper);
+
+  /* =======================================================================================
+   * Sportpark design tokens — member + admin portal ("boutique fitness app" redesign).
+   * Scoped for use anywhere (values are just custom properties), but in practice only the
+   * /mitglied and /admin route trees opt into the --font-ui/--font-headline type system; the
+   * public marketing site keeps its existing --color- and --font-display/--font-body tokens.
+   * ======================================================================================= */
+  --sp-bg: #070908;
+  --sp-bg-soft: #0a0c0b;
+  --sp-sidebar: #090b0a;
+  --sp-surface-1: #101312;
+  --sp-surface-2: #141716;
+  --sp-surface-3: #181b1a;
+
+  --sp-text: #f7f5f2;
+  --sp-text-secondary: #aaa7a3;
+  --sp-text-muted: #747774;
+
+  --sp-red: #f43a35;
+  --sp-red-light: #ff4b45;
+  --sp-red-dark: #a82421;
+  --sp-red-soft: rgba(244, 58, 53, 0.12);
+  --sp-red-glow: rgba(244, 58, 53, 0.2);
+
+  --sp-green: #8ea66a;
+  --sp-green-soft: rgba(142, 166, 106, 0.12);
+
+  --sp-border: rgba(255, 255, 255, 0.1);
+  --sp-border-strong: rgba(255, 255, 255, 0.15);
+  --sp-red-border: rgba(244, 58, 53, 0.55);
+
+  --sp-radius-sm: 14px;
+  --sp-radius-md: 20px;
+  --sp-radius-lg: 26px;
+  --sp-radius-xl: 30px;
+
+  --sp-shadow-card: 0 18px 45px rgba(0, 0, 0, 0.34);
+  --sp-shadow-red: 0 0 34px rgba(244, 58, 53, 0.14);
 }
 
 @theme inline {
@@ -37,10 +75,72 @@
 
   --font-display: var(--font-display);
   --font-body: var(--font-body);
+  --font-ui: var(--font-ui);
+  --font-headline: var(--font-headline);
+
+  --color-sp-bg: var(--sp-bg);
+  --color-sp-bg-soft: var(--sp-bg-soft);
+  --color-sp-sidebar: var(--sp-sidebar);
+  --color-sp-surface-1: var(--sp-surface-1);
+  --color-sp-surface-2: var(--sp-surface-2);
+  --color-sp-surface-3: var(--sp-surface-3);
+  --color-sp-text: var(--sp-text);
+  --color-sp-text-secondary: var(--sp-text-secondary);
+  --color-sp-text-muted: var(--sp-text-muted);
+  --color-sp-red: var(--sp-red);
+  --color-sp-red-light: var(--sp-red-light);
+  --color-sp-red-dark: var(--sp-red-dark);
+  --color-sp-red-soft: var(--sp-red-soft);
+  --color-sp-red-glow: var(--sp-red-glow);
+  --color-sp-green: var(--sp-green);
+  --color-sp-green-soft: var(--sp-green-soft);
+  --color-sp-border: var(--sp-border);
+  --color-sp-border-strong: var(--sp-border-strong);
+  --color-sp-red-border: var(--sp-red-border);
+
+  --radius-sp-sm: var(--sp-radius-sm);
+  --radius-sp-md: var(--sp-radius-md);
+  --radius-sp-lg: var(--sp-radius-lg);
+  --radius-sp-xl: var(--sp-radius-xl);
+
+  --shadow-sp-card: var(--sp-shadow-card);
+  --shadow-sp-red: var(--sp-shadow-red);
 
   --animate-pulse-draw: pulse-draw 3.6s ease-in-out infinite;
   --animate-fade-up: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-marquee: marquee 85s linear infinite;
+  --animate-sp-ring: sp-ring 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-sp-hero-zoom: sp-hero-zoom 12s ease-out both;
+}
+
+@keyframes sp-ring {
+  from {
+    stroke-dashoffset: var(--sp-ring-circumference, 251);
+  }
+  to {
+    stroke-dashoffset: var(--sp-ring-offset, 0);
+  }
+}
+
+@keyframes sp-hero-zoom {
+  from {
+    transform: scale(1.02);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* Shared type scope for /mitglied and /admin: Manrope for UI text, Barlow Condensed for the
+ * sporty training-style headlines (tabular numerals throughout so KPI/stat digits never jitter
+ * or wrap mid-value). */
+.sp-scope {
+  font-family: var(--font-ui), ui-sans-serif, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.sp-headline {
+  font-family: var(--font-headline), var(--font-ui), ui-sans-serif, system-ui, sans-serif;
 }
 
 @keyframes pulse-draw {

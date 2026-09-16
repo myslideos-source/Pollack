@@ -1,10 +1,21 @@
 import type { Metadata } from "next";
-import { CheckCircle2, XCircle } from "lucide-react";
+import Link from "next/link";
+import { CheckCircle2, XCircle, CalendarClock, Tag, Clock, Users, Trophy, UserCog, History, ChevronRight } from "lucide-react";
 import { requireAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { SettingsForm } from "./SettingsForm";
 
 export const metadata: Metadata = { title: "Einstellungen" };
+
+const MORE_LINKS = [
+  { href: "/admin/termine", label: "Termine", icon: CalendarClock },
+  { href: "/admin/angebote", label: "Angebote & Preise", icon: Tag },
+  { href: "/admin/oeffnungszeiten", label: "Öffnungszeiten", icon: Clock },
+  { href: "/admin/team", label: "Team", icon: Users },
+  { href: "/admin/erfolge", label: "Erfolge", icon: Trophy },
+  { href: "/admin/benutzer", label: "Benutzer", icon: UserCog },
+  { href: "/admin/verlauf", label: "Änderungsverlauf", icon: History },
+];
 
 export default async function EinstellungenPage() {
   await requireAdmin();
@@ -37,6 +48,28 @@ export default async function EinstellungenPage() {
             </>
           )}
         </p>
+      </div>
+
+      <div>
+        <h2 className="font-display text-lg text-paper">Weitere Bereiche</h2>
+        <p className="mt-1 text-sm text-paper/60">
+          Nicht Teil der Hauptnavigation, aber weiterhin voll verfügbar.
+        </p>
+        <div className="mt-3 grid gap-2 sm:grid-cols-2">
+          {MORE_LINKS.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className="flex items-center justify-between gap-2 rounded-xl border border-paper/10 bg-anthracite px-4 py-3 text-sm text-paper/80 hover:border-paper/25 hover:text-paper"
+            >
+              <span className="flex items-center gap-2.5">
+                <l.icon size={16} className="text-red" />
+                {l.label}
+              </span>
+              <ChevronRight size={15} className="text-paper/30" />
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );
