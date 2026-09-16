@@ -11,37 +11,76 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-/** One shared login for every role (Mitglied, Trainer, Admin/Redakteur) — signInSharedAction
- *  looks up the signed-in profile's role and sends each to its own area. Already signed in?
- *  Skip the form and go straight there. */
+/**
+ * One shared login for every role (Mitglied, Trainer, Admin/Redakteur) — signInSharedAction
+ * looks up the signed-in profile's role and sends each to its own area. Already signed in?
+ * Skip the form and go straight there.
+ *
+ * Visual redesign only (per the supplied gym-login mockup) — the auth flow itself lives
+ * entirely in LoginForm/member-auth actions, untouched here.
+ */
 export default async function LoginPage() {
   const profile = await getCurrentProfile();
   if (profile) redirect(roleHomePath(profile.role));
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-ink px-4 py-12">
-      <div className="w-full max-w-md">
-        <div className="mb-8 flex flex-col items-center gap-3 text-center">
+    <div className="relative min-h-[100svh] overflow-hidden bg-[#050606]">
+      {/* Full-bleed background: portrait photo below 900px, real 16:9 desktop photo from 900px up. */}
+      <div
+        className="absolute inset-0 bg-cover bg-[position:center_top] min-[900px]:hidden"
+        style={{ backgroundImage: "url(/assets/login/gym-login-bg.png)" }}
+        aria-hidden="true"
+      />
+      <div
+        className="absolute inset-0 hidden bg-cover bg-[position:center_center] min-[900px]:block"
+        style={{ backgroundImage: "url(/assets/login/gym-login-bg-desktop.png)" }}
+        aria-hidden="true"
+      />
+      <div className="absolute inset-0 bg-black/40" aria-hidden="true" />
+      <div
+        className="absolute inset-0"
+        style={{ background: "linear-gradient(180deg, rgba(0,0,0,.10) 0%, rgba(0,0,0,.20) 50%, rgba(0,0,0,.72) 100%)" }}
+        aria-hidden="true"
+      />
+
+      <div
+        className="relative z-10 mx-auto flex min-h-[100svh] w-[calc(100%-32px)] max-w-[760px] flex-col items-center justify-center gap-8 py-10 lg:w-[min(92vw,1440px)] lg:max-w-none lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(440px,0.95fr)] lg:items-center lg:gap-x-[clamp(56px,7vw,128px)] lg:gap-y-0 lg:py-12"
+        style={{
+          paddingTop: "max(env(safe-area-inset-top), 24px)",
+          paddingBottom: "max(env(safe-area-inset-bottom), 24px)",
+        }}
+      >
+        <div className="flex animate-login-logo-in flex-col items-center text-center motion-reduce:animate-none lg:items-start lg:text-left">
           <Image
             src="/logo/sportpark-pollack-logo-white.webp"
             alt="Sportpark Pollack"
-            width={220}
-            height={76}
+            width={1868}
+            height={647}
             priority
-            className="h-14 w-auto"
+            className="h-auto w-[min(82vw,520px)] drop-shadow-[0_8px_30px_rgba(0,0,0,.45)] lg:w-[min(100%,680px)]"
           />
-          <p className="font-display text-xs uppercase tracking-[0.3em] text-paper/50">
-            Anmelden
-          </p>
+          <div className="mt-7 flex items-center gap-3">
+            <span className="h-px w-[34px] bg-white/25" aria-hidden="true" />
+            <span className="text-[13px] font-medium uppercase tracking-[0.38em] text-white/58">Member Login</span>
+            <span className="h-px w-[34px] bg-white/25" aria-hidden="true" />
+          </div>
+          <p className="mt-3 hidden text-lg text-white/70 lg:block">Dein Training. Dein Fortschritt. Dein Sportpark.</p>
         </div>
-        <Suspense>
-          <LoginForm />
-        </Suspense>
-        <div className="mt-6 flex justify-center gap-4 text-xs text-paper/40">
-          <Link href="/impressum" className="hover:text-paper/70">
+
+        <div className="w-full lg:flex lg:justify-center">
+          <div className="w-full lg:max-w-[560px]">
+            <Suspense>
+              <LoginForm />
+            </Suspense>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 text-[13px] text-white/40 lg:fixed lg:inset-x-0 lg:bottom-8 lg:justify-center">
+          <Link href="/impressum" className="rounded transition-colors hover:text-white/70 focus-visible:text-white/70">
             Impressum
           </Link>
-          <Link href="/datenschutz" className="hover:text-paper/70">
+          <span className="h-3 w-px bg-[#ef3d36]/70" aria-hidden="true" />
+          <Link href="/datenschutz" className="rounded transition-colors hover:text-white/70 focus-visible:text-white/70">
             Datenschutz
           </Link>
         </div>

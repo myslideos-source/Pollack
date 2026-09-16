@@ -111,6 +111,8 @@
   --animate-marquee: marquee 85s linear infinite;
   --animate-sp-ring: sp-ring 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-sp-hero-zoom: sp-hero-zoom 12s ease-out both;
+  --animate-login-logo-in: login-logo-in 350ms ease-out both;
+  --animate-login-card-in: login-card-in 450ms ease-out 80ms both;
 }
 
 @keyframes sp-ring {
@@ -128,6 +130,28 @@
   }
   to {
     transform: scale(1);
+  }
+}
+
+@keyframes login-logo-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes login-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
