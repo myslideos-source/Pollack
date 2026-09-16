@@ -44,7 +44,7 @@ export default async function LoginPage() {
       />
 
       <div
-        className="relative z-10 mx-auto flex min-h-[100svh] w-[calc(100%-32px)] max-w-[760px] flex-col items-center justify-center gap-8 py-10 lg:w-[min(92vw,1440px)] lg:max-w-none lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(440px,0.95fr)] lg:items-center lg:gap-x-[clamp(56px,7vw,128px)] lg:gap-y-0 lg:py-12"
+        className="relative z-10 mx-auto flex min-h-[100svh] w-[calc(100%-32px)] max-w-[420px] flex-col items-center justify-center gap-5 py-8 lg:w-[min(92vw,1200px)] lg:max-w-none lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(380px,0.95fr)] lg:items-center lg:gap-x-[clamp(40px,5vw,90px)] lg:gap-y-0 lg:py-12"
         style={{
           paddingTop: "max(env(safe-area-inset-top), 24px)",
           paddingBottom: "max(env(safe-area-inset-bottom), 24px)",
@@ -57,18 +57,18 @@ export default async function LoginPage() {
             width={1868}
             height={647}
             priority
-            className="h-auto w-[min(82vw,520px)] drop-shadow-[0_8px_30px_rgba(0,0,0,.45)] lg:w-[min(100%,680px)]"
+            className="h-auto w-[min(56vw,240px)] drop-shadow-[0_8px_30px_rgba(0,0,0,.45)] lg:w-[min(100%,400px)]"
           />
-          <div className="mt-7 flex items-center gap-3">
-            <span className="h-px w-[34px] bg-white/25" aria-hidden="true" />
-            <span className="text-[13px] font-medium uppercase tracking-[0.38em] text-white/58">Member Login</span>
-            <span className="h-px w-[34px] bg-white/25" aria-hidden="true" />
+          <div className="mt-4 flex items-center gap-2.5">
+            <span className="h-px w-[24px] bg-white/25" aria-hidden="true" />
+            <span className="text-[11px] font-medium uppercase tracking-[0.32em] text-white/58">Member Login</span>
+            <span className="h-px w-[24px] bg-white/25" aria-hidden="true" />
           </div>
-          <p className="mt-3 hidden text-lg text-white/70 lg:block">Dein Training. Dein Fortschritt. Dein Sportpark.</p>
+          <p className="mt-2 hidden text-[15px] text-white/70 lg:block">Dein Training. Dein Fortschritt. Dein Sportpark.</p>
         </div>
 
         <div className="w-full lg:flex lg:justify-center">
-          <div className="w-full lg:max-w-[560px]">
+          <div className="w-full lg:max-w-[400px]">
             <Suspense>
               <LoginForm />
             </Suspense>
