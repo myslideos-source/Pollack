@@ -4,10 +4,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { X, ChevronRight, MessageCircle, SkipForward, Dumbbell, Plus, Award } from "lucide-react";
+import { X, ChevronRight, MessageCircle, SkipForward, Dumbbell, Plus } from "lucide-react";
 import type { PlanDay } from "@/lib/member/data";
 import { finishWorkoutAction, type FinishWorkoutInput } from "@/app/mitglied/actions";
 import type { UnlockedAchievement } from "@/lib/achievements/engine";
+import { AchievementUnlockOverlay } from "@/components/achievements/AchievementUnlockOverlay";
 
 type LoggedSet = {
   planExerciseId: string;
@@ -56,6 +57,7 @@ export function ActiveWorkout({
   const [saveError, setSaveError] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [achievements, setAchievements] = useState<UnlockedAchievement[]>([]);
+  const [unlockOverlayDismissed, setUnlockOverlayDismissed] = useState(false);
 
   const exercise = day.exercises[exerciseIndex] ?? null;
   const draftKey = `sportpark-mitglied-workout-draft-${day.id}`;
@@ -193,31 +195,16 @@ export function ActiveWorkout({
         <h1 className="mt-5 font-display text-2xl font-bold text-paper">Training gespeichert</h1>
         <p className="mt-2 text-paper/60">Starke Leistung — weiter so!</p>
 
-        {achievements.length > 0 ? (
-          <div className="mt-6 flex w-full flex-col gap-2.5">
-            {achievements.map((a) => (
-              <div
-                key={a.slug}
-                className="flex items-center gap-3 rounded-2xl border border-red/25 bg-red/10 p-4 text-left"
-              >
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red/20 text-red">
-                  <Award size={20} />
-                </span>
-                <span className="min-w-0">
-                  <span className="block font-display text-sm text-paper">{a.title}</span>
-                  <span className="block text-xs text-paper/60">{a.description}</span>
-                </span>
-              </div>
-            ))}
-          </div>
-        ) : null}
-
         <Link
           href="/mitglied"
           className="mt-6 rounded-full bg-red px-6 py-3 font-display text-sm uppercase tracking-wide text-paper hover:bg-red-dark"
         >
           Zurück zum Start
         </Link>
+
+        {achievements.length > 0 && !unlockOverlayDismissed ? (
+          <AchievementUnlockOverlay achievements={achievements} onClose={() => setUnlockOverlayDismissed(true)} />
+        ) : null}
       </div>
     );
   }

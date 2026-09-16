@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, ClipboardList, Dumbbell, TrendingUp, User, Bell, LogOut } from "lucide-react";
+import { Home, ClipboardList, Dumbbell, TrendingUp, Trophy, User, Bell, LogOut } from "lucide-react";
 import { signOutSharedAction } from "@/app/actions/member-auth";
 import { OfflineBanner } from "@/components/member/OfflineBanner";
 
@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { href: "/mitglied/trainingsplan", label: "Plan", icon: ClipboardList },
   { href: "/mitglied/training", label: "Training", icon: Dumbbell },
   { href: "/mitglied/fortschritt", label: "Fortschritt", icon: TrendingUp },
+  { href: "/mitglied/erfolge", label: "Erfolge", icon: Trophy },
   { href: "/mitglied/profil", label: "Profil", icon: User },
 ];
 
@@ -87,7 +88,7 @@ export function MemberShell({ fullName, children }: { fullName: string; children
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         aria-label="Portal-Navigation (mobil)"
       >
-        <div className="mx-auto grid max-w-md grid-cols-5">
+        <div className="mx-auto grid max-w-md grid-cols-6">
           {NAV_ITEMS.map((item) => {
             const active = item.href === "/mitglied" ? pathname === "/mitglied" : pathname.startsWith(item.href);
             const Icon = item.icon;

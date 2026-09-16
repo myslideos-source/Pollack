@@ -26,6 +26,7 @@ import {
   Star,
   Trophy,
   Heart,
+  HelpCircle,
 } from "lucide-react";
 
 export type AchievementIconComponent = React.ComponentType<{
@@ -70,6 +71,9 @@ export const ACHIEVEMENT_ICONS: Record<string, AchievementIconComponent> = {
   belt_star: Star,
   laurel_one: Trophy,
   link_symbol: Heart,
+  /** Not a real catalog icon_key — used for a still-secret achievement's masked card, so the
+   *  glyph itself never hints at what the achievement is before it's earned. */
+  secret_mystery: HelpCircle,
 };
 
 export const DEFAULT_ACHIEVEMENT_ICON: AchievementIconComponent = Award;
