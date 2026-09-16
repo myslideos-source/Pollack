@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { X } from "lucide-react";
 import { AchievementIcon } from "./AchievementIcon";
 import { CATEGORY_LABELS, TIER_LABELS } from "./category-labels";
+import { ShareCardButton } from "./ShareCardButton";
 import type { AchievementCard as AchievementCardData } from "@/lib/achievements/data";
 
 export function AchievementDetail({ achievement, onClose }: { achievement: AchievementCardData; onClose: () => void }) {
@@ -74,6 +75,19 @@ export function AchievementDetail({ achievement, onClose }: { achievement: Achie
             <span className="font-medium text-red">Nachricht vom Trainer: </span>
             {achievement.trainerMessage}
           </div>
+        ) : null}
+
+        {achievement.unlockedAt && !achievement.isSecret ? (
+          <ShareCardButton
+            achievement={{
+              title: achievement.title,
+              description: achievement.description,
+              iconKey: achievement.iconKey,
+              customIconSrc: achievement.customIconSrc,
+              tier: achievement.tier,
+              unlockedAt: achievement.unlockedAt,
+            }}
+          />
         ) : null}
       </div>
     </div>

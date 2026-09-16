@@ -5,8 +5,10 @@ import { ArrowLeft } from "lucide-react";
 import { requireTrainerOrAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { loadMemberProfile, loadActivePlan, loadPendingPlan } from "@/lib/member/data";
+import { loadMemberAchievements } from "@/lib/achievements/data";
 import { PlanEditor } from "@/components/trainer/PlanEditor";
 import { MessageThread } from "@/components/member/MessageThread";
+import { AwardAchievement } from "@/components/trainer/AwardAchievement";
 import { ChangeRequestList } from "./ChangeRequestList";
 import { TrainerAssignmentForm } from "./TrainerAssignmentForm";
 import { sendTrainerMessageAction } from "@/app/mitglied/actions";
@@ -23,7 +25,7 @@ export default async function MemberDetailPage({ params }: { params: Promise<{ i
   if (!member) notFound();
 
   const supabase = await createClient();
-  const [activePlan, pendingPlan, { data: exerciseCatalog }, { data: measurements }, { data: changeRequests }, { data: messagesRaw }, { data: trainers }] =
+  const [activePlan, pendingPlan, { data: exerciseCatalog }, { data: measurements }, { data: changeRequests }, { data: messagesRaw }, { data: trainers }, achievementsOverview, { data: manualAchievementRows }] =
     await Promise.all([
       loadActivePlan(id),
       loadPendingPlan(id),
@@ -32,7 +34,16 @@ export default async function MemberDetailPage({ params }: { params: Promise<{ i
       supabase.from("plan_change_requests").select("id, message, status, created_at").eq("member_id", id).order("created_at", { ascending: false }),
       supabase.from("coach_messages").select("id, sender_id, sender_role, body, created_at").eq("member_id", id).order("created_at", { ascending: true }),
       profile.role === "admin" ? supabase.from("profiles").select("id, full_name").eq("role", "trainer") : Promise.resolve({ data: [] }),
+      loadMemberAchievements(id),
+      supabase.from("achievements").select("slug, title, category, icon_key").eq("is_manual", true).eq("is_active", true).order("sort_order"),
     ]);
+
+  const manualAchievements = (manualAchievementRows ?? []).map((a) => ({
+    slug: a.slug,
+    title: a.title,
+    category: a.category,
+    iconKey: a.icon_key,
+  }));
 
   const messages = (messagesRaw ?? []).map((m) => ({
     id: m.id,
@@ -119,6 +130,13 @@ export default async function MemberDetailPage({ params }: { params: Promise<{ i
             ))
           )}
         </ul>
+      </section>
+
+      <section className="mt-8">
+        <h2 className="font-display text-lg text-paper">
+          Erfolge <span className="text-sm font-normal text-paper/40">({achievementsOverview.unlockedCount} von {achievementsOverview.totalCount})</span>
+        </h2>
+        <AwardAchievement memberId={id} manualAchievements={manualAchievements} memberAchievements={achievementsOverview.achievements} />
       </section>
 
       <section className="mt-8">

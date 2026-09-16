@@ -1,6 +1,7 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import { resolveMedia } from "@/lib/content/media";
+import { computeCurrentTier, computeLastUnlocked, computeNextUp } from "@/lib/achievements/overview";
 
 export type AchievementTier = "bronze" | "silber" | "gold" | "platin";
 
@@ -32,8 +33,6 @@ export type AchievementsOverview = {
   lastUnlocked: AchievementCard | null;
   nextUp: AchievementCard | null;
 };
-
-const TIER_RANK: Record<AchievementTier, number> = { bronze: 1, silber: 2, gold: 3, platin: 4 };
 
 const SECRET_TITLE = "Geheimer Erfolg";
 const SECRET_DESCRIPTION = "Diese Auszeichnung bleibt ein Geheimnis, bis du sie erreichst.";
@@ -99,25 +98,14 @@ export async function loadMemberAchievements(memberId: string): Promise<Achievem
     };
   });
 
-  const unlocked = achievements.filter((a) => a.unlockedAt);
-  const locked = achievements.filter((a) => !a.unlockedAt);
-
-  let currentTier: AchievementTier | null = null;
-  for (const a of unlocked) {
-    if (a.tier && (!currentTier || TIER_RANK[a.tier] > TIER_RANK[currentTier])) currentTier = a.tier;
-  }
-
-  const lastUnlocked = [...unlocked].sort((a, b) => new Date(b.unlockedAt!).getTime() - new Date(a.unlockedAt!).getTime())[0] ?? null;
-
-  const nextCandidates = locked.filter((a) => !a.isSecret && !a.isManual && a.threshold != null && a.threshold > 0);
-  const nextUp = [...nextCandidates].sort((a, b) => b.progress / b.threshold! - a.progress / a.threshold!)[0] ?? null;
+  const unlockedCount = achievements.filter((a) => a.unlockedAt).length;
 
   return {
     achievements,
-    unlockedCount: unlocked.length,
+    unlockedCount,
     totalCount: achievements.length,
-    currentTier,
-    lastUnlocked,
-    nextUp,
+    currentTier: computeCurrentTier(achievements),
+    lastUnlocked: computeLastUnlocked(achievements),
+    nextUp: computeNextUp(achievements),
   };
 }

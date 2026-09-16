@@ -19,6 +19,7 @@ import {
   X,
   Dumbbell,
   ClipboardList,
+  Trophy,
 } from "lucide-react";
 import type { Profile } from "@/lib/auth";
 
@@ -55,6 +56,7 @@ export function AdminSidebar({
     { href: "/admin/team", label: "Team", icon: Users },
     { href: "/trainer", label: "Mitgliederportal", icon: Dumbbell },
     { href: "/admin/uebungen", label: "Übungen", icon: ClipboardList },
+    { href: "/admin/erfolge", label: "Erfolge", icon: Trophy, adminOnly: true },
     { href: "/admin/einstellungen", label: "Einstellungen", icon: Settings, adminOnly: true },
     { href: "/admin/benutzer", label: "Benutzer", icon: UserCog, adminOnly: true },
     { href: "/admin/verlauf", label: "Änderungsverlauf", icon: History },

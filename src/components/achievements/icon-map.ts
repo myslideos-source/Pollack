@@ -34,6 +34,7 @@ export type AchievementIconComponent = React.ComponentType<{
   strokeWidth?: number;
   className?: string;
   style?: React.CSSProperties;
+  color?: string;
 }>;
 
 /**
