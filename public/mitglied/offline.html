@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Offline – Sportpark Pollack</title>
+    <style>
+      html, body { height: 100%; margin: 0; }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100dvh;
+        background: #050606;
+        color: #f7f7f5;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        text-align: center;
+        padding: 24px;
+        padding-top: max(env(safe-area-inset-top), 24px);
+        padding-bottom: max(env(safe-area-inset-bottom), 24px);
+      }
+      .card { max-width: 360px; }
+      h1 { font-size: 20px; font-weight: 600; margin: 0 0 8px; }
+      p { font-size: 14px; color: rgba(255, 255, 255, 0.62); margin: 0 0 20px; line-height: 1.5; }
+      button {
+        appearance: none;
+        border: none;
+        border-radius: 999px;
+        padding: 12px 24px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #fff;
+        background: linear-gradient(90deg, #ff433b 0%, #ef332f 52%, #c9161d 100%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>Du bist offline</h1>
+      <p>
+        Dein Mitgliederbereich ist ohne Internetverbindung nicht erreichbar. Sobald du wieder
+        online bist, kannst du dich erneut verbinden.
+      </p>
+      <button type="button" onclick="location.reload()">Erneut versuchen</button>
+    </div>
+  </body>
+</html>

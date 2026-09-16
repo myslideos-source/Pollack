@@ -167,6 +167,14 @@
   font-family: var(--font-headline), var(--font-ui), ui-sans-serif, system-ui, sans-serif;
 }
 
+/* Set on <html> once the member portal detects it's running installed (display-mode: standalone
+ * or iOS's navigator.standalone) — see InstallPromptProvider. Keeps the installed app from
+ * rubber-banding into a white overscroll flash at the top/bottom, the one bit of "browser chrome"
+ * feel that safe-area padding alone doesn't fix. */
+.is-standalone {
+  overscroll-behavior-y: contain;
+}
+
 @keyframes pulse-draw {
   0% {
     stroke-dashoffset: 240;

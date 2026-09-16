@@ -7,6 +7,7 @@ import { loadMemberProfile } from "@/lib/member/data";
 import { signOutSharedAction } from "@/app/actions/member-auth";
 import { ProfileActions } from "./ProfileActions";
 import { BodyMeasurementForm } from "./BodyMeasurementForm";
+import { InstallAppMenuItem } from "@/components/member/InstallAppMenuItem";
 
 export const metadata: Metadata = { title: "Profil" };
 
@@ -51,6 +52,10 @@ export default async function ProfilPage() {
         </span>
         <ChevronRight size={16} className="text-paper/30" />
       </Link>
+
+      <div className="mt-3">
+        <InstallAppMenuItem />
+      </div>
 
       {member ? (
         <section className="mt-6 rounded-2xl border border-paper/10 bg-anthracite p-5">
