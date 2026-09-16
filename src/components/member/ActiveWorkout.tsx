@@ -6,7 +6,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { X, ChevronRight, MessageCircle, SkipForward, Dumbbell, Plus, Award } from "lucide-react";
 import type { PlanDay } from "@/lib/member/data";
-import { finishWorkoutAction, type FinishWorkoutInput, type Achievement } from "@/app/mitglied/actions";
+import { finishWorkoutAction, type FinishWorkoutInput } from "@/app/mitglied/actions";
+import type { UnlockedAchievement } from "@/lib/achievements/engine";
 
 type LoggedSet = {
   planExerciseId: string;
@@ -54,7 +55,7 @@ export function ActiveWorkout({
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const [achievements, setAchievements] = useState<UnlockedAchievement[]>([]);
 
   const exercise = day.exercises[exerciseIndex] ?? null;
   const draftKey = `sportpark-mitglied-workout-draft-${day.id}`;
@@ -196,7 +197,7 @@ export function ActiveWorkout({
           <div className="mt-6 flex w-full flex-col gap-2.5">
             {achievements.map((a) => (
               <div
-                key={a.id}
+                key={a.slug}
                 className="flex items-center gap-3 rounded-2xl border border-red/25 bg-red/10 p-4 text-left"
               >
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red/20 text-red">

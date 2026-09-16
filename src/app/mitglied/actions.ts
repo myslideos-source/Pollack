@@ -5,6 +5,13 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { requireMember, requireTrainerOrAdmin } from "@/lib/auth";
+import {
+  runWorkoutAchievementChecks,
+  runOnboardingAchievementChecks,
+  runPlanStartedAchievementCheck,
+  runBodyMeasurementAchievementChecks,
+  type UnlockedAchievement,
+} from "@/lib/achievements/engine";
 
 const onboardingSchema = z.object({
   goal: z.string().trim().min(1),
@@ -97,6 +104,9 @@ export async function completeOnboardingAction(
     if (rpcError) return { error: "Profil gespeichert, aber der Planentwurf konnte nicht erstellt werden." };
   }
 
+  await runOnboardingAchievementChecks(supabase, profile.id);
+  await runPlanStartedAchievementCheck(supabase, profile.id);
+
   revalidatePath("/mitglied");
   revalidatePath("/mitglied/training");
   redirect("/mitglied/training");
@@ -123,117 +133,10 @@ const finishWorkoutSchema = z.object({
 
 export type FinishWorkoutInput = z.infer<typeof finishWorkoutSchema>;
 
-export type Achievement = { id: string; title: string; description: string };
-
-const SESSION_MILESTONES = [5, 10, 25, 50, 100, 200];
-
-/** Works out which achievements this just-completed session earned — always derived from real
- *  history in the database, never invented: full-completion (no exercise skipped), a total
- *  session-count milestone, and any per-exercise weight personal bests. */
-async function computeAchievements(
-  supabase: Awaited<ReturnType<typeof createClient>>,
-  memberId: string,
-  sessionId: string,
-  planDayId: string | null,
-  sets: FinishWorkoutInput["sets"],
-): Promise<Achievement[]> {
-  const achievements: Achievement[] = [];
-
-  if (planDayId) {
-    const { count: plannedCount } = await supabase
-      .from("training_plan_exercises")
-      .select("id", { count: "exact", head: true })
-      .eq("plan_day_id", planDayId);
-    const loggedExerciseCount = new Set(sets.map((s) => s.planExerciseId)).size;
-    if (plannedCount && loggedExerciseCount >= plannedCount) {
-      achievements.push({
-        id: "full_completion",
-        title: "Plan komplett durchgezogen",
-        description: "Keine Übung ausgelassen — starke Disziplin!",
-      });
-    }
-  }
-
-  const { count: totalSessions } = await supabase
-    .from("workout_sessions")
-    .select("id", { count: "exact", head: true })
-    .eq("member_id", memberId)
-    .not("completed_at", "is", null);
-  if (totalSessions === 1) {
-    achievements.push({
-      id: "first_workout",
-      title: "Erstes Training abgeschlossen",
-      description: "Der wichtigste Schritt ist gemacht.",
-    });
-  } else if (totalSessions && SESSION_MILESTONES.includes(totalSessions)) {
-    achievements.push({
-      id: `session_milestone_${totalSessions}`,
-      title: `${totalSessions}. Training abgeschlossen`,
-      description: "Kontinuität zahlt sich aus.",
-    });
-  }
-
-  const planExerciseIds = Array.from(new Set(sets.map((s) => s.planExerciseId)));
-  if (planExerciseIds.length === 0) return achievements;
-
-  const { data: planExRows } = await supabase
-    .from("training_plan_exercises")
-    .select("id, exercise_id")
-    .in("id", planExerciseIds);
-  const exerciseIdByPlanEx = new Map((planExRows ?? []).map((r) => [r.id, r.exercise_id]));
-  const exerciseIds = Array.from(new Set(exerciseIdByPlanEx.values()));
-  if (exerciseIds.length === 0) return achievements;
-
-  const [{ data: exerciseNames }, { data: allPlanExForExercises }, { data: priorSessions }] = await Promise.all([
-    supabase.from("exercises").select("id, name").in("id", exerciseIds),
-    supabase.from("training_plan_exercises").select("id, exercise_id").in("exercise_id", exerciseIds),
-    supabase.from("workout_sessions").select("id").eq("member_id", memberId).neq("id", sessionId),
-  ]);
-  const nameByExerciseId = new Map((exerciseNames ?? []).map((e) => [e.id, e.name]));
-  const exerciseIdByAnyPlanEx = new Map((allPlanExForExercises ?? []).map((r) => [r.id, r.exercise_id]));
-  const priorSessionIds = (priorSessions ?? []).map((s) => s.id);
-
-  const priorBestByExercise = new Map<string, number>();
-  if (priorSessionIds.length > 0) {
-    const { data: priorSets } = await supabase
-      .from("workout_sets")
-      .select("weight_kg, plan_exercise_id")
-      .in("session_id", priorSessionIds)
-      .not("weight_kg", "is", null);
-    for (const s of priorSets ?? []) {
-      if (!s.plan_exercise_id || s.weight_kg == null) continue;
-      const exId = exerciseIdByAnyPlanEx.get(s.plan_exercise_id);
-      if (!exId) continue;
-      priorBestByExercise.set(exId, Math.max(priorBestByExercise.get(exId) ?? 0, s.weight_kg));
-    }
-  }
-
-  const sessionBestByExercise = new Map<string, number>();
-  for (const s of sets) {
-    if (s.weightKg == null) continue;
-    const exId = exerciseIdByPlanEx.get(s.planExerciseId);
-    if (!exId) continue;
-    sessionBestByExercise.set(exId, Math.max(sessionBestByExercise.get(exId) ?? 0, s.weightKg));
-  }
-
-  for (const [exId, best] of sessionBestByExercise) {
-    const prior = priorBestByExercise.get(exId);
-    if (prior != null && best > prior) {
-      achievements.push({
-        id: `pb_${exId}`,
-        title: `Neuer Bestwert: ${nameByExerciseId.get(exId) ?? "Übung"}`,
-        description: `${best} kg — mehr als je zuvor.`,
-      });
-    }
-  }
-
-  return achievements;
-}
-
 /** Saves a completed (or partially completed — ending early still counts) training session. */
 export async function finishWorkoutAction(
   input: FinishWorkoutInput,
-): Promise<{ error?: string; sessionId?: string; achievements?: Achievement[] }> {
+): Promise<{ error?: string; sessionId?: string; achievements?: UnlockedAchievement[] }> {
   const profile = await requireMember();
   const parsed = finishWorkoutSchema.safeParse(input);
   if (!parsed.success) return { error: "Training konnte nicht gespeichert werden." };
@@ -274,7 +177,11 @@ export async function finishWorkoutAction(
     if (setsError) return { error: "Sätze konnten nicht gespeichert werden." };
   }
 
-  const achievements = await computeAchievements(supabase, profile.id, session.id, d.planDayId, d.sets);
+  const achievements = await runWorkoutAchievementChecks(supabase, profile.id, {
+    sessionId: session.id,
+    planDayId: d.planDayId,
+    sets: d.sets,
+  });
 
   revalidatePath("/mitglied");
   revalidatePath("/mitglied/fortschritt");
@@ -348,6 +255,7 @@ export async function logBodyMeasurementAction(formData: FormData): Promise<{ er
     notes: parsed.data.notes ?? null,
   });
   if (error) return { error: "Wert konnte nicht gespeichert werden." };
+  await runBodyMeasurementAchievementChecks(supabase, profile.id);
   revalidatePath("/mitglied/profil");
   revalidatePath("/mitglied/fortschritt");
   return {};
