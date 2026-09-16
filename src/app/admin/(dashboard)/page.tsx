@@ -7,6 +7,7 @@ import { defaultCoverForTitle } from "@/lib/member/training-cover";
 import { todayWeekday } from "@/lib/member/weekday";
 import { StatCard, PremiumCard, StatusBadge, MemberAvatar, EmptyState, PrimaryButton } from "@/components/sportpark/ui";
 import { TrainingHeroCard } from "@/components/member/TrainingHeroCard";
+import { CalendarClock } from "lucide-react";
 import {
   SpUsers,
   SpMessageCircle,
@@ -16,6 +17,7 @@ import {
   SpPlus,
   SpActivity,
   SpClock,
+  SpBarChart,
 } from "@/components/icons/sportpark";
 
 export const metadata: Metadata = { title: "Übersicht" };
@@ -52,6 +54,8 @@ export default async function AdminDashboardPage() {
     { data: recentInquiries },
     { data: recentLogs },
     { data: topActivePlan },
+    { data: weeklyVisitors },
+    { count: draftCount },
   ] = await Promise.all([
     supabase.from("profiles").select("id", { count: "exact", head: true }).eq("role", "mitglied"),
     supabase.from("profiles").select("id", { count: "exact", head: true }).eq("role", "mitglied").gte("created_at", monthStart.toISOString()),
@@ -88,6 +92,8 @@ export default async function AdminDashboardPage() {
       .order("updated_at", { ascending: false })
       .limit(1)
       .maybeSingle(),
+    supabase.rpc("get_weekly_visitor_count"),
+    supabase.from("website_drafts").select("id", { count: "exact", head: true }),
   ]);
 
   let planOfWeek: {
@@ -175,6 +181,24 @@ export default async function AdminDashboardPage() {
           href="/admin/termine"
         />
       </div>
+
+      <PremiumCard className="mt-4 flex items-center gap-4 p-5">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-sp-sm bg-sp-red-soft text-sp-red">
+          <SpBarChart size={20} strokeWidth={1.8} />
+        </span>
+        <div>
+          <p className="sp-headline text-2xl font-bold leading-none text-sp-text">{weeklyVisitors ?? 0}</p>
+          <p className="mt-1 text-sm text-sp-text-secondary">Besucher diese Woche</p>
+        </div>
+      </PremiumCard>
+
+      {(draftCount ?? 0) > 0 ? (
+        <div className="mt-4 flex items-center gap-3 rounded-sp-lg border border-sand/30 bg-sand/10 px-5 py-4 text-sm text-sand">
+          <CalendarClock size={18} />
+          {draftCount} unveröffentlichte Änderung{(draftCount ?? 0) === 1 ? "" : "en"} — über „Veröffentlichen“ oben
+          rechts live schalten.
+        </div>
+      ) : null}
 
       <div className="mt-6 grid gap-5 lg:grid-cols-2">
         <PremiumCard className="p-5">
