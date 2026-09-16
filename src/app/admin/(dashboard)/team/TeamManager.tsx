@@ -42,7 +42,7 @@ function MemberForm({ member, onDone }: { member?: Member; onDone: () => void })
     <form action={submit} className="space-y-3 rounded-2xl border border-paper/10 bg-anthracite p-5">
       <div>
         <label className="mb-1 block text-xs text-paper/50">Foto</label>
-        <MediaPicker value={photoMediaId} onChange={setPhotoMediaId} fileType="image" />
+        <MediaPicker value={photoMediaId} onChange={setPhotoMediaId} fileType="image" uploadFolderName="Team" />
       </div>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div>

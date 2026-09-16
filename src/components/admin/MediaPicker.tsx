@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { ImagePlus, X, Check } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ImagePlus, UploadCloud, X, Check, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { uploadMediaFile } from "@/lib/media/upload";
+import { resolveOrCreateFolderByNameAction } from "@/app/admin/actions/media";
 
 type MediaItem = {
   id: string;
@@ -20,19 +22,30 @@ function publicUrl(item: MediaItem): string {
   return `${base}/storage/v1/object/public/${item.storage_bucket}/${item.storage_path}`;
 }
 
+/**
+ * Picks an existing media-library item OR uploads a new file straight from here — no detour
+ * through Medienverwaltung first. `uploadFolderName`, when given (e.g. "Übungen"), files a
+ * direct upload into a matching folder, creating it on first use, so the picker stays organized
+ * the same way the media library itself is.
+ */
 export function MediaPicker({
   value,
   onChange,
   fileType,
+  uploadFolderName,
 }: {
   value: string | null;
   onChange: (mediaId: string | null) => void;
   fileType?: "image" | "video";
+  uploadFolderName?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState<MediaItem[]>([]);
   const [selected, setSelected] = useState<MediaItem | null>(null);
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   // Some fields still hold a plain static path (e.g. "/media/hero/hero2-desktop.webp") carried
   // over from the initial content seed rather than a media-library UUID — shown as a lightweight
   // preview instead of triggering a lookup that can only ever come back empty for a non-UUID id.
@@ -88,8 +101,39 @@ export function MediaPicker({
     });
   }, [open, fileType]);
 
+  async function handleUpload(file: File) {
+    setUploading(true);
+    setUploadError(null);
+
+    let folderId: string | null = null;
+    if (uploadFolderName) {
+      const folderRes = await resolveOrCreateFolderByNameAction(uploadFolderName);
+      if (folderRes.id) folderId = folderRes.id;
+    }
+
+    const res = await uploadMediaFile(file, { folderId });
+    if (res.error) {
+      setUploadError(res.error);
+    } else if (res.id) {
+      onChange(res.id);
+      setRawPath(null);
+      setOpen(false);
+    }
+
+    setUploading(false);
+    if (inputRef.current) inputRef.current.value = "";
+  }
+
   return (
     <div>
+      <input
+        ref={inputRef}
+        type="file"
+        accept={fileType === "video" ? "video/mp4,video/quicktime" : fileType === "image" ? "image/jpeg,image/png,image/webp,image/avif" : undefined}
+        className="hidden"
+        onChange={(e) => e.target.files?.[0] && handleUpload(e.target.files[0])}
+      />
+
       {selected ? (
         <div className="flex items-center gap-3 rounded-xl border border-paper/15 bg-ink p-2.5">
           {selected.file_type === "image" ? (
@@ -99,6 +143,9 @@ export function MediaPicker({
             <span className="flex h-12 w-12 items-center justify-center rounded-lg bg-paper/10 text-xs text-paper/50">Video</span>
           )}
           <span className="flex-1 truncate text-sm text-paper">{selected.title}</span>
+          <button type="button" onClick={() => inputRef.current?.click()} disabled={uploading} className="text-xs text-paper/60 hover:text-paper">
+            Ersetzen
+          </button>
           <button type="button" onClick={() => setOpen(true)} className="text-xs text-red hover:text-red-dark">
             Ändern
           </button>
@@ -125,19 +172,34 @@ export function MediaPicker({
             <p className="truncate text-sm text-paper">Aktuelle Datei</p>
             <p className="truncate text-xs text-paper/40">Noch nicht in der Medienbibliothek — {rawPath}</p>
           </div>
+          <button type="button" onClick={() => inputRef.current?.click()} disabled={uploading} className="shrink-0 text-xs text-paper/60 hover:text-paper">
+            Ersetzen
+          </button>
           <button type="button" onClick={() => setOpen(true)} className="shrink-0 text-xs text-red hover:text-red-dark">
             Ändern
           </button>
         </div>
       ) : (
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-paper/20 py-4 text-sm text-paper/50 hover:border-paper/40 hover:text-paper/70"
-        >
-          <ImagePlus size={16} /> Aus Medienbibliothek wählen
-        </button>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <button
+            type="button"
+            disabled={uploading}
+            onClick={() => inputRef.current?.click()}
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-dashed border-red/40 py-4 text-sm text-red hover:border-red/60 disabled:opacity-60"
+          >
+            {uploading ? <Loader2 size={16} className="animate-spin" /> : <UploadCloud size={16} />}
+            {uploading ? "Wird hochgeladen …" : "Datei hochladen"}
+          </button>
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-dashed border-paper/20 py-4 text-sm text-paper/50 hover:border-paper/40 hover:text-paper/70"
+          >
+            <ImagePlus size={16} /> Aus Medienbibliothek wählen
+          </button>
+        </div>
       )}
+      {uploadError ? <p className="mt-2 text-xs text-red">{uploadError}</p> : null}
 
       {open ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/80 p-4" onClick={() => setOpen(false)}>
@@ -147,17 +209,25 @@ export function MediaPicker({
           >
             <div className="flex items-center justify-between">
               <h3 className="font-display text-lg text-paper">Medium auswählen</h3>
-              <button type="button" onClick={() => setOpen(false)} className="text-paper/50 hover:text-paper">
-                <X size={18} />
-              </button>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  disabled={uploading}
+                  onClick={() => inputRef.current?.click()}
+                  className="flex items-center gap-1.5 rounded-full bg-red px-3 py-1.5 text-xs font-medium text-paper hover:bg-red-dark disabled:opacity-60"
+                >
+                  {uploading ? <Loader2 size={13} className="animate-spin" /> : <UploadCloud size={13} />} Hochladen
+                </button>
+                <button type="button" onClick={() => setOpen(false)} className="text-paper/50 hover:text-paper">
+                  <X size={18} />
+                </button>
+              </div>
             </div>
 
             {loading ? (
               <p className="mt-6 text-center text-sm text-paper/40">Lädt …</p>
             ) : items.length === 0 ? (
-              <p className="mt-6 text-center text-sm text-paper/40">
-                Noch keine Medien in der Bibliothek. Lade zuerst Dateien unter &bdquo;Bilder & Videos&ldquo; hoch.
-              </p>
+              <p className="mt-6 text-center text-sm text-paper/40">Noch keine Medien in der Bibliothek. Lade oben direkt eine Datei hoch.</p>
             ) : (
               <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-4">
                 {items.map((item) => (

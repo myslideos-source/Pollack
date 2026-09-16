@@ -2,56 +2,19 @@
 
 import { useRef, useState } from "react";
 import { UploadCloud, Loader2 } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
-import { createMediaRecordAction } from "@/app/admin/actions/media";
+import { uploadMediaFile } from "@/lib/media/upload";
 
-const ALLOWED_TYPES: Record<string, "image" | "video"> = {
-  "image/jpeg": "image",
-  "image/png": "image",
-  "image/webp": "image",
-  "image/avif": "image",
-  "video/mp4": "video",
-  "video/quicktime": "video",
-};
-
-const MAX_BYTES = 100 * 1024 * 1024;
-
-function sanitizeFilename(name: string): string {
-  const base = name.normalize("NFKD").replace(/[^\w.-]+/g, "-");
-  return base.replace(/-+/g, "-").replace(/^-|-$/g, "").toLowerCase() || "datei";
-}
-
-function readImageDimensions(file: File): Promise<{ width: number; height: number } | null> {
-  return new Promise((resolve) => {
-    const img = new Image();
-    const url = URL.createObjectURL(file);
-    img.onload = () => {
-      resolve({ width: img.naturalWidth, height: img.naturalHeight });
-      URL.revokeObjectURL(url);
-    };
-    img.onerror = () => {
-      resolve(null);
-      URL.revokeObjectURL(url);
-    };
-    img.src = url;
-  });
-}
-
-const AREAS = [
-  { value: "", label: "Kein Bereich" },
-  { value: "hero", label: "Hero" },
-  { value: "training", label: "Training" },
-  { value: "gesundheit", label: "Gesundheit" },
-  { value: "kampfkunst", label: "Kampfkunst" },
-  { value: "regeneration", label: "Regeneration" },
-  { value: "partner", label: "Partner & Produkte" },
-  { value: "team", label: "Team" },
-  { value: "community", label: "Community" },
-];
-
-export function MediaUploadForm({ onUploaded }: { onUploaded?: () => void }) {
+export function MediaUploadForm({
+  folders,
+  defaultFolderId,
+  onUploaded,
+}: {
+  folders: { id: string; name: string }[];
+  defaultFolderId?: string | null;
+  onUploaded?: () => void;
+}) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [area, setArea] = useState("");
+  const [folderId, setFolderId] = useState(defaultFolderId ?? "");
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -59,48 +22,10 @@ export function MediaUploadForm({ onUploaded }: { onUploaded?: () => void }) {
   async function handleFiles(files: FileList) {
     setBusy(true);
     setError(null);
-    const supabase = createClient();
 
     for (const file of Array.from(files)) {
-      const fileType = ALLOWED_TYPES[file.type];
-      if (!fileType) {
-        setError(`Nicht unterstützter Dateityp: ${file.name}`);
-        continue;
-      }
-      if (file.size > MAX_BYTES) {
-        setError(`Datei zu groß (max. 100 MB): ${file.name}`);
-        continue;
-      }
-
       setProgress(`Lädt hoch: ${file.name} …`);
-
-      const path = `${fileType}/${Date.now()}-${sanitizeFilename(file.name)}`;
-      const { error: uploadError } = await supabase.storage.from("media-public").upload(path, file, {
-        contentType: file.type,
-        cacheControl: "31536000",
-      });
-
-      if (uploadError) {
-        setError(`Upload fehlgeschlagen: ${file.name}`);
-        continue;
-      }
-
-      const dims = fileType === "image" ? await readImageDimensions(file) : null;
-
-      const fd = new FormData();
-      fd.set("storageBucket", "media-public");
-      fd.set("storagePath", path);
-      fd.set("fileType", fileType);
-      fd.set("mimeType", file.type);
-      fd.set("fileSize", String(file.size));
-      fd.set("title", file.name.replace(/\.[^.]+$/, ""));
-      fd.set("area", area);
-      if (dims) {
-        fd.set("width", String(dims.width));
-        fd.set("height", String(dims.height));
-      }
-
-      const res = await createMediaRecordAction(fd);
+      const res = await uploadMediaFile(file, { folderId: folderId || null });
       if (res.error) setError(res.error);
     }
 
@@ -116,13 +41,14 @@ export function MediaUploadForm({ onUploaded }: { onUploaded?: () => void }) {
       <p className="mt-2 text-sm text-paper/70">Bilder oder Videos hochladen (JPEG, PNG, WebP, AVIF, MP4, MOV)</p>
       <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
         <select
-          value={area}
-          onChange={(e) => setArea(e.target.value)}
+          value={folderId}
+          onChange={(e) => setFolderId(e.target.value)}
           className="rounded-full border border-paper/15 bg-ink px-3 py-2 text-sm text-paper"
         >
-          {AREAS.map((a) => (
-            <option key={a.value} value={a.value}>
-              {a.label}
+          <option value="">Kein Ordner</option>
+          {folders.map((f) => (
+            <option key={f.id} value={f.id}>
+              {f.name}
             </option>
           ))}
         </select>

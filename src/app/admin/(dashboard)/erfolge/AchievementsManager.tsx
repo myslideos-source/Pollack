@@ -129,7 +129,7 @@ function AchievementForm({ achievement, allAchievements, onDone }: { achievement
 
       <div>
         <label className={labelClass}>Eigenes SVG-Icon (überschreibt die Auswahl oben)</label>
-        <MediaPicker value={customIconMediaId} onChange={setCustomIconMediaId} fileType="image" />
+        <MediaPicker value={customIconMediaId} onChange={setCustomIconMediaId} fileType="image" uploadFolderName="Erfolge" />
       </div>
 
       <div className="flex items-center gap-3 rounded-xl border border-paper/10 bg-ink p-3">

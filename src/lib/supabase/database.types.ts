@@ -594,6 +594,7 @@ export type Database = {
           crop: Json | null
           file_size: number
           file_type: string
+          folder_id: string | null
           height: number | null
           id: string
           mime_type: string
@@ -612,6 +613,7 @@ export type Database = {
           crop?: Json | null
           file_size?: number
           file_type: string
+          folder_id?: string | null
           height?: number | null
           id?: string
           mime_type: string
@@ -630,6 +632,7 @@ export type Database = {
           crop?: Json | null
           file_size?: number
           file_type?: string
+          folder_id?: string | null
           height?: number | null
           id?: string
           mime_type?: string
@@ -643,6 +646,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "media_folder_id_fkey"
+            columns: ["folder_id"]
+            isOneToOne: false
+            referencedRelation: "media_folders"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "media_poster_media_id_fkey"
             columns: ["poster_media_id"]
             isOneToOne: false
@@ -652,6 +662,38 @@ export type Database = {
           {
             foreignKeyName: "media_uploaded_by_fkey"
             columns: ["uploaded_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      media_folders: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          name: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "media_folders_created_by_fkey"
+            columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]

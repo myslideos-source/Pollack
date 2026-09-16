@@ -33,7 +33,7 @@ function PartnerForm({ partner, onDone }: { partner?: Partner; onDone: () => voi
     <form action={submit} className="space-y-3 rounded-2xl border border-paper/10 bg-anthracite p-5">
       <div>
         <label className="mb-1 block text-xs text-paper/50">Logo</label>
-        <MediaPicker value={logoMediaId} onChange={setLogoMediaId} fileType="image" />
+        <MediaPicker value={logoMediaId} onChange={setLogoMediaId} fileType="image" uploadFolderName="Partner & Produkte" />
       </div>
       <div>
         <label className="mb-1 block text-xs text-paper/50">Name</label>

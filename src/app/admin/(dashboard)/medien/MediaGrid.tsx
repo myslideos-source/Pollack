@@ -9,7 +9,7 @@ type MediaItem = {
   id: string;
   title: string;
   alt_text: string | null;
-  area: string | null;
+  folder_id: string | null;
   file_type: string;
   storage_bucket: string;
   storage_path: string;
@@ -20,17 +20,7 @@ type MediaItem = {
   created_at: string;
 };
 
-const AREAS = [
-  { value: "", label: "Kein Bereich" },
-  { value: "hero", label: "Hero" },
-  { value: "training", label: "Training" },
-  { value: "gesundheit", label: "Gesundheit" },
-  { value: "kampfkunst", label: "Kampfkunst" },
-  { value: "regeneration", label: "Regeneration" },
-  { value: "partner", label: "Partner & Produkte" },
-  { value: "team", label: "Team" },
-  { value: "community", label: "Community" },
-];
+type Folder = { id: string; name: string };
 
 function publicUrl(item: Pick<MediaItem, "storage_bucket" | "storage_path">): string {
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -50,10 +40,10 @@ function formatSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-function EditRow({ item, onDone }: { item: MediaItem; onDone: () => void }) {
+function EditRow({ item, folders, onDone }: { item: MediaItem; folders: Folder[]; onDone: () => void }) {
   const [title, setTitle] = useState(item.title);
   const [altText, setAltText] = useState(item.alt_text ?? "");
-  const [area, setArea] = useState(item.area ?? "");
+  const [folderId, setFolderId] = useState(item.folder_id ?? "");
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
@@ -62,7 +52,7 @@ function EditRow({ item, onDone }: { item: MediaItem; onDone: () => void }) {
     fd.set("id", item.id);
     fd.set("title", title);
     fd.set("altText", altText);
-    fd.set("area", area);
+    fd.set("folderId", folderId);
     startTransition(async () => {
       const res = await updateMediaAction(fd);
       if (res.error) setError(res.error);
@@ -85,13 +75,14 @@ function EditRow({ item, onDone }: { item: MediaItem; onDone: () => void }) {
         className="w-full rounded-lg border border-paper/15 bg-ink px-2.5 py-1.5 text-xs text-paper"
       />
       <select
-        value={area}
-        onChange={(e) => setArea(e.target.value)}
+        value={folderId}
+        onChange={(e) => setFolderId(e.target.value)}
         className="w-full rounded-lg border border-paper/15 bg-ink px-2.5 py-1.5 text-xs text-paper"
       >
-        {AREAS.map((a) => (
-          <option key={a.value} value={a.value}>
-            {a.label}
+        <option value="">Kein Ordner</option>
+        {folders.map((f) => (
+          <option key={f.id} value={f.id}>
+            {f.name}
           </option>
         ))}
       </select>
@@ -113,8 +104,9 @@ function EditRow({ item, onDone }: { item: MediaItem; onDone: () => void }) {
   );
 }
 
-export function MediaGrid({ items, usedIds }: { items: MediaItem[]; usedIds: string[] }) {
+export function MediaGrid({ items, usedIds, folders }: { items: MediaItem[]; usedIds: string[]; folders: Folder[] }) {
   const used = new Set(usedIds);
+  const folderById = new Map(folders.map((f) => [f.id, f.name]));
   const [editingId, setEditingId] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [focalEditingId, setFocalEditingId] = useState<string | null>(null);
@@ -180,14 +172,14 @@ export function MediaGrid({ items, usedIds }: { items: MediaItem[]; usedIds: str
             </div>
 
             {editingId === item.id ? (
-              <EditRow item={item} onDone={() => setEditingId(null)} />
+              <EditRow item={item} folders={folders} onDone={() => setEditingId(null)} />
             ) : (
               <div className="p-3">
                 <p className="truncate text-sm text-paper">{item.title}</p>
                 <p className="mt-0.5 text-[11px] text-paper/40">
                   {formatSize(item.file_size)}
                   {item.width && item.height ? ` · ${item.width}×${item.height}` : ""}
-                  {item.area ? ` · ${AREAS.find((a) => a.value === item.area)?.label ?? item.area}` : ""}
+                  {item.folder_id ? ` · ${folderById.get(item.folder_id) ?? "Ordner"}` : ""}
                 </p>
                 <div className="mt-2 flex flex-wrap items-center gap-3">
                   <button

@@ -34,7 +34,7 @@ function ExerciseForm({ exercise, onDone }: { exercise?: Exercise; onDone: () =>
     <form action={submit} className="space-y-3 rounded-2xl border border-paper/10 bg-anthracite p-5">
       <div>
         <label className="mb-1 block text-xs text-paper/50">Bild</label>
-        <MediaPicker value={imageMediaId} onChange={setImageMediaId} fileType="image" />
+        <MediaPicker value={imageMediaId} onChange={setImageMediaId} fileType="image" uploadFolderName="Übungen" />
       </div>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div>

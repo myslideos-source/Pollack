@@ -34,7 +34,7 @@ function DayCoverEditor({ memberId, day }: { memberId: string; day: ActivePlan["
       <div className="min-w-0 flex-1">
         {open ? (
           <form action={save} onChange={() => setSaved(false)} className="flex flex-col gap-2">
-            <MediaPicker value={mediaId} onChange={setMediaId} fileType="image" />
+            <MediaPicker value={mediaId} onChange={setMediaId} fileType="image" uploadFolderName="Trainingspläne" />
             <input name="coverAlt" defaultValue={day.hasCustomCover ? day.coverImageAlt : ""} placeholder="Alt-Text (optional)" className={inputClass} />
             <div className="flex items-center gap-2">
               <button type="submit" disabled={isPending} className="rounded-full bg-paper/10 px-3 py-1.5 text-xs text-paper hover:bg-paper/20 disabled:opacity-60">
