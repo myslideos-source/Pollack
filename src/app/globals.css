@@ -75,8 +75,11 @@
 
   --font-display: var(--font-display);
   --font-body: var(--font-body);
-  --font-ui: var(--font-ui);
-  --font-headline: var(--font-headline);
+  /* The member/admin areas used to run their own Manrope/Barlow Condensed type system; per
+   * request everything now uses Poppins (already loaded site-wide via the root layout), so
+   * --font-ui/--font-headline just alias the Poppins tokens instead of a separate font. */
+  --font-ui: var(--font-body);
+  --font-headline: var(--font-display);
 
   --color-sp-bg: var(--sp-bg);
   --color-sp-bg-soft: var(--sp-bg-soft);
@@ -155,16 +158,15 @@
   }
 }
 
-/* Shared type scope for /mitglied and /admin: Manrope for UI text, Barlow Condensed for the
- * sporty training-style headlines (tabular numerals throughout so KPI/stat digits never jitter
- * or wrap mid-value). */
+/* Shared type scope for /mitglied and /admin — Poppins throughout, same as the rest of the site
+ * (tabular numerals so KPI/stat digits never jitter or wrap mid-value). */
 .sp-scope {
-  font-family: var(--font-ui), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
 }
 
 .sp-headline {
-  font-family: var(--font-headline), var(--font-ui), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-display), var(--font-body), ui-sans-serif, system-ui, sans-serif;
 }
 
 /* Set on <html> once the member portal detects it's running installed (display-mode: standalone

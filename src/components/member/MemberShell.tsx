@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { manrope, barlowCondensed } from "@/lib/fonts";
 import { signOutSharedAction } from "@/app/actions/member-auth";
 import { OfflineBanner } from "@/components/member/OfflineBanner";
 import { InstallPromptProvider } from "@/components/member/InstallPromptProvider";
@@ -46,7 +45,7 @@ export function MemberShell({
 
   return (
     <InstallPromptProvider>
-      <div className={`${manrope.variable} ${barlowCondensed.variable} sp-scope flex min-h-screen min-h-[100dvh] flex-col bg-sp-bg text-sp-text`}>
+      <div className="sp-scope flex min-h-screen min-h-[100dvh] flex-col bg-sp-bg text-sp-text">
         <OfflineBanner />
         <header className="sticky top-0 z-40 bg-sp-bg/95 backdrop-blur" style={{ paddingTop: "env(safe-area-inset-top)" }}>
           <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-6">

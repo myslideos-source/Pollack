@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { manrope, barlowCondensed } from "@/lib/fonts";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { AdminTopbar } from "@/components/admin/AdminTopbar";
 import type { Profile } from "@/lib/auth";
@@ -33,7 +32,7 @@ export function AdminShell({
   }
 
   return (
-    <div className={`${manrope.variable} ${barlowCondensed.variable} sp-scope flex h-screen overflow-hidden bg-sp-bg`}>
+    <div className="sp-scope flex h-screen overflow-hidden bg-sp-bg">
       <AdminSidebar profile={profile} inboxCount={inboxCount} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <AdminTopbar profile={profile} inboxCount={inboxCount} draftCount={draftCount} onMenuClick={() => setSidebarOpen(true)} />
