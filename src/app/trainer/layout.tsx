@@ -9,5 +9,9 @@ export const metadata: Metadata = {
 
 export default async function TrainerLayout({ children }: { children: React.ReactNode }) {
   const profile = await requireTrainerOrAdmin();
-  return <TrainerShell fullName={profile.full_name}>{children}</TrainerShell>;
+  return (
+    <TrainerShell fullName={profile.full_name} isAdmin={profile.role === "admin"}>
+      {children}
+    </TrainerShell>
+  );
 }

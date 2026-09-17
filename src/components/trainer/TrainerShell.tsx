@@ -2,17 +2,26 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users, LogOut } from "lucide-react";
+import { LayoutDashboard, Users, LogOut, ArrowLeft } from "lucide-react";
 import { signOutSharedAction } from "@/app/actions/member-auth";
 
-const NAV_ITEMS = [
+const BASE_NAV_ITEMS = [
   { href: "/trainer", label: "Übersicht", icon: LayoutDashboard },
   { href: "/trainer/mitglieder", label: "Mitglieder", icon: Users },
 ];
 
-export function TrainerShell({ fullName, children }: { fullName: string; children: React.ReactNode }) {
+// /trainer has its own shell, entirely separate from AdminShell — an admin who follows a link
+// here (e.g. the admin sidebar's "Trainingspläne", which has no admin-scoped equivalent page)
+// would otherwise land somewhere with no way back to /admin at all, which is a dead end on
+// mobile/PWA where there's no browser back button to fall back on.
+const ADMIN_RETURN_ITEM = { href: "/admin", label: "Zurück zum Admin-Bereich", icon: ArrowLeft };
+
+export function TrainerShell({ fullName, isAdmin, children }: { fullName: string; isAdmin: boolean; children: React.ReactNode }) {
   const pathname = usePathname();
   const initial = fullName.trim().slice(0, 1).toUpperCase() || "T";
+  // First, not last: the mobile nav row scrolls horizontally, and an escape hatch that's
+  // scrolled off-screen by default isn't one.
+  const navItems = isAdmin ? [ADMIN_RETURN_ITEM, ...BASE_NAV_ITEMS] : BASE_NAV_ITEMS;
 
   return (
     <div className="flex min-h-screen flex-col bg-ink text-paper">
@@ -26,7 +35,7 @@ export function TrainerShell({ fullName, children }: { fullName: string; childre
               <span className="font-display text-sm uppercase tracking-wide text-paper/80">Trainerbereich</span>
             </Link>
             <nav className="hidden items-center gap-1 sm:flex" aria-label="Trainer-Navigation">
-              {NAV_ITEMS.map((item) => {
+              {navItems.map((item) => {
                 const active = item.href === "/trainer" ? pathname === "/trainer" : pathname.startsWith(item.href);
                 const Icon = item.icon;
                 return (
@@ -54,7 +63,7 @@ export function TrainerShell({ fullName, children }: { fullName: string; childre
           </div>
         </div>
         <nav className="flex items-center gap-1 overflow-x-auto border-t border-paper/10 px-4 py-1.5 sm:hidden" aria-label="Trainer-Navigation (mobil)">
-          {NAV_ITEMS.map((item) => {
+          {navItems.map((item) => {
             const active = item.href === "/trainer" ? pathname === "/trainer" : pathname.startsWith(item.href);
             const Icon = item.icon;
             return (
