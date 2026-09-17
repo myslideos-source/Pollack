@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { Dumbbell, LogIn, UserPlus, ClipboardList, Trophy, MessageSquare, Activity, ArrowRight } from "lucide-react";
+import { Dumbbell, LogIn, UserPlus, ClipboardList, Trophy, MessageSquare, Activity, ArrowRight, Clock } from "lucide-react";
 import { ACTIVITY_LABEL, type ActivityItem, type ActivityType } from "@/lib/admin/dashboard";
 import { EmptyState } from "@/components/admin/EmptyState";
+import { MemberAvatar } from "@/components/sportpark/ui";
 
 const ACTIVITY_ICON: Record<ActivityType, typeof Activity> = {
   training_beendet: Dumbbell,
@@ -11,6 +12,25 @@ const ACTIVITY_ICON: Record<ActivityType, typeof Activity> = {
   erfolg_erreicht: Trophy,
   nachricht_gesendet: MessageSquare,
 };
+
+const ACTIVITY_PILL: Record<ActivityType, string> = {
+  training_beendet: "border-admin-green/30 bg-admin-green/10 text-admin-green",
+  check_in: "border-admin-border bg-white/[0.04] text-admin-text-secondary",
+  neu_angemeldet: "border-admin-blue/30 bg-admin-blue/10 text-admin-blue",
+  plan_aktualisiert: "border-admin-border bg-white/[0.04] text-admin-text-secondary",
+  erfolg_erreicht: "border-[#f0a524]/30 bg-[#f0a524]/10 text-[#f0a524]",
+  nachricht_gesendet: "border-admin-border bg-white/[0.04] text-admin-text-secondary",
+};
+
+function ActivityPill({ type }: { type: ActivityType }) {
+  const Icon = ACTIVITY_ICON[type];
+  return (
+    <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium ${ACTIVITY_PILL[type]}`}>
+      <Icon size={13} strokeWidth={1.9} aria-hidden="true" />
+      {ACTIVITY_LABEL[type]}
+    </span>
+  );
+}
 
 function relativeTime(iso: string): string {
   const diffMs = Date.now() - new Date(iso).getTime();
@@ -27,7 +47,12 @@ export function RecentActivities({ activities }: { activities: ActivityItem[] })
   return (
     <div className="admin-card p-5 sm:p-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-base font-semibold text-admin-text">Letzte Aktivitäten</h2>
+        <h2 className="flex items-center gap-2.5 text-base font-semibold text-admin-text">
+          <span className="flex h-7 w-7 items-center justify-center rounded-full border border-admin-red/30 text-admin-red">
+            <Clock size={14} strokeWidth={2} aria-hidden="true" />
+          </span>
+          Letzte Aktivitäten
+        </h2>
         <Link href="/admin/verlauf" className="flex items-center gap-1 text-xs font-medium text-admin-text-secondary hover:text-admin-text">
           Alle Aktivitäten <ArrowRight size={13} aria-hidden="true" />
         </Link>
@@ -47,47 +72,39 @@ export function RecentActivities({ activities }: { activities: ActivityItem[] })
               </tr>
             </thead>
             <tbody className="divide-y divide-admin-divider">
-              {activities.map((a) => {
-                const Icon = ACTIVITY_ICON[a.type];
-                return (
-                  <tr key={a.id}>
-                    <td className="py-3 pr-4 text-admin-text">
-                      <Link href={a.href} className="hover:text-admin-red">
-                        {a.memberName}
-                      </Link>
-                    </td>
-                    <td className="py-3 pr-4 text-admin-text-secondary">
-                      <span className="flex items-center gap-2">
-                        <Icon size={15} strokeWidth={1.75} className="text-admin-text-muted" aria-hidden="true" />
-                        {ACTIVITY_LABEL[a.type]}
-                      </span>
-                    </td>
-                    <td className="py-3 text-right text-xs text-admin-text-muted">{relativeTime(a.timestamp)}</td>
-                  </tr>
-                );
-              })}
+              {activities.map((a) => (
+                <tr key={a.id}>
+                  <td className="py-3 pr-4">
+                    <Link href={a.href} className="flex items-center gap-3 text-admin-text hover:text-admin-red">
+                      <MemberAvatar fullName={a.memberName} size={36} />
+                      {a.memberName}
+                    </Link>
+                  </td>
+                  <td className="py-3 pr-4">
+                    <ActivityPill type={a.type} />
+                  </td>
+                  <td className="py-3 text-right text-xs text-admin-text-muted">{relativeTime(a.timestamp)}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
 
           {/* Mobile: compact rows, not a squeezed table */}
           <ul className="mt-4 divide-y divide-admin-divider min-[768px]:hidden">
-            {activities.map((a) => {
-              const Icon = ACTIVITY_ICON[a.type];
-              return (
-                <li key={a.id}>
-                  <Link href={a.href} className="flex items-center gap-3 py-3">
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/[0.04] text-admin-text-secondary">
-                      <Icon size={16} strokeWidth={1.75} aria-hidden="true" />
+            {activities.map((a) => (
+              <li key={a.id}>
+                <Link href={a.href} className="flex items-center gap-3 py-3">
+                  <MemberAvatar fullName={a.memberName} size={36} />
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm text-admin-text">{a.memberName}</span>
+                    <span className="mt-1 block">
+                      <ActivityPill type={a.type} />
                     </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate text-sm text-admin-text">{a.memberName}</span>
-                      <span className="block truncate text-xs text-admin-text-muted">{ACTIVITY_LABEL[a.type]}</span>
-                    </span>
-                    <span className="shrink-0 text-[11px] text-admin-text-muted">{relativeTime(a.timestamp)}</span>
-                  </Link>
-                </li>
-              );
-            })}
+                  </span>
+                  <span className="shrink-0 text-[11px] text-admin-text-muted">{relativeTime(a.timestamp)}</span>
+                </Link>
+              </li>
+            ))}
           </ul>
         </>
       )}
