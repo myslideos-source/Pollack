@@ -74,7 +74,16 @@ export function MemberShell({
             </nav>
 
             <div className="flex items-center gap-2">
-              <IconButton icon={SpBell} label="Benachrichtigungen" badge={unreadCount > 0} className="text-sp-text-secondary" />
+              <Link
+                href="/mitglied/nachrichten"
+                aria-label="Benachrichtigungen"
+                className="relative flex h-10 w-10 items-center justify-center rounded-full text-sp-text-secondary transition-colors hover:text-sp-text"
+              >
+                <SpBell size={22} strokeWidth={1.8} />
+                {unreadCount > 0 ? (
+                  <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-sp-red ring-2 ring-sp-bg" aria-hidden="true" />
+                ) : null}
+              </Link>
               <Link href="/mitglied/profil" aria-label="Profil">
                 <MemberAvatar fullName={fullName} size={34} />
               </Link>
