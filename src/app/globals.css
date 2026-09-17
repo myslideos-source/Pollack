@@ -300,6 +300,43 @@
   animation: var(--animate-admin-shimmer);
 }
 
+/* Dashboard's chart/live-studio/activities/quick-actions block: one grid so the mobile stacking
+ * order (live studio, then chart, then quick actions, then activities — deliberately not the
+ * same order as desktop's two side-by-side rows) can be expressed as grid-template-areas
+ * instead of fighting DOM order with per-breakpoint CSS order. */
+.dashboard-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "livestudio"
+    "chart"
+    "quickactions"
+    "activities";
+}
+
+@media (min-width: 1200px) {
+  .dashboard-grid {
+    grid-template-columns: minmax(0, 2fr) minmax(320px, 0.92fr);
+    grid-template-areas:
+      "chart livestudio"
+      "activities quickactions";
+  }
+}
+
+.dashboard-grid-chart {
+  grid-area: chart;
+}
+.dashboard-grid-livestudio {
+  grid-area: livestudio;
+}
+.dashboard-grid-activities {
+  grid-area: activities;
+}
+.dashboard-grid-quickactions {
+  grid-area: quickactions;
+}
+
 /* Set on <html> once the member portal detects it's running installed (display-mode: standalone
  * or iOS's navigator.standalone) — see InstallPromptProvider. Keeps the installed app from
  * rubber-banding into a white overscroll flash at the top/bottom, the one bit of "browser chrome"
