@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Download, ShieldCheck, FileText, Trophy, ChevronRight } from "lucide-react";
+import { Download, ShieldCheck, FileText, Trophy, ChevronRight, CreditCard } from "lucide-react";
 import { requireMember } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { loadMemberProfile } from "@/lib/member/data";
@@ -43,8 +43,19 @@ export default async function ProfilPage() {
       <p className="mt-1 text-sm text-paper/60">{profile.email}</p>
 
       <Link
-        href="/mitglied/erfolge"
+        href="/mitglied/mitgliedskarte"
         className="mt-4 flex items-center justify-between gap-3 rounded-2xl border border-paper/10 bg-anthracite p-4 hover:border-paper/25"
+      >
+        <span className="flex items-center gap-3">
+          <CreditCard size={18} className="text-red" />
+          <span className="text-sm text-paper">Mitgliedskarte</span>
+        </span>
+        <ChevronRight size={16} className="text-paper/30" />
+      </Link>
+
+      <Link
+        href="/mitglied/erfolge"
+        className="mt-3 flex items-center justify-between gap-3 rounded-2xl border border-paper/10 bg-anthracite p-4 hover:border-paper/25"
       >
         <span className="flex items-center gap-3">
           <Trophy size={18} className="text-red" />

@@ -337,6 +337,49 @@
   grid-area: quickactions;
 }
 
+/* Digitale Mitgliedskarte — a distinct "physical card" surface, not a UI panel, so it gets its
+ * own small bespoke look rather than reusing the --sp- or --admin- card tokens: matte
+ * near-black gradient, a faint carbon-fibre weave, and a hairline gradient edge standing in
+ * for the mockup's "feine rote Lichtkante". Kept scoped to this component only. */
+.membership-card {
+  position: relative;
+  isolation: isolate;
+  border-radius: 22px;
+  background: linear-gradient(155deg, #1c1e1e 0%, #101212 55%, #08090a 100%);
+  box-shadow:
+    0 28px 70px rgba(0, 0, 0, 0.55),
+    0 2px 0 rgba(255, 255, 255, 0.03) inset;
+  overflow: hidden;
+}
+
+.membership-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0px, rgba(255, 255, 255, 0.02) 1px, transparent 1px, transparent 4px),
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.015) 0px, rgba(255, 255, 255, 0.015) 1px, transparent 1px, transparent 4px);
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+.membership-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(120deg, rgba(239, 61, 54, 0.65) 0%, rgba(239, 61, 54, 0) 28%, rgba(239, 61, 54, 0) 72%, rgba(239, 61, 54, 0.45) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.membership-card-qr-invalid {
+  filter: grayscale(1) brightness(0.6);
+}
+
 /* Set on <html> once the member portal detects it's running installed (display-mode: standalone
  * or iOS's navigator.standalone) — see InstallPromptProvider. Keeps the installed app from
  * rubber-banding into a white overscroll flash at the top/bottom, the one bit of "browser chrome"

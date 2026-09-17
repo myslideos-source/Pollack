@@ -6,11 +6,13 @@ import { requireTrainerOrAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { loadMemberProfile, loadActivePlan, loadPendingPlan } from "@/lib/member/data";
 import { loadMemberAchievements } from "@/lib/achievements/data";
+import { loadMembershipCardForMember } from "@/lib/membership-card/data";
 import { PlanEditor } from "@/components/trainer/PlanEditor";
 import { MessageThread } from "@/components/member/MessageThread";
 import { AwardAchievement } from "@/components/trainer/AwardAchievement";
 import { ChangeRequestList } from "./ChangeRequestList";
 import { TrainerAssignmentForm } from "./TrainerAssignmentForm";
+import { MembershipCardSection } from "./MembershipCardSection";
 import { sendTrainerMessageAction } from "@/app/mitglied/actions";
 
 export const metadata: Metadata = { title: "Mitglied" };
@@ -25,18 +27,31 @@ export default async function MemberDetailPage({ params }: { params: Promise<{ i
   if (!member) notFound();
 
   const supabase = await createClient();
-  const [activePlan, pendingPlan, { data: exerciseCatalog }, { data: measurements }, { data: changeRequests }, { data: messagesRaw }, { data: trainers }, achievementsOverview, { data: manualAchievementRows }] =
-    await Promise.all([
-      loadActivePlan(id),
-      loadPendingPlan(id),
-      supabase.from("exercises").select("id, name").order("name"),
-      supabase.from("body_measurements").select("id, measured_at, weight_kg, body_fat_pct, notes").eq("member_id", id).order("measured_at", { ascending: false }).limit(10),
-      supabase.from("plan_change_requests").select("id, message, status, created_at").eq("member_id", id).order("created_at", { ascending: false }),
-      supabase.from("coach_messages").select("id, sender_id, sender_role, body, created_at").eq("member_id", id).order("created_at", { ascending: true }),
-      profile.role === "admin" ? supabase.from("profiles").select("id, full_name").eq("role", "trainer") : Promise.resolve({ data: [] }),
-      loadMemberAchievements(id),
-      supabase.from("achievements").select("slug, title, category, icon_key").eq("is_manual", true).eq("is_active", true).order("sort_order"),
-    ]);
+  const [
+    activePlan,
+    pendingPlan,
+    { data: exerciseCatalog },
+    { data: measurements },
+    { data: changeRequests },
+    { data: messagesRaw },
+    { data: trainers },
+    achievementsOverview,
+    { data: manualAchievementRows },
+    membershipCard,
+    { data: offerRows },
+  ] = await Promise.all([
+    loadActivePlan(id),
+    loadPendingPlan(id),
+    supabase.from("exercises").select("id, name").order("name"),
+    supabase.from("body_measurements").select("id, measured_at, weight_kg, body_fat_pct, notes").eq("member_id", id).order("measured_at", { ascending: false }).limit(10),
+    supabase.from("plan_change_requests").select("id, message, status, created_at").eq("member_id", id).order("created_at", { ascending: false }),
+    supabase.from("coach_messages").select("id, sender_id, sender_role, body, created_at").eq("member_id", id).order("created_at", { ascending: true }),
+    profile.role === "admin" ? supabase.from("profiles").select("id, full_name").eq("role", "trainer") : Promise.resolve({ data: [] }),
+    loadMemberAchievements(id),
+    supabase.from("achievements").select("slug, title, category, icon_key").eq("is_manual", true).eq("is_active", true).order("sort_order"),
+    loadMembershipCardForMember(id),
+    supabase.from("offers").select("title").eq("published", true).order("sort_order"),
+  ]);
 
   const manualAchievements = (manualAchievementRows ?? []).map((a) => ({
     slug: a.slug,
@@ -97,6 +112,14 @@ export default async function MemberDetailPage({ params }: { params: Promise<{ i
       ) : null}
 
       <ChangeRequestList memberId={id} requests={changeRequests ?? []} />
+
+      <MembershipCardSection
+        memberId={id}
+        memberFullName={member.fullName}
+        canManage={profile.role === "admin"}
+        card={membershipCard}
+        offerTitles={(offerRows ?? []).map((o) => o.title)}
+      />
 
       <section className="mt-8">
         <h2 className="font-display text-lg text-paper">Trainingsplan</h2>

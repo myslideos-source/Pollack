@@ -1,5 +1,7 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
+import { loadMembershipCardStatuses } from "@/lib/membership-card/data";
+import type { MembershipCardStatus } from "@/lib/membership-card/status";
 
 export type TrainerMemberRow = {
   id: string;
@@ -9,6 +11,7 @@ export type TrainerMemberRow = {
   lastTrainingAt: string | null;
   trainerId: string | null;
   trainerName: string | null;
+  cardStatus: MembershipCardStatus | null;
 };
 
 /**
@@ -26,11 +29,12 @@ export async function loadMembers(opts: { onlyTrainerId?: string } = {}): Promis
   const memberIds = members.map((m) => m.id);
   const trainerIds = Array.from(new Set(members.map((m) => m.assigned_trainer_id).filter((v): v is string => Boolean(v))));
 
-  const [{ data: profiles }, { data: trainers }, { data: plans }, { data: lastSessions }] = await Promise.all([
+  const [{ data: profiles }, { data: trainers }, { data: plans }, { data: lastSessions }, cardStatusByMember] = await Promise.all([
     supabase.from("profiles").select("id, full_name").in("id", memberIds),
     trainerIds.length > 0 ? supabase.from("profiles").select("id, full_name").in("id", trainerIds) : Promise.resolve({ data: [] }),
     supabase.from("training_plans").select("member_id, status").in("member_id", memberIds).eq("status", "active"),
     supabase.from("workout_sessions").select("member_id, started_at").in("member_id", memberIds).order("started_at", { ascending: false }),
+    loadMembershipCardStatuses(memberIds),
   ]);
 
   const nameById = new Map((profiles ?? []).map((p) => [p.id, p.full_name]));
@@ -49,6 +53,7 @@ export async function loadMembers(opts: { onlyTrainerId?: string } = {}): Promis
     lastTrainingAt: lastSessionByMember.get(m.id) ?? null,
     trainerId: m.assigned_trainer_id,
     trainerName: m.assigned_trainer_id ? (trainerNameById.get(m.assigned_trainer_id) ?? null) : null,
+    cardStatus: cardStatusByMember.get(m.id) ?? null,
   }));
 }
 

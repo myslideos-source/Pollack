@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { requireTrainerOrAdmin } from "@/lib/auth";
 import { loadMembers } from "@/lib/trainer/data";
+import { CARD_STATUS_BADGE_LABEL, CARD_STATUS_COLOR } from "@/lib/membership-card/status";
 import { MemberListFilter } from "./MemberListFilter";
 import { InviteMemberForm } from "./InviteMemberForm";
 
@@ -44,6 +45,7 @@ export default async function TrainerMembersPage({
               <th className="hidden px-4 py-3 sm:table-cell">Ziel</th>
               <th className="hidden px-4 py-3 md:table-cell">Plan</th>
               <th className="hidden px-4 py-3 lg:table-cell">Letztes Training</th>
+              <th className="hidden px-4 py-3 sm:table-cell">Karte</th>
               {profile.role === "admin" ? <th className="hidden px-4 py-3 lg:table-cell">Trainer</th> : null}
               <th className="px-4 py-3" />
             </tr>
@@ -61,6 +63,16 @@ export default async function TrainerMembersPage({
                 <td className="hidden px-4 py-3 text-paper/60 lg:table-cell">
                   {m.lastTrainingAt ? new Date(m.lastTrainingAt).toLocaleDateString("de-DE") : "–"}
                 </td>
+                <td className="hidden px-4 py-3 sm:table-cell">
+                  {m.cardStatus ? (
+                    <span className={`flex items-center gap-1.5 text-xs ${CARD_STATUS_COLOR[m.cardStatus].text}`}>
+                      <span className={`h-1.5 w-1.5 rounded-full ${CARD_STATUS_COLOR[m.cardStatus].bg}`} aria-hidden="true" />
+                      {CARD_STATUS_BADGE_LABEL[m.cardStatus]}
+                    </span>
+                  ) : (
+                    <span className="text-xs text-paper/30">Keine Karte</span>
+                  )}
+                </td>
                 {profile.role === "admin" ? (
                   <td className="hidden px-4 py-3 text-paper/60 lg:table-cell">{m.trainerName ?? "–"}</td>
                 ) : null}
@@ -73,7 +85,7 @@ export default async function TrainerMembersPage({
             ))}
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-sm text-paper/40">
+                <td colSpan={7} className="px-4 py-8 text-center text-sm text-paper/40">
                   Keine Mitglieder gefunden.
                 </td>
               </tr>

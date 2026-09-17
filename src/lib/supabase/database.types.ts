@@ -855,6 +855,72 @@ export type Database = {
           },
         ]
       }
+      membership_cards: {
+        Row: {
+          card_number: string
+          created_at: string
+          created_by: string | null
+          locked_at: string | null
+          member_id: string
+          member_since: string
+          note: string | null
+          qr_token: string
+          qr_token_version: number
+          status: string
+          tariff: string | null
+          updated_at: string
+          valid_from: string | null
+          valid_until: string | null
+        }
+        Insert: {
+          card_number?: string
+          created_at?: string
+          created_by?: string | null
+          locked_at?: string | null
+          member_id: string
+          member_since?: string
+          note?: string | null
+          qr_token?: string
+          qr_token_version?: number
+          status?: string
+          tariff?: string | null
+          updated_at?: string
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Update: {
+          card_number?: string
+          created_at?: string
+          created_by?: string | null
+          locked_at?: string | null
+          member_id?: string
+          member_since?: string
+          note?: string | null
+          qr_token?: string
+          qr_token_version?: number
+          status?: string
+          tariff?: string | null
+          updated_at?: string
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "membership_cards_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "membership_cards_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       offers: {
         Row: {
           billing_period: string | null
@@ -1795,6 +1861,7 @@ export type Database = {
         Args: { p_member_id: string; p_template_id: string }
         Returns: string
       }
+      generate_membership_card_number: { Args: never; Returns: string }
       get_notification_email: { Args: never; Returns: string }
       get_weekly_visitor_count: { Args: never; Returns: number }
       is_admin: { Args: never; Returns: boolean }
