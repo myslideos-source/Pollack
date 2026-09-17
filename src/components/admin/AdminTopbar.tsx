@@ -64,7 +64,7 @@ export function AdminTopbar({
         <p className="mt-0.5 text-sm text-admin-text-secondary">Hier ist dein Überblick für heute.</p>
       </div>
 
-      <form onSubmit={handleSearch} className="hidden min-w-0 max-w-[400px] flex-1 md:block min-[1200px]:ml-auto">
+      <form onSubmit={handleSearch} className="hidden w-[260px] shrink-0 min-[1200px]:ml-auto min-[1200px]:w-[380px] md:block">
         <label className="relative block">
           <Search size={17} strokeWidth={1.8} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-admin-text-muted" />
           <input
@@ -77,7 +77,7 @@ export function AdminTopbar({
       </form>
 
       <div className="ml-auto flex shrink-0 items-center gap-1.5 sm:gap-2.5">
-        <div className="hidden items-center gap-2 text-xs text-admin-text-muted xl:flex">
+        <div className="hidden items-center gap-2 text-xs text-admin-text-muted min-[1600px]:flex">
           <span className={`h-1.5 w-1.5 rounded-full ${pendingCount > 0 ? "bg-sand" : "bg-admin-green"}`} aria-hidden="true" />
           {pendingCount > 0 ? `${pendingCount} Entwurf/Entwürfe ungespeichert` : "Alle Änderungen gespeichert"}
         </div>
@@ -86,9 +86,9 @@ export function AdminTopbar({
           href="/admin/preview-enable"
           target="_blank"
           rel="noopener noreferrer"
-          className="hidden items-center gap-1.5 rounded-full border border-admin-border px-3 py-2 text-xs text-admin-text-secondary transition-colors hover:border-admin-border-hover hover:text-admin-text sm:flex"
+          className="flex items-center gap-1.5 rounded-full border border-admin-border px-3 py-2 text-xs text-admin-text-secondary transition-colors hover:border-admin-border-hover hover:text-admin-text"
         >
-          <Eye size={14} /> Vorschau
+          <Eye size={14} /> <span className="hidden min-[1500px]:inline">Vorschau</span>
         </a>
 
         <form action={publishAction}>
@@ -96,15 +96,15 @@ export function AdminTopbar({
             type="submit"
             disabled={publishPending || pendingCount === 0}
             title={pendingCount === 0 ? "Keine Entwürfe zum Veröffentlichen." : undefined}
-            className="hidden items-center gap-1.5 rounded-full bg-admin-red px-3 py-2 text-xs font-medium text-admin-text transition-colors hover:bg-admin-red-dark disabled:opacity-40 sm:flex"
+            className="flex items-center gap-1.5 rounded-full bg-admin-red px-3 py-2 text-xs font-medium text-admin-text transition-colors hover:bg-admin-red-dark disabled:opacity-40"
           >
             {publishState.status === "success" ? (
               <>
-                <CheckCircle2 size={14} /> Veröffentlicht
+                <CheckCircle2 size={14} /> <span className="hidden min-[1500px]:inline">Veröffentlicht</span>
               </>
             ) : (
               <>
-                <UploadCloud size={14} /> {publishPending ? "…" : "Veröffentlichen"}
+                <UploadCloud size={14} /> <span className="hidden min-[1500px]:inline">{publishPending ? "…" : "Veröffentlichen"}</span>
               </>
             )}
           </button>
