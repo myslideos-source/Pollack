@@ -26,11 +26,11 @@ export const CARD_STATUS_SHORT_LABEL: Record<MembershipCardStatus, string> = {
   expired: "Abgelaufen",
 };
 
-export const CARD_STATUS_COLOR: Record<MembershipCardStatus, { hex: string; text: string; bg: string }> = {
-  active: { hex: "#39d98a", text: "text-[#39d98a]", bg: "bg-[#39d98a]" },
-  paused: { hex: "#f0a524", text: "text-[#f0a524]", bg: "bg-[#f0a524]" },
-  locked: { hex: "#e43b32", text: "text-[#e43b32]", bg: "bg-[#e43b32]" },
-  expired: { hex: "#9a9a9a", text: "text-white/50", bg: "bg-white/40" },
+export const CARD_STATUS_COLOR: Record<MembershipCardStatus, { hex: string; text: string; bg: string; soft: string; border: string }> = {
+  active: { hex: "#39d98a", text: "text-[#39d98a]", bg: "bg-[#39d98a]", soft: "bg-[#39d98a]/10", border: "border-[#39d98a]/40" },
+  paused: { hex: "#f0a524", text: "text-[#f0a524]", bg: "bg-[#f0a524]", soft: "bg-[#f0a524]/10", border: "border-[#f0a524]/40" },
+  locked: { hex: "#e43b32", text: "text-[#e43b32]", bg: "bg-[#e43b32]", soft: "bg-[#e43b32]/10", border: "border-[#e43b32]/40" },
+  expired: { hex: "#9a9a9a", text: "text-white/50", bg: "bg-white/40", soft: "bg-white/5", border: "border-white/20" },
 };
 
 /** Only an active card's QR is meant to work later for check-in — everything else must render

@@ -8,6 +8,7 @@ import { OfflineBanner } from "@/components/member/OfflineBanner";
 import { InstallPromptProvider } from "@/components/member/InstallPromptProvider";
 import { InstallPromptDialog } from "@/components/member/InstallPromptDialog";
 import { IconButton, MemberAvatar } from "@/components/sportpark/ui";
+import { MemberBottomDock } from "@/components/member/MemberBottomDock";
 import {
   SpHome,
   SpClipboardList,
@@ -28,9 +29,10 @@ const NAV_ITEMS = [
 
 /**
  * App-like shell for the whole /mitglied area: a slim top bar (logo, notifications, avatar) and
- * a bottom tab bar fixed to the safe area on phones — no large card surface on the header itself,
- * per the mockup. The five-item bottom nav matches the mockup exactly; Erfolge (not in that set)
- * stays reachable from the Profil page instead of being dropped.
+ * a floating bottom dock fixed to the safe area on phones. Desktop keeps the original top nav
+ * unchanged. /mitglied/menu supplies its own bespoke mobile header (per its own mockup), so this
+ * shell's shared header hides below `lg` only on that one route — every other page keeps the
+ * exact header it always had, at every width.
  */
 export function MemberShell({
   fullName,
@@ -42,12 +44,16 @@ export function MemberShell({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const isMenuPage = pathname === "/mitglied/menu";
 
   return (
     <InstallPromptProvider>
       <div className="sp-scope flex min-h-screen min-h-[100dvh] flex-col bg-sp-bg text-sp-text">
         <OfflineBanner />
-        <header className="sticky top-0 z-40 bg-sp-bg/95 backdrop-blur" style={{ paddingTop: "env(safe-area-inset-top)" }}>
+        <header
+          className={`sticky top-0 z-40 bg-sp-bg/95 backdrop-blur ${isMenuPage ? "max-lg:hidden" : ""}`}
+          style={{ paddingTop: "env(safe-area-inset-top)" }}
+        >
           <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-6">
             <Link href="/mitglied" className="flex items-center">
               <Image src="/logo/sportpark-pollack-logo-white.webp" alt="Sportpark Pollack" width={160} height={55} className="h-7 w-auto" priority />
@@ -94,34 +100,12 @@ export function MemberShell({
           </div>
         </header>
 
-        <main className="flex-1 pb-24 lg:pb-8">{children}</main>
+        {/* 120px clears the floating dock (min-height 78px + its own bottom offset + the
+           center button's protrusion) on every mobile page, not just /mitglied/menu — the dock
+           is global, so every page needs the same clearance. */}
+        <main className="flex-1 pb-[calc(120px+env(safe-area-inset-bottom))] lg:pb-8">{children}</main>
 
-        <nav
-          className="fixed inset-x-0 bottom-0 z-40 border-t border-sp-border bg-sp-sidebar/95 backdrop-blur lg:hidden"
-          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
-          aria-label="Portal-Navigation (mobil)"
-        >
-          <div className="mx-auto grid max-w-md grid-cols-5">
-            {NAV_ITEMS.map((item) => {
-              const active = item.href === "/mitglied" ? pathname === "/mitglied" : pathname.startsWith(item.href);
-              const Icon = item.icon;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`flex min-h-[52px] flex-col items-center justify-center gap-1 py-2 text-[11px] font-medium ${
-                    active ? "text-sp-red" : "text-sp-text-muted hover:text-sp-text-secondary"
-                  }`}
-                  aria-current={active ? "page" : undefined}
-                >
-                  <Icon size={23} strokeWidth={1.8} />
-                  {item.label}
-                  <span className={`mt-0.5 h-[2px] w-4 rounded-full ${active ? "bg-sp-red" : "bg-transparent"}`} aria-hidden="true" />
-                </Link>
-              );
-            })}
-          </div>
-        </nav>
+        <MemberBottomDock />
 
         <InstallPromptDialog />
       </div>

@@ -105,7 +105,7 @@ export default async function ProfilPage() {
         </section>
       ) : null}
 
-      <section className="mt-4 rounded-2xl border border-paper/10 bg-anthracite p-5">
+      <section id="koerperwerte" className="mt-4 scroll-mt-20 rounded-2xl border border-paper/10 bg-anthracite p-5">
         <h2 className="font-display text-sm uppercase tracking-wide text-paper/60">Körperwerte</h2>
         <ul className="mt-3 flex flex-col gap-2">
           {(measurements ?? []).length === 0 ? (
