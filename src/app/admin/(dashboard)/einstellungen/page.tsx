@@ -1,16 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CheckCircle2, XCircle, CalendarClock, Tag, Clock, Users, Trophy, UserCog, History, ChevronRight } from "lucide-react";
+import { CheckCircle2, XCircle, CalendarClock, Tag, Clock, Users, Trophy, UserCog, History, ChevronRight, Inbox, Globe, Image as ImageIcon, Handshake } from "lucide-react";
 import { requireAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { SettingsForm } from "./SettingsForm";
+import { StudioCapacityForm } from "./StudioCapacityForm";
 
 export const metadata: Metadata = { title: "Einstellungen" };
 
 const MORE_LINKS = [
+  { href: "/admin/anfragen", label: "Anfragen", icon: Inbox },
+  { href: "/admin/website", label: "Webseite", icon: Globe },
+  { href: "/admin/medien", label: "Medien", icon: ImageIcon },
   { href: "/admin/termine", label: "Termine", icon: CalendarClock },
   { href: "/admin/angebote", label: "Angebote & Preise", icon: Tag },
   { href: "/admin/oeffnungszeiten", label: "Öffnungszeiten", icon: Clock },
+  { href: "/admin/partner", label: "Partner & Produkte", icon: Handshake },
   { href: "/admin/team", label: "Team", icon: Users },
   { href: "/admin/erfolge", label: "Erfolge", icon: Trophy },
   { href: "/admin/benutzer", label: "Benutzer", icon: UserCog },
@@ -20,8 +25,12 @@ const MORE_LINKS = [
 export default async function EinstellungenPage() {
   await requireAdmin();
   const supabase = await createClient();
-  const { data: setting } = await supabase.from("site_settings").select("value").eq("key", "notification_email").maybeSingle();
+  const [{ data: setting }, { data: capacitySetting }] = await Promise.all([
+    supabase.from("site_settings").select("value").eq("key", "notification_email").maybeSingle(),
+    supabase.from("site_settings").select("value").eq("key", "studio_capacity").maybeSingle(),
+  ]);
   const notificationEmail = typeof setting?.value === "string" ? setting.value : "";
+  const studioCapacity = typeof capacitySetting?.value === "number" ? capacitySetting.value : null;
   const resendConfigured = Boolean(process.env.RESEND_API_KEY);
 
   return (
@@ -48,6 +57,13 @@ export default async function EinstellungenPage() {
             </>
           )}
         </p>
+      </div>
+
+      <div>
+        <h2 className="font-display text-lg text-paper">Studio</h2>
+        <div className="mt-3">
+          <StudioCapacityForm capacity={studioCapacity} />
+        </div>
       </div>
 
       <div>

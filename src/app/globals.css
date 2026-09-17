@@ -57,6 +57,34 @@
 
   --sp-shadow-card: 0 18px 45px rgba(0, 0, 0, 0.34);
   --sp-shadow-red: 0 0 34px rgba(244, 58, 53, 0.14);
+
+  /* =======================================================================================
+   * Admin dashboard tokens — calm, professional "studio management software" look (distinct
+   * from the member portal's --sp-* boutique-app tokens above; only src/components/admin/*
+   * and the admin dashboard modules use these).
+   * ======================================================================================= */
+  --admin-bg: #090a0a;
+  --admin-sidebar: #0d0f0f;
+  --admin-card: #141616;
+  --admin-card-elevated: #181a1a;
+  --admin-card-hover: #1b1e1e;
+  --admin-text: #f7f7f5;
+  --admin-text-secondary: #a4a8a8;
+  --admin-text-muted: #747979;
+  --admin-red: #ef3d36;
+  --admin-red-dark: #c9161d;
+  --admin-red-soft: rgba(239, 61, 54, 0.1);
+  --admin-green: #39d98a;
+  --admin-blue: #438cff;
+  --admin-border: rgba(255, 255, 255, 0.08);
+  --admin-border-hover: rgba(255, 255, 255, 0.14);
+  --admin-divider: rgba(255, 255, 255, 0.07);
+  --admin-radius-small: 12px;
+  --admin-radius: 16px;
+  --admin-radius-large: 20px;
+  --admin-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.025);
 }
 
 @theme inline {
@@ -109,6 +137,29 @@
   --shadow-sp-card: var(--sp-shadow-card);
   --shadow-sp-red: var(--sp-shadow-red);
 
+  --color-admin-bg: var(--admin-bg);
+  --color-admin-sidebar: var(--admin-sidebar);
+  --color-admin-card: var(--admin-card);
+  --color-admin-card-elevated: var(--admin-card-elevated);
+  --color-admin-card-hover: var(--admin-card-hover);
+  --color-admin-text: var(--admin-text);
+  --color-admin-text-secondary: var(--admin-text-secondary);
+  --color-admin-text-muted: var(--admin-text-muted);
+  --color-admin-red: var(--admin-red);
+  --color-admin-red-dark: var(--admin-red-dark);
+  --color-admin-red-soft: var(--admin-red-soft);
+  --color-admin-green: var(--admin-green);
+  --color-admin-blue: var(--admin-blue);
+  --color-admin-border: var(--admin-border);
+  --color-admin-border-hover: var(--admin-border-hover);
+  --color-admin-divider: var(--admin-divider);
+
+  --radius-admin-small: var(--admin-radius-small);
+  --radius-admin: var(--admin-radius);
+  --radius-admin-large: var(--admin-radius-large);
+
+  --shadow-admin: var(--admin-shadow);
+
   --animate-pulse-draw: pulse-draw 3.6s ease-in-out infinite;
   --animate-fade-up: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-marquee: marquee 85s linear infinite;
@@ -116,6 +167,10 @@
   --animate-sp-hero-zoom: sp-hero-zoom 12s ease-out both;
   --animate-login-logo-in: login-logo-in 350ms ease-out both;
   --animate-login-card-in: login-card-in 450ms ease-out 80ms both;
+  --animate-admin-fade-in: admin-fade-in 200ms ease-out both;
+  --animate-admin-card-in: admin-card-in 300ms ease-out both;
+  --animate-admin-live-pulse: admin-live-pulse 2.4s ease-in-out infinite;
+  --animate-admin-shimmer: admin-shimmer 1.6s ease-in-out infinite;
 }
 
 @keyframes sp-ring {
@@ -167,6 +222,82 @@
 
 .sp-headline {
   font-family: var(--font-display), var(--font-body), ui-sans-serif, system-ui, sans-serif;
+}
+
+@keyframes admin-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes admin-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes admin-live-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes admin-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Admin dashboard — same Poppins/tabular-nums treatment as .sp-scope, kept as its own class so
+ * the admin area's calmer --admin-* tokens stay visually and structurally separate from the
+ * member portal's --sp-* boutique-app system. */
+.admin-scope {
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-card {
+  background: var(--admin-card);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius);
+  box-shadow: var(--admin-shadow);
+}
+
+.admin-card-interactive:hover {
+  background: var(--admin-card-hover);
+  border-color: var(--admin-border-hover);
+  transform: translateY(-1px);
+}
+
+@media (hover: none) {
+  .admin-card-interactive:hover {
+    background: var(--admin-card);
+    border-color: var(--admin-border);
+    transform: none;
+  }
+}
+
+.admin-skeleton {
+  background: linear-gradient(90deg, var(--admin-card) 25%, var(--admin-card-elevated) 50%, var(--admin-card) 75%);
+  background-size: 200% 100%;
+  animation: var(--animate-admin-shimmer);
 }
 
 /* Set on <html> once the member portal detects it's running installed (display-mode: standalone

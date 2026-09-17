@@ -1211,6 +1211,47 @@ export type Database = {
         }
         Relationships: []
       }
+      studio_visits: {
+        Row: {
+          auto_closed: boolean
+          checked_in_at: string
+          checked_out_at: string | null
+          created_at: string
+          id: string
+          member_id: string
+          source: string
+          updated_at: string
+        }
+        Insert: {
+          auto_closed?: boolean
+          checked_in_at?: string
+          checked_out_at?: string | null
+          created_at?: string
+          id?: string
+          member_id: string
+          source?: string
+          updated_at?: string
+        }
+        Update: {
+          auto_closed?: boolean
+          checked_in_at?: string
+          checked_out_at?: string | null
+          created_at?: string
+          id?: string
+          member_id?: string
+          source?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "studio_visits_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       team_members: {
         Row: {
           bio: string | null

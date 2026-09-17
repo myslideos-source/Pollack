@@ -31,3 +31,33 @@ export async function saveNotificationEmailAction(formData: FormData): Promise<{
   revalidatePath("/admin/einstellungen");
   return {};
 }
+
+const capacitySchema = z.object({
+  studioCapacity: z.coerce.number().int().min(1, "Muss mindestens 1 sein.").max(2000, "Unrealistisch hoch."),
+});
+
+/** Studio capacity for the "Live im Studio" dashboard card — deliberately not hardcoded so an
+ *  admin can adjust it as the studio grows, per site_settings' existing key/value pattern. */
+export async function saveStudioCapacityAction(formData: FormData): Promise<{ error?: string }> {
+  const profile = await requireAdmin();
+  const parsed = capacitySchema.safeParse({ studioCapacity: formData.get("studioCapacity") });
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Ungültige Eingabe." };
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("site_settings").upsert(
+    { key: "studio_capacity", value: parsed.data.studioCapacity, updated_by: profile.id },
+    { onConflict: "key" },
+  );
+  if (error) return { error: "Einstellung konnte nicht gespeichert werden." };
+
+  await supabase.from("audit_logs").insert({
+    actor_id: profile.id,
+    action: "settings.updated",
+    entity_type: "site_settings",
+    summary: `Studio-Kapazität geändert auf: ${parsed.data.studioCapacity}`,
+  });
+
+  revalidatePath("/admin/einstellungen");
+  revalidatePath("/admin");
+  return {};
+}
