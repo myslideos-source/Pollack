@@ -6,8 +6,13 @@ import { AlertCircle, CheckCircle2 } from "lucide-react";
 import { signInSharedAction, requestPasswordResetSharedAction, type AuthActionState } from "@/app/actions/member-auth";
 import { LoginMail, LoginLock, LoginEye, LoginEyeOff, LoginArrowRight, LoginFaceId } from "@/components/icons/login";
 
+// text-[16px] is deliberate, not a rounding choice: iOS Safari (and the standalone PWA's
+// WKWebView) auto-zooms the whole page on focus of any input whose font-size is below 16px,
+// and in standalone display-mode — no browser chrome to reset it — that zoom stays stuck after
+// login instead of snapping back, leaving the app looking enlarged. 16px is the threshold that
+// avoids the zoom entirely.
 const inputClass =
-  "h-[46px] w-full rounded-[13px] border border-[rgba(255,255,255,.24)] bg-[rgba(3,4,4,.78)] pl-11 pr-4 text-[14px] text-[#f7f7f5] outline-none transition-colors placeholder:text-white/30 focus:border-[#ef3d36] focus:ring-[3px] focus:ring-[rgba(239,61,54,.14)] sm:h-[50px]";
+  "h-[46px] w-full rounded-[13px] border border-[rgba(255,255,255,.24)] bg-[rgba(3,4,4,.78)] pl-11 pr-4 text-[16px] text-[#f7f7f5] outline-none transition-colors placeholder:text-white/30 focus:border-[#ef3d36] focus:ring-[3px] focus:ring-[rgba(239,61,54,.14)] sm:h-[50px]";
 
 /** Sign-in card for every role (Mitglied, Trainer, Admin/Redakteur) — visual redesign only, the
  *  underlying signInSharedAction/requestPasswordResetSharedAction and their redirect/error
