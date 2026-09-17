@@ -56,7 +56,7 @@ export function MemberShell({
         >
           <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-6">
             <Link href="/mitglied" className="flex items-center">
-              <Image src="/logo/sportpark-pollack-logo-white.webp" alt="Sportpark Pollack" width={160} height={55} className="h-7 w-auto" priority />
+              <Image src="/logo/sportpark-pollack-logo-white.webp" alt="Sportpark Pollack" width={160} height={55} className="h-9 w-auto" priority />
             </Link>
 
             <nav className="hidden items-center gap-1 lg:flex" aria-label="Portal-Navigation">
